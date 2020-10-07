@@ -3,6 +3,8 @@ package graphviz;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.HashMap;
+import java.util.HashSet;
+
 import analysis.Class;
 
 public class ConvertVisual  {
@@ -11,19 +13,51 @@ public class ConvertVisual  {
 	private final static String CONFIG_PATH = "./src/assets/config.properties";
 	private final static int DPI_INCREASE = 8;
 	
-	public static String convertClassStructure(HashMap<String, Class> reference) {
+	//TODO: Line formatting (straight lines, 90 degree turns)
+	
+	public static String convertClassStructure(HashMap<String, Class> reference, HashSet<String> clusters, boolean instanceVar, boolean funct) {
 		String out = "digraph G {\n";
-		out += 	"node[shape=record];\n\n";
-				/*"\tsize=\"5,5\";\r\n" + 
-				"\tnode[shape=record,style=filled,fillcolor=gray95];\r\n" + 
+		out += 	"\tnode[shape=record,style=filled,fillcolor=gray95];\r\n" + 
 				"\tedge[dir=back, arrowtail=empty];\n\n";
-		*/
+
+		out += "\n";
+		
 		int val = 1;
 		HashMap<String, Integer> ref = new HashMap<String, Integer>();
 		for(Class c : reference.values()) {
 			ref.put(c.getName(), val);
-			out += c.generateDot(val++);
+			out += c.generateDot(val++, instanceVar, funct);
 		}
+		out += "\n";
+		
+		for(String s: clusters) {
+			String[] pack = s.split("\\.");
+			String nom = "";
+			for(int i = 0; i < pack.length; i++) {
+				nom += (i == 0 ? "" : "_") + pack[i];
+				String tab = "";
+				for(int j = 0; j < i + 1; j++) {
+					tab += "\t";
+				}
+				out += tab + "subgraph cluster_" + nom + "{\n";
+				out += tab + "\tlabel = \"" + nom + "\";\n";
+			}
+			String tab = "";
+			for(int j = 0; j < pack.length; j++) {
+				tab += "\t";
+			}
+			for(String c : ref.keySet()) {
+				if(c.contains(s))
+					out += tab + "\tn" + ref.get(c) + ";\n";
+			}
+			for(int i = 0; i < pack.length; i++) {
+				for(int j = pack.length - i - 1; j >= 0; j--) {
+					out += "\t";
+				}
+				out += "}\n";
+			}
+		}
+		
 		out += "\n";
 		for(Class c : reference.values()) {
 			out += c.generateAssociations(ref.get(c.getName()), ref);

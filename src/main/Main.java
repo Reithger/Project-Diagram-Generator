@@ -12,23 +12,27 @@ import graphviz.ConvertVisual;
  * Hierarchy:
  *  - Explore
  *  - Class
+ *  
+ * TODO: Straight lines in output image
+ * TODO: JavaClass needs to specify inheritance/directed association/etc. in associates
+ * TODO: A UI, embed GraphViz?
  * 
- * 
- * @author Borinor
+ * @author Ada Clevinger
  *
  */
 
 public class Main {
 
-	//TODO: Make a program that takes another program and generates a UML diagram for reference; parse Import statements, extends/implements, collate class list from project, etc.
-	
 	private final static String PATH = "C:/Users/Borinor/git/Finite-State-Machine-Model/src/";
+	private final static String PATH2 = "C:/Users/Borinor/eclipse-workspace/Project Diagram Generator/src/";
+	private final static String PATH3 = "C:/Users/Borinor/git/SoftwareVisualInterface/src";
+	private final static String PATH4 = "C:/Users/Borinor/git/ZombieApocalypse/src";
 	private final static String NAME = "FSM Model";
-
+	
 	public static void main(String[] args) {
-		File f = new File(PATH);
-		Explore expl = new Explore(f);
-		String dot = ConvertVisual.convertClassStructure(expl.getClassStructure());
+		File f = new File(PATH4);
+		Explore expl = new Explore(f, "");
+		String dot = ConvertVisual.convertClassStructure(expl.getClassStructure(), expl.getClusters(), true, true);
 		ConvertVisual.draw(dot, NAME, "jpg");
 	}
 	

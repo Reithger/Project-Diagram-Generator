@@ -1,6 +1,7 @@
 package analysis;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JavaClass extends Class {
@@ -15,12 +16,15 @@ public class JavaClass extends Class {
 	@Override
 	public void process(HashMap<String, Class> reference) {
 		int depth = 0;
-		for(String s : this.getFileContents()) {
+		ArrayList<String> contents = getFileContents();
+		boolean skipNextFunction = false;
+		for(int i = 0; i < contents.size(); i++) {
+			String s = contents.get(i);
 			depth -= s.replaceAll("\"[^\"\\}]*\\}[^\"]*\"", "").replaceAll("[^}]", "").length();
 			if(s.matches("import.*")) {
-				String mtch = s.substring(IMPORT_PHRASE.length()).replaceAll(";", "");
-				if(reference.get(mtch) != null) {
-					this.addClassAssociate(reference.get(mtch));
+				String[] imp = s.replaceAll(";", "").split("\\s++");
+				if(reference.get(imp[1]) != null) {
+					this.addClassAssociate(reference.get(imp[1]));
 				}
 			}
 			else if(depth == 1) {
@@ -30,9 +34,42 @@ public class JavaClass extends Class {
 				if(testInstanceVariable(use)) {
 					addInstanceVariable(processInstanceVariable(use));
 				}
-				//else if(testFunction(use)) {		TODO: Fix this
-				//	addFunction(use);
-				//}
+				else if(testFunction(use) && !skipNextFunction) {
+					addFunction(processFunction(use));
+				}
+				else if(use.contains("@Override")) {
+					skipNextFunction = true;
+				}
+				else {
+					skipNextFunction = false;
+				}
+			}
+			else if(depth == 0){
+				if(s.contains("extends")) {
+					String[] use = s.trim().split("\\s+");
+					int posit = -1;
+					for(int j = 0; j < use.length; j++) {
+						if(use[j].equals("extends")) {
+							posit = j;
+						}
+					}
+					String nom = use[posit+1].replaceAll("\\{", "");
+					boolean found = false;
+					for(Class cl : this.getClassAssociates()) {
+						if(stripContext(cl.getName()).equals(nom)) {
+							found = true;
+						}
+					}
+					if(!found) {
+						String outN = getContext(getName()) + "." +  nom;
+						if(reference.get(outN) != null) {
+							addClassAssociate(reference.get(outN));
+						}
+					}
+				}
+				if(s.contains("implements")) {
+					
+				}
 			}
 			depth += s.replaceAll("\"[^\"\\{]*\\{[^\"]*\"", "").replaceAll("[^{]", "").length();
 		}
@@ -72,11 +109,9 @@ public class JavaClass extends Class {
 	}
 	
 	private String processFunction(String in) {
-		return "";		//TODO: It's late and this is a lot of work, I'll fix it later.
-		/*
 		boolean underline = false;
 		if(in.contains("static")) {
-			underline = true;		//TODO: Do the formatting here
+			underline = true;	//TODO: Do the formatting here
 		}
 		String out = in.replaceAll(" static ", " ").replaceAll(" volatile ", " ").replaceAll("  ", " ").trim();
 		while(out.contains("( ")) {
@@ -85,29 +120,44 @@ public class JavaClass extends Class {
 		while(out.contains(" )")) {
 			out = out.replaceAll(" )", ")");
 		}
-		out = out.replaceAll("(", " ( ");
-		out = out.replaceAll(")", " ) ");
-		out = out.replaceAll(",", " ");
-		String[] cont = out.split(" ");
+		out = out.replaceAll("\\(", " ( ");
+		out = out.replaceAll("\\)", " ) ");
+		String[] cont = out.split("\\s+");
 		int argStart = -1;
 		for(int i = 0; i < cont.length; i++) {
+			cont[i] = cont[i].trim();
 			if(cont[i].contains("(")) {
 				argStart = i;
-				break;
 			}
 		}
 		String vis = cont[0].matches("\\s*private.*") ? "-" : cont[0].matches("\\s*public.*") ? "+" : "#";
 		String name = cont[argStart-1];
-		String ret = cont[1];
-		
-		name += "(";
-		
-		for(int i = argStart + 1; i < cont.length - 1; i += 2) {
-			name += cont[i] + " : " + cont[i + 1];
+		String ret = (argStart - 1 == 1 ? "" : cont[1]);
+		for(int i = 2; i < argStart - 1; i++) {
+			ret += " " + cont[i];
 		}
 		
-		return vis + name + " : " + ret;
-		*/
+		name += "(";
+		for(int i = argStart + 1; i < cont.length - 2; i += 2) {
+			if(cont[i].equals(")")) {
+				break;
+			}
+			String type = cont[i];
+			while(cont[i].contains(",")) {
+				type += " " + cont[++i];
+			}
+			name += cont[i + 1].replaceAll(",", "") + " : " + type + (i + 2 < cont.length - 2 ? ", " : "");
+		}
+		name += ")";
+		String tog = vis + name + " : " + ret;
+		tog = tog.replaceAll("\\<", "\\\\<");
+		tog = tog.replaceAll("\\>", "\\\\>");
+		tog = tog.replaceAll("\\[", "\\\\[");
+		tog = tog.replaceAll("\\]", "\\\\]");
+		tog = tog.replaceAll("\\(", "\\\\(");
+		tog = tog.replaceAll("\\)", "\\\\)");
+		tog = tog.replaceAll("\\:", "\\\\:");
+		return tog;
 	};
 	
 	public String getType() {

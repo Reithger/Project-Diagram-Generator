@@ -42,16 +42,20 @@ public abstract class Class{
 	
 	public abstract void process(HashMap<String, Class> reference);
 	
-	public String generateDot(int val) {
+	public String generateDot(int val, boolean inst, boolean func) {
 		String out = "\tn" + val + " [label = \"{" + stripContext(getName()) + "|";
-		for(int i = 0; i < instanceVariables.size(); i++) {
-			String s = instanceVariables.get(i);
-			out += s + (i + 1 < instanceVariables.size() ? "&#92;n" : "");
+		if(inst) {
+			for(int i = 0; i < instanceVariables.size(); i++) {
+				String s = instanceVariables.get(i);
+				out += s + (i + 1 < instanceVariables.size() ? "&#92;n" : "");
+			}
 		}
 		out += "|";
-		for(int i = 0; i < functions.size(); i++) {
-			String s =functions.get(i);
-			out += s + (i + 1 < functions.size() ? "&#92;n" : "");
+		if(func) {
+			for(int i = 0; i < functions.size(); i++) {
+				String s =functions.get(i);
+				out += s + (i + 1 < functions.size() ? "&#92;n" : "");
+			}
 		}
 		out += "}\"];\n";
 		return out;
@@ -77,8 +81,12 @@ public abstract class Class{
 		instanceVariables.add(inst);
 	}
 	
-	protected String stripContext(String in) {
+	public String stripContext(String in) {
 		return in.substring(in.lastIndexOf(".") + 1);
+	}
+	
+	public String getContext(String in) {
+		return in.substring(0, in.lastIndexOf("."));
 	}
 	
 //---  Getter Methods   -----------------------------------------------------------------------
