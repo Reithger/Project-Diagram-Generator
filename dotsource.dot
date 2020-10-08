@@ -1,220 +1,342 @@
 digraph G {
 	node[shape=record,style=filled,fillcolor=gray95];
 	edge[dir=back, arrowtail=empty];
+	graph[];
 
+	n1 [label = <{PopoutConfig||}>];
+	n2 [label = <{Agent||}>];
+	n3 [label = <{FormatConversion||}>];
+	n4 [label = <{FSMUI||}>];
+	n5 [label = <{EntrySet||}>];
+	n6 [label = <{ReadWrite||}>];
+	n7 [label = <{ImageHeader||}>];
+	n8 [label = <{GraphViz||}>];
+	n9 [label = <{Category||}>];
+	n10 [label = <{OptionsHeader||}>];
+	n11 [label = <{PopoutImageDisplay||}>];
+	n12 [label = <{Operations||}>];
+	n13 [label = <{Event||}>];
+	n14 [label = <{StateMap||}>];
+	n15 [label = <{test||}>];
+	n16 [label = <{Transition||}>];
+	n17 [label = <{UStructure||}>];
+	n18 [label = <{MultiFSMSelection||}>];
+	n19 [label = <{DisabledEvents||}>];
+	n20 [label = <{ImageDisplay||}>];
+	n21 [label = <{State||}>];
+	n22 [label = <{HeaderBase||}>];
+	n23 [label = <{UStructurePage||}>];
+	n24 [label = <{PopoutAlert||}>];
+	n25 [label = <{ModalSpecification||}>];
+	n26 [label = <{PopoutWindow||}>];
+	n27 [label = <{TransitionSystem||}>];
+	n28 [label = <{SVGtoTikZ||}>];
+	n29 [label = <{OptionPageManager||}>];
+	n30 [label = <{TransitionFunction||}>];
+	n31 [label = <{SingleFSMSelection||}>];
+	n32 [label = <{OptionPage||}>];
+	n33 [label = <{PopoutSelectList||}>];
+	n34 [label = <{GenerateFSM||}>];
+	n35 [label = <{PopoutAgentSelection||}>];
+	n36 [label = <{FSM||}>];
+	n37 [label = <{ImagePage||}>];
+	n38 [label = <{EventMap||}>];
+	n39 [label = <{AdjustFSM||}>];
 
-	n1 [label = "{ZombieberSymbol||+ZombieberSymbol\(\) \: }"];
-	n2 [label = "{Town||+orderSlaying\(hunter \: ZombieHunter, zomB \: HuntableZombie\) \: boolean&#92;n+employZombieHunter\(newbie \: ZombieHunter\) \: boolean&#92;n+employZombieHunter\(newbie \: ZombieHunter, reference \: ZombieHunterGuild\) \: void&#92;n+attractZombie\(zomB \: HuntableZombie\) \: boolean&#92;n+attactZombie\(zomB \: HuntableZombie, reference \: Horde\) \: void&#92;n+ratifyNewGuild\(collective \: ZombieHunterGuild\) \: boolean&#92;n+amalgamateNewHorde\(collective \: Horde\) \: boolean&#92;n+fireZombieHunter\(trash \: ZombieHunter\) \: void&#92;n+exileZombie\(trash \: HuntableZombie\) \: void&#92;n+dissolveGuild\(collective \: ZombieHunterGuild\) \: boolean&#92;n+dissolveHorde\(collective \: Horde\) \: boolean&#92;n+renameTown\(name \: String\) \: void&#92;n+getTownName\(\) \: String&#92;n+seeZombieHunterRegistry\(\) \: ArrayList\<ZombieHunter\>&#92;n+seeZombieHunterRegistry\(type \: Career\) \: ArrayList\<ZombieHunter\>&#92;n+seeZombieHunterRegistry\(type \: Weapon\) \: ArrayList\<ZombieHunter\>&#92;n+seeZombieHunterGuilds\(\) \: ArrayList\<ZombieHunterGuild\>&#92;n+seeZombieHunterGuilds\(type \: Career\) \: ArrayList\<ZombieHunterGuild\>&#92;n+seeZombieRegistry\(\) \: ArrayList\<HuntableZombie\>&#92;n+seeZombieRegistry\(type \: FactionSymbol\) \: ArrayList\<HuntableZombie\>&#92;n+seeZombieHordes\(\) \: ArrayList\<Horde\>&#92;n+seeZombieHordes\(type \: FactionSymbol\) \: ArrayList\<Horde\>}"];
-	n3 [label = "{GenericHunterGuild|# defaultCareer: Career|+GenericHunterGuild\(inCareer \: Career, title \: String\) \: }"];
-	n4 [label = "{Weapon||}"];
-	n5 [label = "{KickPowerCareer||+KickPowerCareer\(\) \: }"];
-	n6 [label = "{GenericHorde|# defaultSymbol: FactionSymbol|+GenericHorde\(providedSymbol \: FactionSymbol, name \: String\) \: }"];
-	n7 [label = "{HunterGuildArchery||+HunterGuildArchery\(title \: String\) \: }"];
-	n8 [label = "{HuntableZombie|# uniqueID: int&#92;n# limbCount: int&#92;n# zombieName: String&#92;n# socialCircle: Horde&#92;n# factionID: FactionSymbol&#92;n# pronouns: GenderPronoun|+joinHorde\(newHorde \: Horde\) \: void&#92;n+leaveHorde\(\) \: void&#92;n+notifyNewFactionSymbol\(\) \: void&#92;n+setZombieID\(id \: int\) \: void&#92;n+setZombieName\(zombieNameIn \: String\) \: void&#92;n+setLimbCount\(limbs \: int\) \: void&#92;n+setHorde\(socialite \: Horde\) \: void&#92;n+setFactionSymbol\(symbol \: FactionSymbol\) \: void&#92;n+applyPronouns\(newPronouns \: GenderPronoun\) \: void&#92;n+getZombieID\(\) \: int&#92;n+getZombieName\(\) \: String&#92;n+getLimbCount\(\) \: int&#92;n+getHorde\(\) \: Horde&#92;n+getFactionSymbol\(\) \: FactionSymbol&#92;n+getPronouns\(\) \: GenderPronoun&#92;n+accessWeakness\(\) \: Weapon}"];
-	n9 [label = "{Sackville||+Sackville\(\) \: }"];
-	n10 [label = "{Machete||}"];
-	n11 [label = "{GenderPronoun|# subject: String&#92;n# pronoun: String&#92;n# possessive: String|+getSubject\(\) \: String&#92;n+getPronoun\(\) \: String&#92;n+getPossessive\(\) \: String}"];
-	n12 [label = "{GenericTown||+GenericTown\(inName \: String\) \: }"];
-	n13 [label = "{ZombieTubbiesSymbol||+ZombieTubbiesSymbol\(\) \: }"];
-	n14 [label = "{MacheteHunter||+MacheteHunter\(hunterName \: String, usedPronouns \: GenderPronoun, assocation \: ZombieHunterGuild\) \: &#92;n+reassignCareerWeapon\(\) \: void}"];
-	n15 [label = "{FactionSymbol|# vulnerableTo: Weapon|+getCulturalWeakness\(\) \: Weapon&#92;n#assignCulturalWeakness\(newWeakness \: Weapon\) \: void&#92;n+compatible\(other \: FactionSymbol\) \: boolean}"];
-	n16 [label = "{Zombie||+Zombie\(ID \: int, name \: String, numLimbs \: int, family \: FactionSymbol, givenPronouns \: GenderPronoun\) \: }"];
-	n17 [label = "{NonBinary||+NonBinary\(\) \: }"];
-	n18 [label = "{HunterGuildKickPower||+HunterGuildKickPower\(title \: String\) \: }"];
-	n19 [label = "{ZombieTest||#test\(\) \: }"];
-	n20 [label = "{ZombieberHorde||+ZombieberHorde\(name \: String\) \: }"];
-	n21 [label = "{TaeKwonDoHunter||+TaeKwonDoHunter\(hunterName \: String, usedPronouns \: GenderPronoun, assocation \: ZombieHunterGuild\) \: &#92;n+reassignCareerWeapon\(\) \: void}"];
-	n22 [label = "{HunterGuildSlashing||+HunterGuildSlashing\(title \: String\) \: }"];
-	n23 [label = "{ArcheryCareer||+ArcheryCareer\(\) \: }"];
-	n24 [label = "{Horde|# hordeName: String&#92;n# zomBoys: ArrayList\<HuntableZombie\>&#92;n# factionIdentifier: FactionSymbol|+employZombie\(zomGirl \: HuntableZombie\) \: void&#92;n+removeZombie\(zomThey \: HuntableZombie\) \: void&#92;n+changeHordeFactionSymbol\(newIdentifier \: FactionSymbol\) \: void&#92;n+assignHordeTitle\(in \: String\) \: void&#92;n+getFactionSymbol\(\) \: FactionSymbol&#92;n+getZombieRegistry\(\) \: ArrayList\<HuntableZombie\>&#92;n+getZombieRegistry\(identifier \: FactionSymbol\) \: ArrayList\<HuntableZombie\>&#92;n+getHordeTitle\(\) \: String&#92;n+queryCorrespond\(other \: Horde\) \: boolean&#92;n+queryMatchingSymbol\(symbol \: FactionSymbol\) \: boolean&#92;n+updateZombiesOnTrend\(\) \: void}"];
-	n25 [label = "{Bow||}"];
-	n26 [label = "{ZombieHunterGuild|# guildTitle: String&#92;n# freelanceHunters: ArrayList\<ZombieHunter\>&#92;n# guildCareer: Career|+employZombieHunter\(zHunt \: ZombieHunter\) \: void&#92;n+fireZombieHunter\(byebye \: ZombieHunter\) \: void&#92;n+getHunterRegistry\(\) \: ArrayList\<ZombieHunter\>&#92;n+getHunterRegistry\(type \: Weapon\) \: ArrayList\<ZombieHunter\>&#92;n+getHunterRegistry\(type \: Career\) \: ArrayList\<ZombieHunter\>&#92;n+getGuildTitle\(\) \: String&#92;n+queryCorresponds\(zHG \: ZombieHunterGuild\) \: boolean&#92;n+queryMatchingCareer\(type \: Career\) \: boolean&#92;n+getCareer\(\) \: Career&#92;n+changeGuildCareer\(newCareer \: Career\) \: void&#92;n+assignGuildTitle\(newName \: String\) \: void&#92;n+updateHuntersOnCareer\(\) \: void}"];
-	n27 [label = "{ZombieTubbiesHorde||+ZombieTubbiesHorde\(name \: String\) \: }"];
-	n28 [label = "{Career|# preferredWeapon: Weapon|+getPreferredWeapon\(\) \: Weapon&#92;n+compatible\(other \: Career\) \: boolean&#92;n#assignPreferredWeapon\(newWeapon \: Weapon\) \: void}"];
-	n29 [label = "{Masculine||+Masculine\(\) \: }"];
-	n30 [label = "{SlashingCareer||+SlashingCareer\(\) \: }"];
-	n31 [label = "{KickPower||}"];
-	n32 [label = "{Feminine||+Feminine\(\) \: }"];
-	n33 [label = "{ZombieHunter|# name: String&#92;n# career: Career&#92;n# pronoun: GenderPronoun&#92;n# combatPower: Weapon&#92;n# association: ZombieHunterGuild&#92;n# fixedCareer: boolean&#92;n# fixedWeapon: boolean|+attackZombie\(zomB \: HuntableZombie\) \: boolean&#92;n+joinGuild\(zHG \: ZombieHunterGuild\) \: void&#92;n+quitGuild\(\) \: void&#92;n+freezeWeapon\(\) \: void&#92;n+freeWeapon\(\) \: void&#92;n+freezeCareer\(\) \: void&#92;n+freeCareer\(\) \: void&#92;n+getHuntingPower\(\) \: Weapon&#92;n+getHunterType\(\) \: Career&#92;n+getName\(\) \: String&#92;n+getPronouns\(\) \: GenderPronoun&#92;n+getGuildAssociation\(\) \: ZombieHunterGuild&#92;n+applyNameChange\(preferredName \: String\) \: void&#92;n+notifyNewCareer\(\) \: void&#92;n+chooseCareer\(careerChoice \: Career\) \: void&#92;n+applyPronouns\(newPronouns \: GenderPronoun\) \: void&#92;n+assignWeapon\(in \: Weapon\) \: void&#92;n+setGuild\(zHG \: ZombieHunterGuild\) \: void}"];
-	n34 [label = "{Custom||+Custom\(subj \: String, pron \: String, poss \: String\) \: }"];
-	n35 [label = "{BowHunter||+BowHunter\(hunterName \: String, usedPronouns \: GenderPronoun, assocation \: ZombieHunterGuild\) \: &#92;n+reassignCareerWeapon\(\) \: void}"];
-
-	subgraph cluster_weapon{
-		label = "weapon";
-		n4;
-		n10;
+	subgraph cluster_fsm{
+		label = "fsm";
 		n25;
-		n31;
-	}
-	subgraph cluster_horde{
-		label = "horde";
-		n1;
-		n6;
-		n13;
-		n15;
-		n20;
-		n24;
 		n27;
-	}
-	subgraph cluster_town{
-		label = "town";
-		n2;
-		n9;
-		n12;
-	}
-	subgraph cluster_pronoun{
-		label = "pronoun";
-		n11;
-		n17;
-		n29;
-		n32;
-		n34;
-	}
-	subgraph cluster_testing{
-		label = "testing";
-		n19;
-	}
-	subgraph cluster_zombie{
-		label = "zombie";
-		n8;
-		n16;
-	}
-	subgraph cluster_horde{
-		label = "horde";
-		subgraph cluster_horde_symbol{
-			label = "horde_symbol";
-			n1;
-			n13;
-			n15;
+		n36;
+}
+	subgraph cluster_test{
+		label = "test";
+		n15;
+}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_optionpage{
+				label = "ui_page_optionpage";
+				subgraph cluster_ui_page_optionpage_implementation{
+					label = "ui_page_optionpage_implementation";
+					n12;
+					n23;
+					n39;
+			}
 		}
 	}
-	subgraph cluster_hunterguild{
-		label = "hunterguild";
-		n3;
-		n5;
-		n7;
-		n18;
-		n22;
-		n23;
-		n26;
-		n28;
-		n30;
+}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_imagepage{
+				label = "ui_page_imagepage";
+				n20;
+				n37;
+		}
 	}
-	subgraph cluster_hunter{
-		label = "hunter";
-		n3;
+}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_optionpage{
+				label = "ui_page_optionpage";
+				n5;
+				n9;
+				n12;
+				n18;
+				n23;
+				n29;
+				n31;
+				n32;
+				n39;
+		}
+	}
+}
+	subgraph cluster_support{
+		label = "support";
+		subgraph cluster_support_component{
+			label = "support_component";
+			n13;
+			n14;
+			n16;
+			n21;
+			n30;
+			n38;
+	}
+}
+	subgraph cluster_ui{
+		label = "ui";
+		n1;
+		n4;
 		n5;
 		n7;
-		n14;
+		n9;
+		n10;
+		n11;
+		n12;
 		n18;
-		n21;
+		n20;
 		n22;
 		n23;
+		n24;
 		n26;
-		n28;
-		n30;
+		n29;
+		n31;
+		n32;
 		n33;
 		n35;
-	}
-	subgraph cluster_hunterguild{
-		label = "hunterguild";
-		subgraph cluster_hunterguild_career{
-			label = "hunterguild_career";
-			n5;
-			n23;
-			n28;
-			n30;
+		n37;
+		n39;
+}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_headers{
+				label = "ui_page_headers";
+				n7;
+				n10;
+				n22;
 		}
 	}
+}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_optionpage{
+				label = "ui_page_optionpage";
+				subgraph cluster_ui_page_optionpage_entryset{
+					label = "ui_page_optionpage_entryset";
+					n5;
+					n18;
+					n31;
+			}
+		}
+	}
+}
+	subgraph cluster_graphviz{
+		label = "graphviz";
+		n8;
+}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_popups{
+				label = "ui_page_popups";
+				n1;
+				n11;
+				n24;
+				n26;
+				n33;
+				n35;
+		}
+	}
+}
+	subgraph cluster_support{
+		label = "support";
+		n2;
+		n3;
+		n6;
+		n13;
+		n14;
+		n16;
+		n17;
+		n19;
+		n21;
+		n28;
+		n30;
+		n34;
+		n38;
+}
+	subgraph cluster_support{
+		label = "support";
+		subgraph cluster_support_component{
+			label = "support_component";
+			subgraph cluster_support_component_map{
+				label = "support_component_map";
+				n14;
+				n30;
+				n38;
+		}
+	}
+}
+	subgraph cluster_support{
+		label = "support";
+		subgraph cluster_support_meta{
+			label = "support_meta";
+			n3;
+			n6;
+			n28;
+			n34;
+	}
+}
 
-	n1 -> n31;
-n1 -> n15;
-	n2 -> n8;
-n2 -> n33;
-n2 -> n4;
-n2 -> n15;
-n2 -> n24;
-n2 -> n26;
-n2 -> n28;
-	n3 -> n28;
-n3 -> n33;
-n3 -> n26;
-		n5 -> n31;
-n5 -> n28;
-	n6 -> n15;
-n6 -> n8;
-n6 -> n24;
-	n7 -> n23;
-n7 -> n33;
-n7 -> n26;
-	n8 -> n15;
-n8 -> n11;
-n8 -> n4;
-n8 -> n24;
-n8 -> n32;
-	n9 -> n24;
-n9 -> n26;
-n9 -> n2;
-			n12 -> n26;
-n12 -> n24;
+	n1 -> n26;
+	n2 -> n13;
+n2 -> n38;
+	n3 -> n27;
+n3 -> n8;
+n3 -> n4;
+n3 -> n24;
+	n4 -> n36;
+n4 -> n8;
+n4 -> n3;
+n4 -> n7;
+n4 -> n10;
+n4 -> n37;
+n4 -> n29;
+n4 -> n24;
+n4 -> n1;
+	n5 -> n4;
+n5 -> n32;
+	n6 -> n13;
+n6 -> n21;
+n6 -> n16;
+n6 -> n38;
+n6 -> n14;
+n6 -> n30;
+	n7 -> n4;
+n7 -> n37;
+n7 -> n22;
+		n9 -> n5;
+	n10 -> n4;
+n10 -> n29;
+n10 -> n22;
+	n11 -> n20;
+n11 -> n26;
+	n12 -> n36;
+n12 -> n25;
 n12 -> n2;
-	n13 -> n10;
-n13 -> n15;
-	n14 -> n11;
-n14 -> n10;
-n14 -> n26;
-n14 -> n30;
-n14 -> n33;
-	n15 -> n4;
-	n16 -> n15;
-n16 -> n11;
-n16 -> n8;
-	n17 -> n11;
-	n18 -> n33;
-n18 -> n5;
-n18 -> n26;
-	n19 -> n16;
-n19 -> n21;
-n19 -> n18;
-n19 -> n5;
-n19 -> n9;
-n19 -> n31;
-n19 -> n10;
-n19 -> n20;
-	n20 -> n1;
-n20 -> n8;
-n20 -> n24;
-	n21 -> n26;
-n21 -> n5;
-n21 -> n11;
-n21 -> n33;
-	n22 -> n33;
-n22 -> n30;
-n22 -> n26;
-	n23 -> n25;
-n23 -> n28;
-	n24 -> n8;
-n24 -> n15;
-		n26 -> n33;
-n26 -> n4;
-n26 -> n28;
-	n27 -> n13;
-n27 -> n8;
-n27 -> n24;
-	n28 -> n4;
-	n29 -> n11;
-	n30 -> n10;
-n30 -> n28;
-		n32 -> n11;
+n12 -> n17;
+n12 -> n30;
+n12 -> n4;
+n12 -> n32;
+n12 -> n5;
+		n14 -> n21;
+	n15 -> n36;
+n15 -> n2;
+n15 -> n17;
+n15 -> n13;
+n15 -> n21;
+n15 -> n30;
+n15 -> n3;
+n15 -> n4;
+n15 -> n35;
+		n17 -> n36;
+n17 -> n13;
+n17 -> n21;
+n17 -> n16;
+n17 -> n30;
+	n18 -> n4;
+n18 -> n32;
+		n20 -> n11;
+			n23 -> n36;
+n23 -> n2;
+n23 -> n17;
+n23 -> n30;
+n23 -> n4;
+n23 -> n32;
+n23 -> n5;
+n23 -> n35;
+	n24 -> n26;
+	n25 -> n13;
+n25 -> n21;
+n25 -> n16;
+n25 -> n38;
+n25 -> n14;
+n25 -> n30;
+n25 -> n3;
+n25 -> n6;
+n25 -> n19;
+n25 -> n27;
+		n27 -> n13;
+n27 -> n21;
+n27 -> n16;
+n27 -> n38;
+n27 -> n14;
+n27 -> n30;
+		n29 -> n4;
+n29 -> n39;
+n29 -> n12;
+n29 -> n23;
+	n30 -> n13;
+n30 -> n21;
+n30 -> n16;
+	n31 -> n4;
+n31 -> n32;
+	n32 -> n4;
+n32 -> n5;
 	n33 -> n4;
-n33 -> n8;
-n33 -> n11;
 n33 -> n26;
-n33 -> n28;
-n33 -> n32;
-	n34 -> n11;
-	n35 -> n11;
+		n35 -> n36;
+n35 -> n2;
+n35 -> n13;
+n35 -> n38;
 n35 -> n23;
 n35 -> n26;
-n35 -> n33;
+	n36 -> n19;
+n36 -> n13;
+n36 -> n21;
+n36 -> n16;
+n36 -> n38;
+n36 -> n14;
+n36 -> n30;
+n36 -> n6;
+n36 -> n27;
+	n37 -> n4;
+	n38 -> n13;
+	n39 -> n3;
+n39 -> n34;
+n39 -> n4;
+n39 -> n32;
+n39 -> n5;
+n39 -> n33;
+n39 -> n24;
 }

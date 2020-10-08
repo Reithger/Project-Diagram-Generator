@@ -1,0 +1,342 @@
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[dir=back, arrowtail=empty];
+
+
+	n1 [label = "{PopoutConfig||+PopoutConfig\(\)&#92;n-drawPage\(\) : void&#92;n+failure\(\) : void&#92;n+success\(\) : void}"];
+	n2 [label = "{Agent||+Agent\(eventsProvided : Event\.\.\.\)&#92;n+Agent\(eventsProvided : Collection\<Event\>\)&#92;n+addObservableEvents\(names : String\.\.\.\) : void&#92;n+addNonObservableEvents\(names : String\.\.\.\) : void&#92;n+addControllableEvents\(names : String\.\.\.\) : void&#92;n+addNonControllableEvents\(names : String\.\.\.\) : void&#92;n+getObservable\(eventName : String\) : boolean&#92;n+setObservable\(eventName : String, in : boolean\) : void&#92;n+setControllable\(eventName : String, in : boolean\) : void&#92;n+getUnobservableEvents\(\) : ArrayList\<String\>&#92;n+getControllable\(eventName : String\) : boolean&#92;n+getAgentEvents\(\) : Collection\<Event\>&#92;n+addNonPresentEvent\(eventName : String\) : void&#92;n+contains\(eventName : String\) : boolean}"];
+	n3 [label = "{FormatConversion|- CONFIG\_PATH\: String&#92;n- WORKING\_PATH\: String&#92;n- initialized\: boolean|+assignPaths\(workingPath : String, configPath : String\) : void&#92;n+createImgFromFSM\(fsm : TransitionSystem, name : String\) : String&#92;n+createSVGFromFSM\(fsm : TransitionSystem, name : String\) : String&#92;n+createTikZFromSVG\(fsm : TransitionSystem, name : String\) : String&#92;n+createTikZFromFSM\(fsm : TransitionSystem, name : String\) : String&#92;n+generateDotFile\(fsm : TransitionSystem, name : String, type : String\) : File&#92;n-initializeCheck\(\) : boolean}"];
+	n4 [label = "{FSMUI|- frame\: WindowFrame&#92;n- imagePage\: ImagePage&#92;n- optionPageManager\: OptionPageManager&#92;n- imageHeader\: ImageHeader&#92;n- optionHeader\: OptionsHeader&#92;n- fsmPaths\: ArrayList\\<String\\>&#92;n- fsms\: ArrayList\\<FSM\\>&#92;n- dotAddress\: String|+FSMUI\(\)&#92;n-createPages\(\) : void&#92;n-fileConfiguration\(\) : void&#92;n-verifyConfigFile\(f : File\) : boolean&#92;n-createConfigurationFile\(config : File\) : void&#92;n-readDirectories\(config : File\) : void&#92;n-writeConfigEntry\(entry : String, contents : String\) : void&#92;n-verifyDotAddress\(path : String\) : boolean&#92;n+allotImage\(path : String\) : void&#92;n+allotTransitionSystem\(in : String, name : String\) : void&#92;n+allotTransitionSystem\(in : FSM, name : String\) : void&#92;n+removeImage\(index : int\) : void&#92;n+removeTransitionSystem\(index : int\) : void&#92;n+removeActiveTransitionSystem\(\) : void&#92;n+refreshActiveImage\(\) : void&#92;n+saveActiveFSMSource\(\) : void&#92;n+saveActiveFSMImage\(\) : String&#92;n+saveActiveTikZ\(\) : String&#92;n+saveActiveSVG\(\) : String&#92;n+renameActiveFSM\(newName : String\) : void&#92;n+deleteActiveFSM\(\) : void&#92;n-deleteFSMFromMemory\(name : String\) : void&#92;n+updateDisplay\(\) : void&#92;n+updateOptionHeader\(\) : void&#92;n+updateImageHeader\(\) : void&#92;n+updateActiveOptionPage\(\) : void&#92;n+updateImagePanel\(\) : void&#92;n+getActiveFSM\(\) : FSM&#92;n+getFSMList\(\) : ArrayList\<String\>&#92;n+getFSMPath\(index : int\) : String&#92;n+getFSM\(index : int\) : FSM&#92;n+getCurrentActiveFSM\(\) : int&#92;n+retrieveFileReader\(pathIn : String\) : BufferedReader&#92;n+stripPath\(in : String\) : String&#92;n+popupDisplayText\(text : String\) : void}"];
+	n5 [label = "{EntrySet|- contents\: String\\[\\]&#92;n- subsystemCode\: int&#92;n- category\: String&#92;n- label\: String&#92;n- type\: String&#92;n- code\: int&#92;n- button\: boolean|+EntrySet\(lab : String, ty : String, butt : boolean, co : int\)&#92;n+drawEntrySet\(y : int\) : int&#92;n+appendItem\(ref : String\) : boolean&#92;n+removeItem\(ind : int\) : boolean&#92;n+resetContents\(\) : void&#92;n+processEvent\(\) : void&#92;n+setCode\(in : int\) : void&#92;n+setCategory\(in : String\) : void&#92;n+getElementPrefix\(\) : String&#92;n+getElementNameTextEntry\(ind : int\) : String&#92;n-getEntryContentSize\(in : String\) : int&#92;n+getCode\(\) : int&#92;n+getLabel\(\) : String&#92;n+getType\(\) : String&#92;n+getContents\(\) : String\[\]&#92;n+getContentAtIndex\(index : int\) : String}"];
+	n6 [label = "{ReadWrite||+writeToFile\(filePath : String, special : String, transF : TransitionFunction, ext : String\) : boolean&#92;n+readFromFile\(states : StateMap, events : EventMap, transitions : TransitionFunction, file : File\) : ArrayList\<ArrayList\<String\>\>}"];
+	n7 [label = "{ImageHeader|- imagePage\: ImagePage|+ImageHeader\(x : int, y : int, wid : int, hei : int, refer : ImagePage\)&#92;n+update\(\) : void}"];
+	n8 [label = "{GraphViz|- configFile\: Properties&#92;n- osName\: String&#92;n- cfgProp\: String&#92;n- tempDir\: String&#92;n- DOT\: String&#92;n- graph\: StringBuilder&#92;n- currentDpiPos\: int|+GraphViz\(workingPath : String, configPath : String\)&#92;n+verifyDotPath\(path : String\) : boolean&#92;n+increaseDpi\(\) : void&#92;n+decreaseDpi\(\) : void&#92;n+getImageDpi\(\) : int&#92;n+getDotSource\(\) : String&#92;n+start\_subgraph\(clusterid : int\) : String&#92;n+end\_subgraph\(\) : String&#92;n+start\_graph\(\) : String&#92;n+end\_graph\(\) : String&#92;n+clearGraph\(\) : void&#92;n+add\(line : String\) : void&#92;n+addln\(line : String\) : void&#92;n+addln\(\) : void}"];
+	n9 [label = "{Category|- name\: String&#92;n- sets\: ArrayList\\<EntrySet\\>&#92;n- contained\: HashSet\\<Integer\\>&#92;n- open\: boolean&#92;n- code\: int|+Category\(nom : String\)&#92;n+drawCategoryHeader\(y : int\) : int&#92;n+toggleOpen\(\) : void&#92;n+hideContents\(\) : void&#92;n+setCode\(in : int\) : void&#92;n+addEntrySet\(in : EntrySet\) : void&#92;n+getEntrySet\(code : int\) : EntrySet&#92;n+isOpen\(\) : boolean&#92;n+getContents\(code : int, posit : int\) : String&#92;n+getCode\(\) : int&#92;n+getEntrySets\(\) : ArrayList\<EntrySet\>&#92;n+getTitle\(\) : String&#92;n+contains\(code : int\) : boolean}"];
+	n10 [label = "{OptionsHeader|- optionPageManager\: OptionPageManager|+OptionsHeader\(x : int, y : int, wid : int, hei : int, refer : OptionPageManager\)&#92;n+update\(\) : void}"];
+	n11 [label = "{PopoutImageDisplay|- imageDisplay\: ImageDisplay&#92;n- dragStartX\: int&#92;n- dragStartY\: int&#92;n- dragState\: boolean|+PopoutImageDisplay\(ref : String\)}"];
+	n12 [label = "{Operations||+Operations\(x : int, y : int, wid : int, hei : int\)&#92;n-getFSMArray\(code : int, \) : FSM\[\]&#92;n-getFSM\(code : int, \) : FSM&#92;n-getModal\(code : int, \) : ModalSpecification}"];
+	n13 [label = "{Event|# id\: String&#92;n- controllability\: boolean&#92;n- systemObservability\: boolean&#92;n- attackerObservability\: boolean|+Event\(\)&#92;n+Event\(eventName : String\)&#92;n+Event\(eventName : String, cont : boolean, obs : boolean, atk : boolean\)&#92;n+Event\(oldEvent : Event\)&#92;n+Event\(other1 : Event, other2 : Event\)&#92;n+setEventName\(in : String\) : void&#92;n+setEventObservability\(obs : boolean\) : void&#92;n+setEventAttackerObservability\(obs : boolean\) : void&#92;n+setEventControllability\(con : boolean\) : void&#92;n+getEventName\(\) : String&#92;n+getEventType\(\) : int&#92;n+getEventObservability\(\) : boolean&#92;n+getEventAttackerObservability\(\) : boolean&#92;n+getEventControllability\(\) : boolean&#92;n+resetEventAttributes\(\) : void&#92;n+equals\(other : Object\) : boolean}"];
+	n14 [label = "{StateMap|- states\: HashMap\\<String, State\\>&#92;n- composition\: HashMap\\<State, ArrayList\\<State\\>\\>|+StateMap\(\)&#92;n+renameState\(state : State, newName : String\) : boolean&#92;n+renameState\(oldName : String, newName : String\) : boolean&#92;n+renameStates\(\) : void&#92;n+makeDotString\(\) : String&#92;n+getStateComposition\(provided : State\) : ArrayList\<State\>&#92;n+getComposedStates\(\) : HashMap\<State, ArrayList\<State\>\>&#92;n+getState\(stateName : String\) : State&#92;n+getState\(state : State\) : State&#92;n+stateExists\(stateName : String\) : boolean&#92;n+getStates\(\) : Collection\<State\>&#92;n+setStateMapStates\(inHash : HashMap\<String, State\>\) : void&#92;n+setCompositionStates\(newComposed : HashMap\<State, ArrayList\<State\>\>\) : void&#92;n+setStateComposition\(keyState : State, composedStates : ArrayList\<State\>\) : void&#92;n+addState\(state : State\) : State&#92;n+addState\(state : State, prefix : String\) : State&#92;n+addState\(state1 : State, state2 : State\) : State&#92;n+addState\(stateName : String\) : State&#92;n+addState\(providedStates : State\.\.\.\) : State&#92;n+removeState\(state : State\) : void&#92;n+removeState\(stateName : String\) : void&#92;n+removeStates\(inStates : ArrayList\<State\>\) : void&#92;n+removeStates\(inStates : HashSet\<State\>\) : void}"];
+	n15 [label = "{test||+main\(args : String\[\]\) : void&#92;n+testA\(\) : void&#92;n+testB\(\) : void&#92;n#catch\(e : Exception\) : \(&#92;n+testC\(\) : void}"];
+	n16 [label = "{Transition|+ event\: Event&#92;n- states\: ArrayList\\<State\\>|+Transition\(inEvent : Event, inStates : State\.\.\.\)&#92;n+Transition\(inEvent : Event, inStates : Collection\<State\>\)&#92;n+Transition\(\)&#92;n+makeDotString\(firstState : State\) : String&#92;n+makeDotStringMayTransition\(firstState : State\) : String&#92;n+generateTransition\(\) : Transition&#92;n+setTransitionState\(in : ArrayList\<State\>\) : void&#92;n+setTransitionState\(in : State\) : void&#92;n+setTransitionEvent\(in : Event\) : void&#92;n+getTransitionEvent\(\) : Event&#92;n+getTransitionStates\(\) : ArrayList\<State\>&#92;n+stateExists\(stateName : String\) : boolean&#92;n+stateExists\(inState : State\) : boolean&#92;n+addTransitionState\(stateNew : State\) : boolean&#92;n+removeTransitionState\(stateName : String\) : boolean&#92;n+removeTransitionState\(inState : State\) : boolean&#92;n+removeTransitionStates\(inStates : Collection\<State\>\) : boolean}"];
+	n17 [label = "{UStructure|- plantFSM\: FSM&#92;n- agents\: Agent\\[\\]&#92;n- badTransitions\: HashMap\\<String, ArrayList\\<Transition\\>\\>&#92;n- compositeMapping\: HashMap\\<State, State\\[\\]\\>&#92;n- uStructure\: FSM&#92;n- goodBadStates\: HashSet\\<State\\>&#92;n- badGoodStates\: HashSet\\<State\\>|+UStructure\(thePlant : FSM, theBadTransitions : TransitionFunction, theAgents : Agent\.\.\.\)&#92;n+UStructure\(thePlant : FSM, theBadTransitions : TransitionFunction, theAgents : ArrayList\<Agent\>\)&#92;n+createUStructure\(\) : void&#92;n+createUStructureAgain\(\) : void&#92;n-generateObservablePermutation\(tags : HashSet\<String\>, index : int, total : String, sight : boolean\[\]\) : HashSet\<String\>&#92;n+findIllegalStates\(\) : void&#92;n+getUStructure\(\) : FSM&#92;n+getPlantFSM\(\) : FSM&#92;n+getIllegalConfigOneStates\(\) : HashSet\<State\>&#92;n+getIllegalConfigTwoStates\(\) : HashSet\<State\>&#92;n+BatchAgentStates\(states : State\[\], identity : State\)&#92;n+getStates\(\) : State\[\]&#92;n+setState\(in : State\) : void&#92;n+getIdentityState\(\) : State}"];
+	n18 [label = "{MultiFSMSelection|- selected\: MultiFSMSelectedPanel&#92;n- choice\: MultiFSMSelectablePanel&#92;n- context\: EntrySet|+MultiFSMSelection\(ref : EntrySet\)&#92;n+redraw\(\) : void&#92;n+getContext\(\) : EntrySet}"];
+	n19 [label = "{DisabledEvents|- stateIsDisabled\: boolean&#92;n- disabledEvents\: ArrayList\\<String\\>|+DisabledEvents\(stateDisabled : boolean\)&#92;n+stateIsDisabled\(\) : boolean&#92;n+allEventsEnabled\(\) : boolean&#92;n+eventIsEnabled\(eventName : String\) : boolean&#92;n+getDisabledEvents\(\) : ArrayList\<String\>&#92;n+disableState\(\) : void&#92;n+disableEvent\(eventName : String\) : void&#92;n+disableEvents\(other : DisabledEvents\) : void}"];
+	n20 [label = "{ImageDisplay|- imageName\: String&#92;n- imagePath\: String&#92;n- reference\: Image&#92;n- zoom\: double&#92;n- p\: ElementPanel&#92;n- originUIX\: int&#92;n- originUIY\: int&#92;n- popout\: boolean&#92;n- hideUI\: boolean|+ImageDisplay\(path : String, in : ElementPanel\)&#92;n+processClickInput\(code : int\) : void&#92;n+processKeyInput\(code : char\) : void&#92;n+generatePopout\(\) : void&#92;n+drawPage\(\) : void&#92;n+refresh\(\) : void&#92;n+clear\(\) : void&#92;n+resetPosition\(\) : void&#92;n-drawImageButton\(name : String, frame : boolean, x : int, y : int, wid : int, hei : int, path : String, code : int\) : void&#92;n+designatePopout\(\) : void&#92;n+setImagePath\(in : String\) : void&#92;n+increaseOriginX\(\) : void&#92;n+increaseOriginY\(\) : void&#92;n+decreaseOriginX\(\) : void&#92;n+decreaseOriginY\(\) : void&#92;n+dragOriginX\(amount : int\) : void&#92;n+dragOriginY\(amount : int\) : void&#92;n+increaseZoom\(\) : void&#92;n+decreaseZoom\(\) : void&#92;n+getImageName\(\) : String&#92;n+getImagePath\(\) : String&#92;n+getImage\(\) : Image&#92;n+getZoom\(\) : double&#92;n-formatImageName\(in : String\) : String}"];
+	n21 [label = "{State|- id\: String&#92;n- initial\: boolean&#92;n- marked\: boolean&#92;n- badState\: boolean&#92;n- privacy\: boolean|+State\(name : String, init : boolean, mark : boolean\)&#92;n+State\(name : String, code : int\)&#92;n+State\(states : State\.\.\.\)&#92;n+State\(replace : State\)&#92;n+State\(state1 : State, state2 : State\)&#92;n+State\(name : String\)&#92;n+State\(\)&#92;n+copy\(\) : State&#92;n+copyDataFrom\(other : State\) : void&#92;n+makeStateWith\(other : State\) : State&#92;n+makeDotString\(\) : String&#92;n+getStateName\(\) : String&#92;n+getStateInitial\(\) : boolean&#92;n+getStateMarked\(\) : boolean&#92;n+getStatePrivate\(\) : boolean&#92;n+getStateBad\(\) : boolean&#92;n+setStateName\(in : String\) : void&#92;n+setStateInitial\(init : boolean\) : void&#92;n+setStateMarked\(init : boolean\) : void&#92;n+setStatePrivate\(init : boolean\) : void&#92;n+setStateBad\(init : boolean\) : void}"];
+	n22 [label = "{HeaderBase||+HeaderBase\(x : int, y : int, wid : int, hei : int\)&#92;n+handleText\(nom : String, x : int, y : int, wid : int, hei : int, font : Font, phr : String\) : void&#92;n+handleTextEntry\(nom : String, x : int, y : int, wid : int, hei : int, cod : int, phr : String\) : void&#92;n+handleButton\(nom : String, x : int, y : int, wid : int, hei : int, code : int\) : void&#92;n+handleLine\(nom : String, x : int, y : int, x2 : int, y2 : int, thck : int, col : Color\) : void&#92;n+handleRectangle\(nom : String, prior : int, x : int, y : int, wid : int, hei : int, col : Color, col2 : Color\) : void}"];
+	n23 [label = "{UStructurePage||+UStructurePage\(x : int, y : int, wid : int, hei : int\)&#92;n+setAgents\(in : ArrayList\<Agent\>\) : void}"];
+	n24 [label = "{PopoutAlert||+PopoutAlert\(text : String\)}"];
+	n25 [label = "{ModalSpecification|# initialState\: State&#92;n# mustTransitions\: TransitionFunction&#92;n- Transition\\>\: \\<T extends|+ModalSpecification\(in : File, inId : String\)&#92;n+ModalSpecification\(other : TransitionSystem, inId : String\) : \<T1 extends Transition\>&#92;n+ModalSpecification\(other : ModalSpecification, badStates : HashSet\<String\>, inId : String\)&#92;n+ModalSpecification\(inId : String\)&#92;n+ModalSpecification\(\)&#92;n+getUnderlyingFSM\(\) : FSM&#92;n+buildOptimalOpaqueController\(\) : FSM&#92;n+epsilonReach\(ts : ModalSpecification, s : State, must : boolean\) : HashSet\<State\>&#92;n+toTextFile\(filePath : String, name : String\) : void&#92;n+makeDotString\(\) : String&#92;n+makeAccessible\(\) : ModalSpecification&#92;n+getSupremalControllableSublanguage\(other : FSM\) : FSM&#92;n+testCurrentStateOpacity\(\) : ArrayList\<State\>&#92;n+product\(other : ModalSpecification\.\.\.\) : ModalSpecification&#92;n#productHelper\(other : ModalSpecification, newFSM : ModalSpecification\) : void&#92;n+parallelComposition\(other : ModalSpecification\.\.\.\) : ModalSpecification&#92;n#parallelCompositionHelper\(other : ModalSpecification, newFSM : ModalSpecification\) : void&#92;n+newPrune\(modal1 : ModalSpecification, modal2 : ModalSpecification, composedModal : ModalSpecification\) : ModalSpecification&#92;n+stateIsBad\(modal1 : ModalSpecification, modal2 : ModalSpecification, composedModal : ModalSpecification, s : State\) : boolean&#92;n+privateEventSearch\(mod : EventMap, modState : State, shared : EventMap, e : Event\) : boolean&#92;n+prune\(\) : ModalSpecification&#92;n-getBadMustTransitionStates\(badStates : HashSet\<String\>\) : boolean&#92;n+makeOptimalSupervisor\(ModalSpecification : FSM, \) : ModalSpecification&#92;n#markBadStates\(fsm : FSM, specFSM : FSM, product : FSM, badStates : HashSet\<String\>\)&#92;n+createUniversalObserverView\(fsm : FSM, newFSM : FSM\) : \<T extends Transition\> HashMap\<String, String\>&#92;n-addComposedState\(fsm : FSM, stateCollection : HashSet\<State\>\) : \<T extends Transition\> State&#92;n+getGreatestLowerBound\(other : ModalSpecification\) : ModalSpecification&#92;n-getPseudoLowerBound\(other : ModalSpecification\) : ModalSpecification&#92;n-copyCommonTransitions\(curr : NextStates, msA : ModalSpecification, msB : ModalSpecification\) : LinkedList\<NextStates\>&#92;n-copyPrivateTransitions\(curr : NextStates, msA : ModalSpecification, msB : ModalSpecification\) : LinkedList\<NextStates\>&#92;n-copyMustTransitions\(curr : NextStates, msA : ModalSpecification, msB : ModalSpecification\) : LinkedList\<NextStates\>&#92;n+copyMustTransitions\(other : ModalSpecification\) : void&#92;n+copyMustTransitions\(other : ModalSpecification, badStates : HashSet\<String\>\) : void&#92;n+getMustTransitions\(\) : TransitionFunction&#92;n+getInitialStates\(\) : ArrayList\<State\>&#92;n+getInitialState\(\) : State&#92;n+hasInitialState\(stateName : String\) : boolean&#92;n+getDisabledEvents\(curr : State, otherFSM : FSM, visitedStates : HashSet, disabledMap : HashMap\) : DisabledEvents&#92;n+getEventControllability\(eventName : String\) : Boolean&#92;n+getEventObservability\(eventName : String\) : Boolean&#92;n+getEventAttackerObservability\(eventName : String\) : Boolean&#92;n+setEventControllability\(eventName : String, value : boolean\) : void&#92;n+setEventObservability\(eventName : String, status : boolean\) : boolean&#92;n+setEventAttackerObservability\(eventName : String, status : boolean\) : boolean&#92;n+addMustTransition\(state1 : String, eventName : String, state2 : String\) : void&#92;n+addMustTransition\(state : State, transition : Transition\) : void&#92;n+addInitialState\(newInitial : String\) : void&#92;n+addInitialState\(newState : State\) : void&#92;n+removeInitialState\(stateName : String\) : boolean&#92;n+removeTransition\(state1 : String, eventName : String, state2 : String\) : boolean&#92;n+copy\(\) : ModalSpecification&#92;n+contains\(s : State, t : Transition\) : boolean}"];
+	n26 [label = "{PopoutWindow|- frame\: WindowFrame&#92;n- panel\: ElementPanel|+PopoutWindow\(\)&#92;n+resize\(wid : int, hei : int\) : void&#92;n+dispose\(\) : void&#92;n#allowScrollbars\(set : boolean\) : void&#92;n#removeElementPrefixed\(in : String\) : void&#92;n+setTitle\(in : String\) : void&#92;n+getStoredText\(ref : String\) : String&#92;n#getElementPanel\(\) : ElementPanel&#92;n+handleTextButton\(nom : String, x : int, y : int, wid : int, hei : int, font : Font, phr : String, code : int, col : Color, col2 : Color\) : void&#92;n+handleText\(nom : String, x : int, y : int, wid : int, hei : int, font : Font, phr : String\) : void&#92;n+handleTextEntry\(nom : String, x : int, y : int, wid : int, hei : int, cod : int, phr : String\) : void&#92;n+handleButton\(nom : String, x : int, y : int, wid : int, hei : int, code : int\) : void&#92;n+handleLine\(nom : String, x : int, y : int, x2 : int, y2 : int, thck : int, col : Color\) : void&#92;n+handleRectangle\(nom : String, prior : int, x : int, y : int, wid : int, hei : int, col : Color, col2 : Color\) : void}"];
+	n27 [label = "{TransitionSystem|# states\: StateMap&#92;n# events\: EventMap&#92;n# transitions\: TransitionFunction&#92;n# id\: String|+renameStates\(\) : void&#92;n+makeDotString\(\) : String&#92;n#getCoAccessibleMap\(\) : HashMap\<String, Boolean\>&#92;n-recursivelyFindMarked\(curr : State, results : HashMap\<String, Boolean\>, visited : HashSet\<String\>\) : boolean&#92;n+isBlocking\(\) : boolean&#92;n+copyStates\(other : TransitionSystem, prefix : String\) : void&#92;n+copyStates\(other : TransitionSystem\) : void&#92;n+copyStates\(other : TransitionSystem, badStates : HashSet\<String\>\) : void&#92;n+copyEvents\(other : TransitionSystem\) : void&#92;n+copyTransitions\(other : TransitionSystem\) : void&#92;n+setId\(inId : String\) : void&#92;n+setStateComposition\(aggregate : State, pieces : State\.\.\.\) : void&#92;n+setStateCompositionDuplicate\(aggregate : State, pieces : State\.\.\.\) : void&#92;n+setCompositionStates\(composed : HashMap\<State, ArrayList\<State\>\>\) : void&#92;n+setFSMStateMap\(inState : StateMap\) : void&#92;n+setFSMEventMap\(inEvent : EventMap\) : void&#92;n+setFSMTransitionFunction\(inTrans : TransitionFunction\) : void&#92;n+constructFSM\(inStates : StateMap, inTrans : TransitionFunction, inEvents : EventMap\) : void&#92;n+getStateMap\(\) : StateMap&#92;n+getEventMap\(\) : EventMap&#92;n+getId\(\) : String&#92;n+getComposedStates\(\) : HashMap\<State, ArrayList\<State\>\>&#92;n+getStateComposition\(state : State\) : ArrayList\<State\>&#92;n+getStateTransitions\(state : State\) : ArrayList\<Transition\>&#92;n+getState\(state : State\) : State&#92;n+getStates\(\) : Collection\<State\>&#92;n+getEvents\(\) : Collection\<Event\>&#92;n+getState\(stateName : String\) : State&#92;n+getEvent\(eventName : String\) : Event&#92;n+stateExists\(stateName : String\) : boolean&#92;n+getTransitions\(\) : TransitionFunction&#92;n+isMarked\(stateName : String\) : boolean&#92;n+addState\(stateName : String\) : State&#92;n+addState\(state : State\) : State&#92;n+addState\(state : State\.\.\.\) : State&#92;n+addStateTransitions\(state : State, newTransitions : ArrayList\<Transition\>\) : void&#92;n+addStateComposition\(composed : HashMap\<State, ArrayList\<State\>\>\) : void&#92;n+addTransition\(state1 : String, eventName : String, state2 : String\) : void&#92;n+addTransition\(state : State, transition : Transition\) : void&#92;n+addTransition\(state : State, event : Event, state2 : State\) : void&#92;n+removeState\(stateName : String\) : boolean&#92;n+removeTransition\(state1 : String, eventName : String, state2 : String\) : boolean&#92;n+markAllStates\(\) : void&#92;n+unmarkAllStates\(\) : void&#92;n+makeAllStatesGood\(\) : void&#92;n+removeBadStates\(\) : void&#92;n+toggleMarkedState\(stateName : String\) : Boolean&#92;n+toggleBadState\(stateName : String\) : Boolean&#92;n+toggleSecretState\(stateName : String\) : Boolean}"];
+	n28 [label = "{SVGtoTikZ||+convertSVGToTikZ\(f : File, path : String\) : File&#92;n-drawCircleNode\(x : double, y : double, rad : double, mark : boolean, name : String, color : String\) : String&#92;n-drawEdges\(path : ArrayList\<Double\>, color : String, dotted : boolean\) : String&#92;n-drawPolygon\(path : ArrayList\<Double\>, color : String\) : String&#92;n-drawLabel\(x : double, y : double, name : String\) : String}"];
+	n29 [label = "{OptionPageManager|- currentOptionPageIndex\: int&#92;n- p\: ElementPanel|+OptionPageManager\(reference : FSMUI\)&#92;n+generateElementPanel\(x : int, y : int, width : int, height : int\) : ElementPanel&#92;n+drawPage\(\) : void&#92;n+setCurrentOptionPageIndex\(in : int\) : void&#92;n+getCurrentOptionPageIndex\(\) : int&#92;n+getOptionPageList\(\) : OptionPage\[\]}"];
+	n30 [label = "{TransitionFunction|# transitions\: HashMap\\<State, ArrayList\\<Transition\\>\\>|+TransitionFunction\(\)&#92;n+makeDotString\(\) : String&#92;n+makeDotStringExcluding\(other : TransitionFunction\) : String&#92;n+getEpsilonReaches\(fsmStates : Collection\<State\>\) : HashMap\<State, HashSet\<State\>\>&#92;n+getInconsistentStates\(mustTransitionFunction : TransitionFunction\) : HashSet\<String\>&#92;n+getTransitions\(state : State\) : ArrayList\<Transition\>&#92;n+getSortedTransitions\(state : State\) : ArrayList\<Transition\>&#92;n+getAllTransitions\(\) : Set\<Map\.Entry\<State, ArrayList\<Transition\>\>\>&#92;n+getStates\(\) : Collection\<State\>&#92;n+getEmptyTransition\(\) : Transition&#92;n+eventExists\(state : State, event : Event\) : boolean&#92;n+getTransitionStates\(state : State, event : Event\) : ArrayList\<State\>&#92;n+contains\(reference : State, transition : Transition\) : boolean&#92;n+putTransitions\(state : State, inTransitions : ArrayList\<Transition\>\) : void&#92;n+addTransition\(state : State, transition : Transition\) : void&#92;n+addTransitionState\(inState : State, event : Event, outState : State\) : void&#92;n+addTransition\(state : String, event : String, outState : String\) : void&#92;n+removeState\(state : State\) : void&#92;n+removeStates\(badStates : Collection\<State\>\) : void&#92;n+removeTransition\(stateFrom : State, event : Event, stateTo : State\) : boolean}"];
+	n31 [label = "{SingleFSMSelection|- pan\: SingleFSMPanel|+SingleFSMSelection\(ref : EntrySet\)}"];
+	n32 [label = "{OptionPage|- header\: String&#92;n- help\: String&#92;n- categories\: ArrayList\\<Category\\>&#92;n+ SUBSYSTEM\_CODE\: int&#92;n- p\: ElementPanel&#92;n- reference\: FSMUI&#92;n- showHelp\: boolean&#92;n- helpKey\: int&#92;n- showSettings\: boolean&#92;n- settingsKey\: int|+OptionPage\(head : String, inHelp : String, categoriesIn : String\[\], data : Object\[\]\[\]\[\]\)&#92;n+drawPage\(\) : void&#92;n+drawNormalPage\(\) : void&#92;n+drawHelpPage\(\) : void&#92;n+handleMouseInput\(code : int, x : int, y : int\) : void&#92;n+assignElementPanel\(inP : ElementPanel\) : void&#92;n+assignFSMUI\(fsm : FSMUI\) : void&#92;n+addCategory\(title : String\) : void&#92;n+addEntrySet\(category : String, label : String, type : String, code : int, activeButton : boolean\) : void&#92;n+resetCodeEntries\(code : int\) : void&#92;n+toggleCategory\(code : int\) : boolean&#92;n+appendContentToCode\(code : int, reference : String\) : void&#92;n+removeContentsFromCode\(code : int, index : int\) : void&#92;n+getHeader\(\) : String&#92;n+getFSMUI\(\) : FSMUI&#92;n+getElementPanel\(\) : ElementPanel&#92;n+getCategory\(title : String\) : Category&#92;n+getCategoryFromCode\(code : int\) : Category&#92;n+getEntrySetFromCode\(code : int\) : EntrySet&#92;n+getTextFromCode\(code : int, posit : int\) : String&#92;n+getIntegerFromCode\(code : int, posit : int\) : Integer&#92;n+getCheckboxContentsFromCode\(code : int\) : Boolean&#92;n+getTypeFromCode\(code : int\) : String&#92;n+getContentFromCode\(code : int\) : String\[\]&#92;n+handleText\(nom : String, x : int, y : int, wid : int, hei : int, inF : Font, phr : String\) : void&#92;n+handleImage\(nom : String, x : int, y : int, path : String, scale : double\) : void&#92;n+handleTextEntry\(nom : String, x : int, y : int, wid : int, hei : int, cod : int, phr : String\) : void&#92;n+handleButton\(nom : String, x : int, y : int, wid : int, hei : int, code : int\) : void&#92;n+handleLine\(nom : String, x : int, y : int, x2 : int, y2 : int, thck : int, col : Color\) : void&#92;n+handleRectangle\(nom : String, x : int, y : int, wid : int, hei : int, inside : Color, border : Color\) : void}"];
+	n33 [label = "{PopoutSelectList|- ref\: String\\[\\]&#92;n- used\: String\\[\\]&#92;n- searchTerm\: String&#92;n- filtered\: boolean|+PopoutSelectList\(list : String\[\], filter : boolean\)&#92;n-drawPage\(\) : void&#92;n-filterList\(\) : void}"];
+	n34 [label = "{GenerateFSM|- events\: ArrayList\\<String\\>&#92;n- states\: ArrayList\\<String\\>|+createNewFSM\(sizeStates : int, sizeMarked : int, sizeEvents : int, sizePaths : int, sizeInitial : int, sizePrivate : int, sizeUnobserv : int, sizeAttacker : int, sizeControl : int, nonDet : boolean, name : String, filePath : String\) : String&#92;n+createModalSpec\(sizeStates : int, sizeMarked : int, sizeEvents : int, sizePaths : int, sizePrivate : int, sizeUnobserv : int, sizeAttacker : int, sizeControl : int, sizeMust : int, name : String, filePath : String\) : String}"];
+	n35 [label = "{PopoutAgentSelection|- DEFAULT\_FONT\: Font&#92;n- SMALL\_FONT\: Font&#92;n- SMALLER\_FONT\: Font|+PopoutAgentSelection\(context : UStructurePage, ref : String\)&#92;n+drawPage\(\) : void}"];
+	n36 [label = "{FSM|# initialStates\: ArrayList\\<State\\>|+FSM\(in : File, inId : String, \)&#92;n+FSM\(other : TransitionSystem, inId : String\)&#92;n+FSM\(inId : String\)&#92;n+FSM\(\)&#92;n+buildObserver\(\) : FSM&#92;n+toTextFile\(filePath : String, name : String\) : void&#92;n+getDisabledEvents\(curr : State, otherFSM : FSM, visitedStates : HashSet\<String\>, disabledMap : HashMap\<String, DisabledEvents\>\) : DisabledEvents&#92;n+testCurrentStateOpacity\(\) : ArrayList\<State\>&#92;n+trim\(\) : FSM&#92;n+makeAccessible\(\) : FSM&#92;n+makeCoAccessible\(\) : FSM&#92;n+product\(other : FSM\.\.\.\) : FSM&#92;n+parallelComposition\(other : FSM\.\.\.\) : FSM&#92;n+getSupremalControllableSublanguage\(other : FSM\) : FSM&#92;n#productHelper\(other : FSM, newFSM : FSM\) : void&#92;n#parallelCompositionHelper\(other : FSM, newFSM : FSM\) : void&#92;n+getEventObservability\(eventName : String\) : Boolean&#92;n+getEventControllability\(eventName : String\) : Boolean&#92;n+getEventAttackerObservability\(eventName : String\) : Boolean&#92;n+setEventObservability\(eventName : String, status : boolean\) : boolean&#92;n+setEventControllability\(eventName : String, value : boolean\) : void&#92;n+setEventAttackerObservability\(eventName : String, status : boolean\) : boolean&#92;n+copy\(\) : FSM}"];
+	n37 [label = "{ImagePage|- p\: ElementPanel&#92;n- images\: ArrayList\\<ImageDisplay\\>&#92;n- currentImageIndex\: int&#92;n- reference\: FSMUI&#92;n- dragStartX\: int&#92;n- dragStartY\: int&#92;n- dragState\: boolean|+ImagePage\(ref : FSMUI\)&#92;n+generateElementPanel\(x : int, y : int, width : int, height : int\) : ElementPanel&#92;n+generatePopout\(\) : void&#92;n+replaceActiveImage\(newName : String\) : void&#92;n+refreshActiveImage\(\) : void&#92;n+allotImage\(path : String\) : void&#92;n+removeImage\(ind : int\) : void&#92;n+drawPage\(\) : void&#92;n-addFraming\(\) : void&#92;n+setCurrentImageIndex\(in : int\) : void&#92;n+increaseCurrentImageIndex\(\) : void&#92;n+decreaseCurrentImageIndex\(\) : void&#92;n+getImages\(\) : ArrayList\<String\>&#92;n+getCurrentImageIndex\(\) : int&#92;n+getCurrentImageDisplay\(\) : ImageDisplay}"];
+	n38 [label = "{EventMap|- events\: HashMap\\<String, Event\\>|+EventMap\(\)&#92;n+renameEvent\(oldName : String, newName : String\) : void&#92;n+getSharedEvents\(other : EventMap\) : EventMap&#92;n+getEvent\(eventName : String\) : Event&#92;n+getEvent\(event : Event\) : Event&#92;n+getEvents\(\) : Collection\<Event\>&#92;n+getPrivateEvents\(other : EventMap\) : HashSet\<String\>&#92;n+eventExists\(eventName : String\) : boolean&#92;n+addEvent\(oldEvent : Event\) : Event&#92;n+addEvent\(event1 : Event, event2 : Event\) : Event&#92;n+addEvent\(eventName : String\) : Event&#92;n+removeEvent\(event : Event\) : void&#92;n+removeEvent\(eventName : String\) : void&#92;n+resetEvents\(\) : void&#92;n+contains\(in : Event\) : boolean&#92;n+contains\(in : String\) : boolean}"];
+	n39 [label = "{AdjustFSM||+AdjustFSM\(x : int, y : int, width : int, height : int\)}"];
+
+	subgraph cluster_fsm{
+		label = "fsm";
+		n25;
+		n27;
+		n36;
+	}
+	subgraph cluster_test{
+		label = "test";
+		n15;
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_optionpage{
+				label = "ui_page_optionpage";
+				subgraph cluster_ui_page_optionpage_implementation{
+					label = "ui_page_optionpage_implementation";
+					n12;
+					n23;
+					n39;
+				}
+			}
+		}
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_imagepage{
+				label = "ui_page_imagepage";
+				n20;
+				n37;
+			}
+		}
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_optionpage{
+				label = "ui_page_optionpage";
+				n5;
+				n9;
+				n12;
+				n18;
+				n23;
+				n29;
+				n31;
+				n32;
+				n39;
+			}
+		}
+	}
+	subgraph cluster_support{
+		label = "support";
+		subgraph cluster_support_component{
+			label = "support_component";
+			n13;
+			n14;
+			n16;
+			n21;
+			n30;
+			n38;
+		}
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		n1;
+		n4;
+		n5;
+		n7;
+		n9;
+		n10;
+		n11;
+		n12;
+		n18;
+		n20;
+		n22;
+		n23;
+		n24;
+		n26;
+		n29;
+		n31;
+		n32;
+		n33;
+		n35;
+		n37;
+		n39;
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_headers{
+				label = "ui_page_headers";
+				n7;
+				n10;
+				n22;
+			}
+		}
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_optionpage{
+				label = "ui_page_optionpage";
+				subgraph cluster_ui_page_optionpage_entryset{
+					label = "ui_page_optionpage_entryset";
+					n5;
+					n18;
+					n31;
+				}
+			}
+		}
+	}
+	subgraph cluster_graphviz{
+		label = "graphviz";
+		n8;
+	}
+	subgraph cluster_ui{
+		label = "ui";
+		subgraph cluster_ui_page{
+			label = "ui_page";
+			subgraph cluster_ui_page_popups{
+				label = "ui_page_popups";
+				n1;
+				n11;
+				n24;
+				n26;
+				n33;
+				n35;
+			}
+		}
+	}
+	subgraph cluster_support{
+		label = "support";
+		n2;
+		n3;
+		n6;
+		n13;
+		n14;
+		n16;
+		n17;
+		n19;
+		n21;
+		n28;
+		n30;
+		n34;
+		n38;
+	}
+	subgraph cluster_support{
+		label = "support";
+		subgraph cluster_support_component{
+			label = "support_component";
+			subgraph cluster_support_component_map{
+				label = "support_component_map";
+				n14;
+				n30;
+				n38;
+			}
+		}
+	}
+	subgraph cluster_support{
+		label = "support";
+		subgraph cluster_support_meta{
+			label = "support_meta";
+			n3;
+			n6;
+			n28;
+			n34;
+		}
+	}
+
+	n1 -> n26;
+	n2 -> n13;
+n2 -> n38;
+	n3 -> n27;
+n3 -> n8;
+n3 -> n4;
+n3 -> n24;
+	n4 -> n36;
+n4 -> n8;
+n4 -> n3;
+n4 -> n7;
+n4 -> n10;
+n4 -> n37;
+n4 -> n29;
+n4 -> n24;
+n4 -> n1;
+	n5 -> n4;
+n5 -> n32;
+	n6 -> n13;
+n6 -> n21;
+n6 -> n16;
+n6 -> n38;
+n6 -> n14;
+n6 -> n30;
+	n7 -> n4;
+n7 -> n37;
+n7 -> n22;
+		n9 -> n5;
+	n10 -> n4;
+n10 -> n29;
+n10 -> n22;
+	n11 -> n20;
+n11 -> n26;
+	n12 -> n36;
+n12 -> n25;
+n12 -> n2;
+n12 -> n17;
+n12 -> n30;
+n12 -> n4;
+n12 -> n32;
+n12 -> n5;
+		n14 -> n21;
+	n15 -> n36;
+n15 -> n2;
+n15 -> n17;
+n15 -> n13;
+n15 -> n21;
+n15 -> n30;
+n15 -> n3;
+n15 -> n4;
+n15 -> n35;
+		n17 -> n36;
+n17 -> n13;
+n17 -> n21;
+n17 -> n16;
+n17 -> n30;
+	n18 -> n4;
+n18 -> n32;
+		n20 -> n11;
+			n23 -> n36;
+n23 -> n2;
+n23 -> n17;
+n23 -> n30;
+n23 -> n4;
+n23 -> n32;
+n23 -> n5;
+n23 -> n35;
+	n24 -> n26;
+	n25 -> n13;
+n25 -> n21;
+n25 -> n16;
+n25 -> n38;
+n25 -> n14;
+n25 -> n30;
+n25 -> n3;
+n25 -> n6;
+n25 -> n19;
+n25 -> n27;
+		n27 -> n13;
+n27 -> n21;
+n27 -> n16;
+n27 -> n38;
+n27 -> n14;
+n27 -> n30;
+		n29 -> n4;
+n29 -> n39;
+n29 -> n12;
+n29 -> n23;
+	n30 -> n13;
+n30 -> n21;
+n30 -> n16;
+	n31 -> n4;
+n31 -> n32;
+	n32 -> n4;
+n32 -> n5;
+	n33 -> n4;
+n33 -> n26;
+		n35 -> n36;
+n35 -> n2;
+n35 -> n13;
+n35 -> n38;
+n35 -> n23;
+n35 -> n26;
+	n36 -> n19;
+n36 -> n13;
+n36 -> n21;
+n36 -> n16;
+n36 -> n38;
+n36 -> n14;
+n36 -> n30;
+n36 -> n6;
+n36 -> n27;
+	n37 -> n4;
+	n38 -> n13;
+	n39 -> n3;
+n39 -> n34;
+n39 -> n4;
+n39 -> n32;
+n39 -> n5;
+n39 -> n33;
+n39 -> n24;
+}

@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import analysis.Class;
+import analysis.language.Class;
 
 public class ConvertVisual  {
 	
@@ -13,12 +13,11 @@ public class ConvertVisual  {
 	private final static String CONFIG_PATH = "./src/assets/config.properties";
 	private final static int DPI_INCREASE = 8;
 	
-	//TODO: Line formatting (straight lines, 90 degree turns)
-	
-	public static String convertClassStructure(HashMap<String, Class> reference, HashSet<String> clusters, boolean instanceVar, boolean funct) {
+	public static String convertClassStructure(HashMap<String, Class> reference, HashSet<String> clusters) {
 		String out = "digraph G {\n";
 		out += 	"\tnode[shape=record,style=filled,fillcolor=gray95];\r\n" + 
-				"\tedge[dir=back, arrowtail=empty];\n\n";
+				"\tedge[dir=back, arrowtail=empty];\n" +
+				"\tgraph[];\n";	//splines = ortho, nodesep = 1 for straight lines, looks rough, let user change how lines are displayed
 
 		out += "\n";
 		
@@ -26,7 +25,8 @@ public class ConvertVisual  {
 		HashMap<String, Integer> ref = new HashMap<String, Integer>();
 		for(Class c : reference.values()) {
 			ref.put(c.getName(), val);
-			out += c.generateDot(val++, instanceVar, funct);
+			String lab = c.generateDot(val++);
+			out += lab;
 		}
 		out += "\n";
 		
@@ -35,35 +35,32 @@ public class ConvertVisual  {
 			String nom = "";
 			for(int i = 0; i < pack.length; i++) {
 				nom += (i == 0 ? "" : "_") + pack[i];
-				String tab = "";
-				for(int j = 0; j < i + 1; j++) {
-					tab += "\t";
-				}
-				out += tab + "subgraph cluster_" + nom + "{\n";
-				out += tab + "\tlabel = \"" + nom + "\";\n";
-			}
-			String tab = "";
-			for(int j = 0; j < pack.length; j++) {
-				tab += "\t";
+				out += tabBuffer(i+1) + "subgraph cluster_" + nom + "{\n";
+				out += tabBuffer(i+1) + "\tlabel = \"" + nom + "\";\n";
 			}
 			for(String c : ref.keySet()) {
 				if(c.contains(s))
-					out += tab + "\tn" + ref.get(c) + ";\n";
+					out += tabBuffer(pack.length) + "\tn" + ref.get(c) + ";\n";
 			}
 			for(int i = 0; i < pack.length; i++) {
-				for(int j = pack.length - i - 1; j >= 0; j--) {
-					out += "\t";
-				}
-				out += "}\n";
+				out += tabBuffer(pack.length - i - 1) + "}\n";
 			}
 		}
 		
 		out += "\n";
 		for(Class c : reference.values()) {
-			out += c.generateAssociations(ref.get(c.getName()), ref);
+			out += c.generateAssociations(ref);
 		}
 		
 		out += "}";
+		return out;
+	}
+	
+	private static String tabBuffer(int in) {
+		String out = "";
+		while(in-- > 0) {
+			out += "\t";
+		}
 		return out;
 	}
 	
