@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import analysis.component.Argument;
+import analysis.component.Constructor;
 import analysis.component.Function;
 import analysis.component.InstanceVariable;
 
@@ -79,6 +81,39 @@ public abstract class Class{
 		return in.substring(in.lastIndexOf(".") + 1);
 	}
 
+	/**
+	 * Assumes input tokens ArrayList<<r>String> is in format of [name, type, name, type, ...]
+	 * 
+	 * 
+	 * @param tokens
+	 * @return
+	 */
+	
+	protected ArrayList<Argument> compileArguments(ArrayList<String> tokens){
+		ArrayList<Argument> out = new ArrayList<Argument>();
+		for(int i = 0; i < tokens.size(); i += 2) {
+			out.add(new Argument(tokens.get(i), tokens.get(i + 1)));
+		}
+		return out;
+	}
+	
+	protected Function compileFunction(String vis, String name, String ret, ArrayList<Argument> arguments, boolean statStatic, boolean statAbstract) {
+		Function in = new Function(vis, name, arguments, ret);
+		in.setAbstract(statAbstract);
+		in.setStatic(statStatic);
+		return in;
+	}
+	
+	protected Constructor compileConstructor(String vis, String name, ArrayList<Argument> arguments) {
+		return new Constructor(vis, name, arguments);
+	}
+	
+	protected InstanceVariable compileInstanceVariable(String vis, String typ, String nom, boolean statStatic) {
+		InstanceVariable in = new InstanceVariable(vis, nom, typ);
+		in.setStatic(statStatic);
+		return in;
+	}
+	
 //---  Setter Methods   -----------------------------------------------------------------------
 	
 	public static void assignProcessStates(boolean inst, boolean func, boolean priv) {
@@ -94,18 +129,16 @@ public abstract class Class{
 		associates.add(ref);
 	}
 	
-	protected void addFunction(Function func) {
-		if(func == null) {
-			return;
-		}
-		functions.add(func);
+	protected void addFunction(Function in) {
+		functions.add(in);
 	}
 	
-	protected void addInstanceVariable(InstanceVariable inst) {
-		if(inst == null) {
-			return;
-		}
-		instanceVariables.add(inst);
+	protected void addConstructor(Constructor in) {
+		functions.add(in);
+	}
+	
+	protected void addInstanceVariable(InstanceVariable in) {
+		instanceVariables.add(in);
 	}
 	
 //---  Getter Methods   -----------------------------------------------------------------------
@@ -129,6 +162,8 @@ public abstract class Class{
 	}
 	
 	public String getContext(String in) {
+		if(!in.contains("."))
+			return "";
 		return in.substring(0, in.lastIndexOf("."));
 	}
 	

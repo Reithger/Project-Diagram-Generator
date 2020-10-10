@@ -3,340 +3,165 @@ digraph G {
 	edge[dir=back, arrowtail=empty];
 	graph[];
 
-	n1 [label = <{PopoutConfig||}>];
-	n2 [label = <{Agent||}>];
-	n3 [label = <{FormatConversion||}>];
-	n4 [label = <{FSMUI||}>];
-	n5 [label = <{EntrySet||}>];
-	n6 [label = <{ReadWrite||}>];
-	n7 [label = <{ImageHeader||}>];
-	n8 [label = <{GraphViz||}>];
-	n9 [label = <{Category||}>];
-	n10 [label = <{OptionsHeader||}>];
-	n11 [label = <{PopoutImageDisplay||}>];
-	n12 [label = <{Operations||}>];
-	n13 [label = <{Event||}>];
-	n14 [label = <{StateMap||}>];
-	n15 [label = <{test||}>];
-	n16 [label = <{Transition||}>];
-	n17 [label = <{UStructure||}>];
-	n18 [label = <{MultiFSMSelection||}>];
-	n19 [label = <{DisabledEvents||}>];
-	n20 [label = <{ImageDisplay||}>];
-	n21 [label = <{State||}>];
-	n22 [label = <{HeaderBase||}>];
-	n23 [label = <{UStructurePage||}>];
-	n24 [label = <{PopoutAlert||}>];
-	n25 [label = <{ModalSpecification||}>];
-	n26 [label = <{PopoutWindow||}>];
-	n27 [label = <{TransitionSystem||}>];
-	n28 [label = <{SVGtoTikZ||}>];
-	n29 [label = <{OptionPageManager||}>];
-	n30 [label = <{TransitionFunction||}>];
-	n31 [label = <{SingleFSMSelection||}>];
-	n32 [label = <{OptionPage||}>];
-	n33 [label = <{PopoutSelectList||}>];
-	n34 [label = <{GenerateFSM||}>];
-	n35 [label = <{PopoutAgentSelection||}>];
-	n36 [label = <{FSM||}>];
-	n37 [label = <{ImagePage||}>];
-	n38 [label = <{EventMap||}>];
-	n39 [label = <{AdjustFSM||}>];
+	n1 [label = <{TimerRefresh||}>];
+	n2 [label = <{MaximalTesting||}>];
+	n3 [label = <{JohnSmithTest||}>];
+	n4 [label = <{MrJackCharacterDec||}>];
+	n5 [label = <{Player||}>];
+	n6 [label = <{SirWilliamGullTest||}>];
+	n7 [label = <{Building||}>];
+	n8 [label = <{keyComponent||}>];
+	n9 [label = <{GameView||}>];
+	n10 [label = <{Tile||}>];
+	n11 [label = <{Lantern||}>];
+	n12 [label = <{Road||}>];
+	n13 [label = <{InspectorLestrade||}>];
+	n14 [label = <{Board||}>];
+	n15 [label = <{InteractFrame||}>];
+	n16 [label = <{MrJackCharacter||}>];
+	n17 [label = <{SirWilliamGull||}>];
+	n18 [label = <{clickComponent||}>];
+	n19 [label = <{MissStealthy||}>];
+	n20 [label = <{JohnSmith||}>];
+	n21 [label = <{RestrictedMovementDec||}>];
+	n22 [label = <{InspectorAbberline||}>];
+	n23 [label = <{Clock||}>];
+	n24 [label = <{MrJack||}>];
+	n25 [label = <{MissStealthyTest||}>];
+	n26 [label = <{Madame||}>];
+	n27 [label = <{GameModel||}>];
+	n28 [label = <{InspectorLestradeTest||}>];
+	n29 [label = <{DrawnTile||}>];
+	n30 [label = <{GameCharacter||}>];
+	n31 [label = <{Manhole||}>];
+	n32 [label = <{Detective||}>];
+	n33 [label = <{JosephLane||}>];
+	n34 [label = <{GameController||}>];
+	n35 [label = <{Exit||}>];
 
-	subgraph cluster_fsm{
-		label = "fsm";
-		n25;
-		n27;
-		n36;
-}
-	subgraph cluster_test{
-		label = "test";
-		n15;
-}
-	subgraph cluster_ui{
-		label = "ui";
-		subgraph cluster_ui_page{
-			label = "ui_page";
-			subgraph cluster_ui_page_optionpage{
-				label = "ui_page_optionpage";
-				subgraph cluster_ui_page_optionpage_implementation{
-					label = "ui_page_optionpage_implementation";
-					n12;
-					n23;
-					n39;
-			}
-		}
-	}
-}
-	subgraph cluster_ui{
-		label = "ui";
-		subgraph cluster_ui_page{
-			label = "ui_page";
-			subgraph cluster_ui_page_imagepage{
-				label = "ui_page_imagepage";
-				n20;
-				n37;
-		}
-	}
-}
-	subgraph cluster_ui{
-		label = "ui";
-		subgraph cluster_ui_page{
-			label = "ui_page";
-			subgraph cluster_ui_page_optionpage{
-				label = "ui_page_optionpage";
-				n5;
-				n9;
-				n12;
-				n18;
-				n23;
-				n29;
-				n31;
-				n32;
-				n39;
-		}
-	}
-}
-	subgraph cluster_support{
-		label = "support";
-		subgraph cluster_support_component{
-			label = "support_component";
-			n13;
-			n14;
-			n16;
-			n21;
-			n30;
-			n38;
-	}
-}
-	subgraph cluster_ui{
-		label = "ui";
-		n1;
-		n4;
-		n5;
-		n7;
-		n9;
-		n10;
-		n11;
-		n12;
-		n18;
-		n20;
-		n22;
-		n23;
-		n24;
-		n26;
-		n29;
-		n31;
-		n32;
-		n33;
-		n35;
-		n37;
-		n39;
-}
-	subgraph cluster_ui{
-		label = "ui";
-		subgraph cluster_ui_page{
-			label = "ui_page";
-			subgraph cluster_ui_page_headers{
-				label = "ui_page_headers";
-				n7;
-				n10;
-				n22;
-		}
-	}
-}
-	subgraph cluster_ui{
-		label = "ui";
-		subgraph cluster_ui_page{
-			label = "ui_page";
-			subgraph cluster_ui_page_optionpage{
-				label = "ui_page_optionpage";
-				subgraph cluster_ui_page_optionpage_entryset{
-					label = "ui_page_optionpage_entryset";
-					n5;
-					n18;
-					n31;
-			}
-		}
-	}
-}
-	subgraph cluster_graphviz{
-		label = "graphviz";
-		n8;
-}
-	subgraph cluster_ui{
-		label = "ui";
-		subgraph cluster_ui_page{
-			label = "ui_page";
-			subgraph cluster_ui_page_popups{
-				label = "ui_page_popups";
-				n1;
-				n11;
-				n24;
-				n26;
-				n33;
-				n35;
-		}
-	}
-}
-	subgraph cluster_support{
-		label = "support";
-		n2;
+	subgraph cluster_character{
+		label = "character";
 		n3;
+		n4;
 		n6;
 		n13;
-		n14;
 		n16;
 		n17;
 		n19;
+		n20;
 		n21;
+		n22;
+		n25;
+		n26;
 		n28;
 		n30;
+		n33;
+}
+	subgraph cluster_game{
+		label = "game";
+		n9;
+		n14;
+		n23;
+		n27;
+		n29;
 		n34;
-		n38;
 }
-	subgraph cluster_support{
-		label = "support";
-		subgraph cluster_support_component{
-			label = "support_component";
-			subgraph cluster_support_component_map{
-				label = "support_component_map";
-				n14;
-				n30;
-				n38;
-		}
-	}
+	subgraph cluster_testing{
+		label = "testing";
+		n2;
 }
-	subgraph cluster_support{
-		label = "support";
-		subgraph cluster_support_meta{
-			label = "support_meta";
-			n3;
-			n6;
-			n28;
-			n34;
-	}
+	subgraph cluster_tile{
+		label = "tile";
+		n7;
+		n10;
+		n11;
+		n12;
+		n31;
+		n35;
+}
+	subgraph cluster_visualmechanics{
+		label = "visualmechanics";
+		n1;
+		n8;
+		n15;
+		n18;
+}
+	subgraph cluster_player{
+		label = "player";
+		n5;
+		n24;
+		n32;
 }
 
-	n1 -> n26;
-	n2 -> n13;
-n2 -> n38;
-	n3 -> n27;
-n3 -> n8;
-n3 -> n4;
-n3 -> n24;
-	n4 -> n36;
-n4 -> n8;
-n4 -> n3;
-n4 -> n7;
-n4 -> n10;
-n4 -> n37;
-n4 -> n29;
-n4 -> n24;
-n4 -> n1;
-	n5 -> n4;
-n5 -> n32;
-	n6 -> n13;
-n6 -> n21;
-n6 -> n16;
-n6 -> n38;
-n6 -> n14;
-n6 -> n30;
-	n7 -> n4;
-n7 -> n37;
-n7 -> n22;
-		n9 -> n5;
-	n10 -> n4;
-n10 -> n29;
-n10 -> n22;
-	n11 -> n20;
-n11 -> n26;
-	n12 -> n36;
-n12 -> n25;
-n12 -> n2;
-n12 -> n17;
-n12 -> n30;
-n12 -> n4;
-n12 -> n32;
-n12 -> n5;
-		n14 -> n21;
-	n15 -> n36;
-n15 -> n2;
-n15 -> n17;
-n15 -> n13;
-n15 -> n21;
-n15 -> n30;
-n15 -> n3;
-n15 -> n4;
-n15 -> n35;
-		n17 -> n36;
-n17 -> n13;
-n17 -> n21;
+	n1 -> n9;
+	n2 -> n34;
+		n4 -> n16;
+	n5 -> n30;
+n5 -> n16;
+		n7 -> n10;
+		n9 -> n1;
+n9 -> n15;
+		n11 -> n10;
+	n12 -> n10;
+	n13 -> n14;
+n13 -> n10;
+n13 -> n35;
+n13 -> n27;
+n13 -> n16;
+	n14 -> n10;
+n14 -> n30;
+n14 -> n11;
+n14 -> n31;
+n14 -> n35;
+n14 -> n7;
+n14 -> n12;
+		n16 -> n10;
+n16 -> n27;
+	n17 -> n10;
+n17 -> n27;
 n17 -> n16;
-n17 -> n30;
-	n18 -> n4;
-n18 -> n32;
-		n20 -> n11;
-			n23 -> n36;
-n23 -> n2;
-n23 -> n17;
-n23 -> n30;
-n23 -> n4;
-n23 -> n32;
-n23 -> n5;
-n23 -> n35;
-	n24 -> n26;
-	n25 -> n13;
-n25 -> n21;
-n25 -> n16;
-n25 -> n38;
-n25 -> n14;
-n25 -> n30;
-n25 -> n3;
-n25 -> n6;
-n25 -> n19;
-n25 -> n27;
-		n27 -> n13;
-n27 -> n21;
+		n19 -> n7;
+n19 -> n10;
+n19 -> n14;
+n19 -> n27;
+n19 -> n16;
+	n20 -> n14;
+n20 -> n27;
+n20 -> n10;
+n20 -> n11;
+n20 -> n16;
+	n21 -> n27;
+n21 -> n10;
+n21 -> n4;
+	n22 -> n14;
+n22 -> n10;
+n22 -> n35;
+n22 -> n27;
+n22 -> n16;
+	n23 -> n10;
+n23 -> n11;
+	n24 -> n30;
+n24 -> n5;
+		n26 -> n14;
+n26 -> n27;
+n26 -> n31;
+n26 -> n10;
+n26 -> n16;
+	n27 -> n30;
 n27 -> n16;
-n27 -> n38;
-n27 -> n14;
-n27 -> n30;
-		n29 -> n4;
-n29 -> n39;
-n29 -> n12;
-n29 -> n23;
-	n30 -> n13;
-n30 -> n21;
-n30 -> n16;
-	n31 -> n4;
-n31 -> n32;
-	n32 -> n4;
+n27 -> n22;
+	n28 -> n14;
+n28 -> n10;
+		n30 -> n27;
+n30 -> n10;
+	n31 -> n10;
+	n32 -> n30;
 n32 -> n5;
-	n33 -> n4;
-n33 -> n26;
-		n35 -> n36;
-n35 -> n2;
-n35 -> n13;
-n35 -> n38;
-n35 -> n23;
-n35 -> n26;
-	n36 -> n19;
-n36 -> n13;
-n36 -> n21;
-n36 -> n16;
-n36 -> n38;
-n36 -> n14;
-n36 -> n30;
-n36 -> n6;
-n36 -> n27;
-	n37 -> n4;
-	n38 -> n13;
-	n39 -> n3;
-n39 -> n34;
-n39 -> n4;
-n39 -> n32;
-n39 -> n5;
-n39 -> n33;
-n39 -> n24;
+	n33 -> n14;
+n33 -> n27;
+n33 -> n11;
+n33 -> n10;
+n33 -> n16;
+	n34 -> n2;
+	n35 -> n10;
 }

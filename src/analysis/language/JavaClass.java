@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import analysis.language.Class;
-import analysis.component.Function;
-import analysis.component.Constructor;
-
-import analysis.component.Argument;
-import analysis.component.InstanceVariable;
 
 public class JavaClass extends Class {
 
@@ -75,10 +70,10 @@ public class JavaClass extends Class {
 			else if(depth == 1) {
 				String use = s;
 				if(testInstanceVariable(use)) {
-					addInstanceVariable(processInstanceVariable(use));
+					processInstanceVariable(use);
 				}
 				else if(testFunction(use) && !skipNextFunction) {
-					addFunction(processFunction(use));
+					processFunction(use);
 				}
 				else if(use.contains("@Override")) {
 					skipNextFunction = true;
@@ -91,7 +86,7 @@ public class JavaClass extends Class {
 		}
 	}
 	
-	private InstanceVariable processInstanceVariable(String in) {
+	private void processInstanceVariable(String in) {
 		boolean underline = false;
 		if(in.contains("static")) {
 			underline = true;	//TODO: Do the formatting here
@@ -99,12 +94,12 @@ public class JavaClass extends Class {
 		String[] cont = cleanInput(in);
 		String vis = processVisibility(cont[0]);
 		String typ = compileType(cont, 1);
-		return new InstanceVariable(vis, cont[cont.length-1], typ);
+		addInstanceVariable(compileInstanceVariable(vis, cont[cont.length - 1], typ, underline));
 	}
 	
-	private Function processFunction(String in) {
+	private void processFunction(String in) {
 		if(!getStatusPrivate() && in.contains("private")) {
-			return null;
+			return;
 		}
 		boolean stat = false;
 		boolean abs = false;
@@ -119,23 +114,20 @@ public class JavaClass extends Class {
 		String vis = processVisibility(cont[0]);
 		String name = cont[argStart-1];
 		String ret = compileType(cont, 1);
-		ArrayList<Argument> args = new ArrayList<Argument>();
+		ArrayList<String> args = new ArrayList<String>();
 		for(int i = argStart + 1; i < cont.length - 2; i += 2) {
 			String type = compileType(cont, i);
 			i += type.replaceAll("[^,]", "").length();
 			String nom = cont[i + 1].replaceAll(",", "");
-			args.add(new Argument(nom, type));
+			args.add(nom);
+			args.add(type);
 		}
-		Function funct = null;
-		if(argStart == 2) {
-			funct = new Constructor(vis, name, args);
+		if(ret.equals("")) {
+			addFunction(compileConstructor(vis, name, compileArguments(args)));
 		}
 		else {
-			funct = new Function(vis, name, args, ret);
+			addFunction(compileFunction(vis, name, ret, compileArguments(args), stat, abs));
 		}
-		funct.setStatic(stat);
-		funct.setAbstract(abs);
-		return funct;
 	};
 	
 //---  Tester Methods   -----------------------------------------------------------------------

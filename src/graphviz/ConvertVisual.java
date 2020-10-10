@@ -6,12 +6,30 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import analysis.language.Class;
+import explore.Explore;
 
 public class ConvertVisual  {
 	
-	private final static String REPOSITORY_PATH = "./Diagram/";
 	private final static String CONFIG_PATH = "./src/assets/config.properties";
 	private final static int DPI_INCREASE = 8;
+	
+	private static String imagePath;
+	private static String sourcePath;
+	private static String settingsPath;
+	
+	public static void assignPaths(String img, String src, String sett) {
+		imagePath = img;
+		sourcePath = src;
+		settingsPath = sett;
+	}
+	
+	public static String generateUMLDiagram(String path, String filter, String name, boolean a, boolean b, boolean c) {
+		File f = new File(path);
+		Explore.setParameters(a, b, c);
+		Explore expl = new Explore(f, filter);
+		String dot = ConvertVisual.convertClassStructure(expl.getClassStructure(), expl.getClusters());
+		return ConvertVisual.draw(dot, name, "jpg").getAbsolutePath();
+	}
 	
 	public static String convertClassStructure(HashMap<String, Class> reference, HashSet<String> clusters) {
 		String out = "digraph G {\n";
@@ -65,18 +83,18 @@ public class ConvertVisual  {
 	}
 	
 	public static File draw(String dotData, String name, String type) {
-		File folder = new File(REPOSITORY_PATH);
+		File folder = new File(imagePath);
 		folder.mkdir();
-		GraphViz gv = new GraphViz(REPOSITORY_PATH, CONFIG_PATH);
+		GraphViz gv = new GraphViz(imagePath, CONFIG_PATH);
 		gv.add(dotData);
 		for(int i = 0; i < DPI_INCREASE; i++) {
 			gv.increaseDpi();
 		}
-		File out = new File(REPOSITORY_PATH + "//" + name + "." + type);
+		File out = new File(imagePath + "//" + name + "." + type);
 
 		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
 		
-		File ref = new File(REPOSITORY_PATH + "//" + name + ".txt");
+		File ref = new File(sourcePath + "//" + name + ".txt");
 		ref.delete();
 		try {
 			RandomAccessFile raf = new RandomAccessFile(ref, "rw");
