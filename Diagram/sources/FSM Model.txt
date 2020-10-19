@@ -1,0 +1,377 @@
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[dir=back, arrowtail=empty, concentrate=true];
+	graph[splines = ortho, ranksep = 1, ratio = fill];
+rankdir = TB;
+	n1 [label = <{MaterialsCatalogue||+validateCheckoutAvailability(id : int, matIds : int[]) : boolean<BR/>+checkAvailableMaterial(materialId : int) : boolean<BR/>+checkOverdueMaterials(ids : int[]) : boolean<BR/>+checkOverdueMaterial(id : int) : boolean<BR/>+calculateOverdueCost(id : int) : int<BR/>+compileMaterial(matId : int, mType : String) : Material<BR/>+getMaterials() : ArrayList&lt;Material&gt;<BR/>+getMaterial(id : int) : Material}>];
+	n2 [label = <{MaterialType|-int : overdueCost<BR/>-int : timeLimit|+MaterialType(typ : String, cost : int, limit : int) : MaterialType<BR/>+getOverdueCost() : int<BR/>+getTimeLimit() : int}>];
+	n3 [label = <{InterpretInput|-Library : library|+InterpretInput(in : Library) : InterpretInput<BR/>+interpret(sc : Scanner, input : String) : void}>];
+	n4 [label = <{MaterialTypeRegistry||<i>+compileMaterialType(nom : String, overdue : int, cost : int) : MaterialType</i><BR/><i>+getMaterialType(nom : String) : MaterialType</i>}>];
+	n5 [label = <{ConvertModel|-Library : library<BR/>-int : reference<BR/>-HashMap&lt;String, DisplayFormat&gt; : hold|+ConvertModel(in : Library) : ConvertModel<BR/>+getUserData() : ArrayList&lt;DisplayFormat&gt;<BR/>+getMaterialData() : ArrayList&lt;DisplayFormat&gt;<BR/>+getOrganizationData() : ArrayList&lt;DisplayFormat&gt;<BR/>+compileUserData(u : User) : DisplayFormat<BR/>+compileMaterialData(m : Material) : DisplayFormat<BR/>+compileOrganizationData(o : Organization) : DisplayFormat<BR/>+getHeldDisplayFormat(val : String) : DisplayFormat}>];
+	n6 [label = <{CatalogueItem|-int : id|+CatalogueItem(in : int) : CatalogueItem<BR/>+getId() : int}>];
+	n7 [label = <{CatalogueItem|-int : id|+CatalogueItem(in : int) : CatalogueItem<BR/>+getId() : int}>];
+	n8 [label = <{MaterialTypeRegistry||<i>+compileMaterialType(nom : String, overdue : int, cost : int) : MaterialType</i><BR/><i>+getMaterialType(nom : String) : MaterialType</i>}>];
+	n9 [label = <{OrganizationCatalogue|-HashMap&lt;String, Integer&gt; : idMapping<BR/>-int : maxFines<BR/>-int : countOrganizations|+OrganizationCatalogue(in : int) : OrganizationCatalogue<BR/>+verifyOrganizationCheckout(userId : int) : boolean<BR/>+addUserToOrganization(userId : int, nom : String) : void<BR/>+compileOrganization(nom : String) : Organization<BR/>+getOrganizations() : ArrayList&lt;Organization&gt;<BR/>+getOrganizationByUser(userId : int) : Organization<BR/>+getOrganization(nom : String) : Organization}>];
+	n10 [label = <{JUnitTest||?test() : test}>];
+	n11 [label = <{CheckoutTime|-long : checkedOutTime|+CheckoutTime(in : long) : CheckoutTime<BR/>+CheckoutTime() : CheckoutTime<BR/>+elapsedTimeDays() : int}>];
+	n12 [label = <{Catalogue|-HashMap&lt;Integer, CatalogueItem&gt; : registry|+Catalogue() : Catalogue<BR/>+addResource(in : CatalogueItem) : void<BR/>+getResource(id : int) : CatalogueItem<BR/>+getKeys() : Collection&lt;Integer&gt;}>];
+	n13 [label = <{MaterialType|-int : overdueCost<BR/>-int : timeLimit|+MaterialType(typ : String, cost : int, limit : int) : MaterialType<BR/>+getOverdueCost() : int<BR/>+getTimeLimit() : int}>];
+	n14 [label = <{User|-String : organization<BR/>-int[] : matIds<BR/>-int : numOut|+User(inId : int, inOrg : String, maxMaterials : int) : User<BR/>+addMaterial(in : int) : void<BR/>+removeMaterial(matId : int) : void<BR/>+verifyCanCheckOut() : boolean<BR/>+getOrganization() : String<BR/>+getCheckedOut() : int[]<BR/>+hasMaterial(matId : int) : boolean<BR/>+getCheckedOutCount() : int}>];
+	n15 [label = <{Material|-CheckoutTime : checkedOut<BR/>-MaterialType : type|+Material(inId : int, inType : MaterialType) : Material<BR/>+checkoutMaterial() : void<BR/>+returnMaterial() : void<BR/>+isAvailable() : boolean<BR/>+testOverdue() : boolean<BR/>+getMaterialType() : String<BR/>+getDaysCheckedOut() : int<BR/>+getOverdueLimit() : int<BR/>+getOverdueCost() : int<BR/>+setCheckoutTime(in : long) : void}>];
+	n16 [label = <{CommandLineInterface|<i>-Library : library</i>|<i>+displayLibrary() : void</i><BR/><i>-libraryInputCommands() : void</i><BR/><i>-printMaterial(m : Material) : void</i><BR/><i>-printUser(u : User) : void</i><BR/><i>-printOrganization(o : Organization) : void</i><BR/><i>+assignLibrary(assign : Library) : void</i>}>];
+	n17 [label = <{UserCatalogue||+UserCatalogue(maxCheckout : int) : UserCatalogue<BR/>+validateUserCheckout(id : int) : boolean<BR/>+compileUser(userId : int, organization : String) : User<BR/>+getUser(id : int) : User<BR/>+getUsers() : ArrayList&lt;User&gt;}>];
+	n18 [label = <{CheckoutTime|-long : checkedOutTime|+CheckoutTime(in : long) : CheckoutTime<BR/>+CheckoutTime() : CheckoutTime<BR/>+elapsedTimeDays() : int}>];
+	n19 [label = <{Registry|<i>-HashMap&lt;String, RegistryItem&gt; : registry</i>|<i>+registerEntry(in : RegistryItem) : void</i><BR/><i>+getEntry(name : String) : RegistryItem</i>}>];
+	n20 [label = <{Catalogue|-HashMap&lt;Integer, CatalogueItem&gt; : registry|+Catalogue() : Catalogue<BR/>+addResource(in : CatalogueItem) : void<BR/>+getResource(id : int) : CatalogueItem<BR/>+getKeys() : Collection&lt;Integer&gt;}>];
+	n21 [label = <{DisplayFormat|-String : type<BR/>-ArrayList&lt;String&gt; : data|+DisplayFormat(typ : String, inDat : ArrayList&lt;String&gt;) : DisplayFormat<BR/>+getType() : String<BR/>+getData() : ArrayList&lt;String&gt;<BR/>+getIndexData(ind : int) : String}>];
+	n22 [label = <{MainController|-InterpretInput : intInp|+MainController(in : Library) : MainController<BR/>+runProgram() : void}>];
+	n23 [label = <{User|-String : organization<BR/>-int[] : matIds<BR/>-int : numOut|+User(inId : int, inOrg : String, maxMaterials : int) : User<BR/>+addMaterial(in : int) : void<BR/>+removeMaterial(matId : int) : void<BR/>+verifyCanCheckOut() : boolean<BR/>+getOrganization() : String<BR/>+getCheckedOut() : int[]<BR/>+hasMaterial(matId : int) : boolean<BR/>+getCheckedOutCount() : int}>];
+	n24 [label = <{RegistryItem|-String : name|+RegistryItem(nom : String) : RegistryItem<BR/>+getName() : String}>];
+	n25 [label = <{Library|-HashMap&lt;Integer, ArrayList&lt;String&gt;&gt; : users<BR/>-HashMap&lt;Integer, ArrayList&lt;String&gt;&gt; : materials<BR/>-HashMap&lt;String, Integer&gt; : organizationFines|+Library() : Library<BR/>+stockMaterial(materialId : int, type : int) : boolean<BR/>+stockMaterial(materialId : int, info : ArrayList&lt;String&gt;) : boolean<BR/>+enrolUser(userId : int, organization : String) : boolean<BR/>+enrolUser(userId : int, info : ArrayList&lt;String&gt;) : boolean<BR/>+addOrganization(organization : String) : boolean<BR/>+checkoutMaterial(userId : int, materialId : int) : boolean<BR/>+returnMaterial(userId : int, materialId : int) : boolean<BR/>+payFee(organization : String, amount : int) : boolean<BR/>+displayLibrary() : void<BR/>-libraryInputCommands() : void<BR/>+getOrganizationFine(organization : String) : Integer<BR/>-addMaterialToUser(userId : int, materialId : int) : void<BR/>-validateCheckout(info : ArrayList&lt;String&gt;, materialId : int) : boolean<BR/>-elapsedCheckoutTime(materialId : int) : int<BR/>-configureUser(userId : int, organization : String) : ArrayList&lt;String&gt;<BR/>-configureMaterial(materialId : int, type : int) : ArrayList&lt;String&gt;<BR/>-indexOf(array : String[], key : String) : int}>];
+	n26 [label = <{JUnitTest||+test() : void}>];
+	n27 [label = <{Library|-UserCatalogue : users<BR/>-MaterialsCatalogue : materials<BR/>-OrganizationCatalogue : organizations|+Library() : Library<BR/>+stockMaterial(materialId : int, type : String) : boolean<BR/>+enrolUser(userId : int, organization : String) : boolean<BR/>+addOrganization(organization : String) : boolean<BR/>+checkoutMaterial(userId : int, materialId : int) : boolean<BR/>+returnMaterial(userId : int, materialId : int) : boolean<BR/>+payFee(organization : String, amount : int) : boolean<BR/>+getOrganizationFine(organization : String) : Integer<BR/>+getUserCatalogue() : UserCatalogue<BR/>+getMaterialCatalogue() : MaterialsCatalogue<BR/>+getOrganizationCatalogue() : OrganizationCatalogue<BR/>-validateCheckout(userId : int, materialId : int) : boolean}>];
+	n28 [label = <{OrganizationCatalogue|-HashMap&lt;String, Integer&gt; : idMapping<BR/>-int : maxFines<BR/>-int : countOrganizations|+OrganizationCatalogue(in : int) : OrganizationCatalogue<BR/>+verifyOrganizationCheckout(userId : int) : boolean<BR/>+addUserToOrganization(userId : int, nom : String) : void<BR/>+compileOrganization(nom : String) : Organization<BR/>+getOrganizations() : ArrayList&lt;Organization&gt;<BR/>+getOrganizationByUser(userId : int) : Organization<BR/>+getOrganization(nom : String) : Organization}>];
+	n29 [label = <{Organization|-String : name<BR/>-int : fines<BR/>-HashSet&lt;Integer&gt; : members|+Organization(id : int, nom : String) : Organization<BR/>+addFines(in : int) : boolean<BR/>+deductFines(in : int) : boolean<BR/>+addUser(id : int) : void<BR/>+checkStatusMember(id : int) : boolean<BR/>+getName() : String<BR/>+getFines() : int}>];
+	n30 [label = <{Library|-UserCatalogue : users<BR/>-MaterialsCatalogue : materials<BR/>-OrganizationCatalogue : organizations|+Library() : Library<BR/>+stockMaterial(materialId : int, type : String) : boolean<BR/>+enrolUser(userId : int, organization : String) : boolean<BR/>+addOrganization(organization : String) : boolean<BR/>+checkoutMaterial(userId : int, materialId : int) : boolean<BR/>+returnMaterial(userId : int, materialId : int) : boolean<BR/>+payFee(organization : String, amount : int) : boolean<BR/>+getOrganizationFine(organization : String) : Integer<BR/>+getUserCatalogue() : UserCatalogue<BR/>+getMaterialCatalogue() : MaterialsCatalogue<BR/>+getOrganizationCatalogue() : OrganizationCatalogue<BR/>-validateCheckout(userId : int, materialId : int) : boolean}>];
+	n31 [label = <{Registry|<i>-HashMap&lt;String, RegistryItem&gt; : registry</i>|<i>+registerEntry(in : RegistryItem) : void</i><BR/><i>+getEntry(name : String) : RegistryItem</i>}>];
+	n32 [label = <{JUnitTest||+test() : void}>];
+	n33 [label = <{RegistryItem|-String : name|+RegistryItem(nom : String) : RegistryItem<BR/>+getName() : String}>];
+	n34 [label = <{MaterialsCatalogue||+MaterialsCatalogue() : MaterialsCatalogue<BR/>+validateCheckoutAvailability(id : int, matIds : int[]) : boolean<BR/>+checkAvailableMaterial(materialId : int) : boolean<BR/>+checkOverdueMaterials(ids : int[]) : boolean<BR/>+checkOverdueMaterial(id : int) : boolean<BR/>+calculateOverdueCost(id : int) : int<BR/>+compileMaterial(matId : int, mType : String) : Material<BR/>+getMaterials() : ArrayList&lt;Material&gt;<BR/>+getMaterial(id : int) : Material}>];
+	n35 [label = <{Material|-CheckoutTime : checkedOut<BR/>-MaterialType : type|+Material(inId : int, inType : MaterialType) : Material<BR/>+checkoutMaterial() : void<BR/>+returnMaterial() : void<BR/>+isAvailable() : boolean<BR/>+testOverdue() : boolean<BR/>+getMaterialType() : String<BR/>+getDaysCheckedOut() : int<BR/>+getOverdueLimit() : int<BR/>+getOverdueCost() : int<BR/>+setCheckoutTime(in : long) : void}>];
+	n36 [label = <{CommandLineInterface|<i>-ConvertModel : reference</i>|<i>+assignConvertModel(in : ConvertModel) : void</i><BR/><i>+start() : void</i><BR/><i>+displayUsers() : void</i><BR/><i>-displayUser(d : DisplayFormat) : void</i><BR/><i>+displayMaterials() : void</i><BR/><i>-displayMaterial(d : DisplayFormat) : void</i><BR/><i>+displayOrganizations() : void</i><BR/><i>-displayOrganization(d : DisplayFormat) : void</i><BR/><i>+displayText(text : String) : void</i><BR/><i>+libraryInputCommands() : void</i>}>];
+	n37 [label = <{UserCatalogue||+UserCatalogue(maxCheckout : int) : UserCatalogue<BR/>+validateUserCheckout(id : int) : boolean<BR/>+compileUser(userId : int, organization : String) : User<BR/>+getUser(id : int) : User<BR/>+getUsers() : ArrayList&lt;User&gt;}>];
+	n38 [label = <{Organization|-String : name<BR/>-int : fines<BR/>-HashSet&lt;Integer&gt; : members|+Organization(id : int, nom : String) : Organization<BR/>+addFines(in : int) : boolean<BR/>+deductFines(in : int) : boolean<BR/>+addUser(id : int) : void<BR/>+checkStatusMember(id : int) : boolean<BR/>+getName() : String<BR/>+getFines() : int}>];
+
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_view{
+			label = "version3.view";
+			fontsize = 26;
+			penwidth = 2;
+			n36;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_organization{
+				label = "version3.model.organization";
+				fontsize = 22;
+				penwidth = 3;
+				n38;
+		}
+	}
+}
+	subgraph cluster_version1{
+		label = "version1";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version1_example{
+			label = "version1.example";
+			fontsize = 26;
+			penwidth = 2;
+			n25;
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_test{
+			label = "version2.test";
+			fontsize = 26;
+			penwidth = 2;
+			n26;
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_registry{
+			label = "version2.registry";
+			fontsize = 26;
+			penwidth = 2;
+			n4;
+			n19;
+			n33;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_controller{
+			label = "version3.controller";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_controller_conversion{
+				label = "version3.controller.conversion";
+				fontsize = 22;
+				penwidth = 3;
+				n5;
+				n21;
+		}
+	}
+}
+	subgraph cluster_version1{
+		label = "version1";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version1_test{
+			label = "version1.test";
+			fontsize = 26;
+			penwidth = 2;
+			n10;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_catalogue{
+				label = "version3.model.catalogue";
+				fontsize = 22;
+				penwidth = 3;
+				n7;
+				n12;
+				n17;
+				n28;
+				n34;
+		}
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_ui{
+			label = "version2.ui";
+			fontsize = 26;
+			penwidth = 2;
+			n16;
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_material{
+			label = "version2.material";
+			fontsize = 26;
+			penwidth = 2;
+			n2;
+			n15;
+			n18;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_library{
+				label = "version3.model.library";
+				fontsize = 22;
+				penwidth = 3;
+				n30;
+		}
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_organization{
+			label = "version2.organization";
+			fontsize = 26;
+			penwidth = 2;
+			n29;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_test{
+			label = "version3.test";
+			fontsize = 26;
+			penwidth = 2;
+			n32;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_user{
+				label = "version3.model.user";
+				fontsize = 22;
+				penwidth = 3;
+				n14;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_material{
+				label = "version3.model.material";
+				fontsize = 22;
+				penwidth = 3;
+				n11;
+				n13;
+				n35;
+		}
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_library{
+			label = "version2.library";
+			fontsize = 26;
+			penwidth = 2;
+			n27;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_registry{
+				label = "version3.model.registry";
+				fontsize = 22;
+				penwidth = 3;
+				n8;
+				n24;
+				n31;
+		}
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_catalogue{
+			label = "version2.catalogue";
+			fontsize = 26;
+			penwidth = 2;
+			n1;
+			n6;
+			n9;
+			n20;
+			n37;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_controller{
+			label = "version3.controller";
+			fontsize = 26;
+			penwidth = 2;
+			n3;
+			n5;
+			n21;
+			n22;
+	}
+}
+	subgraph cluster_version2{
+		label = "version2";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version2_user{
+			label = "version2.user";
+			fontsize = 26;
+			penwidth = 2;
+			n23;
+	}
+}
+
+	n1 -> n15;
+n1 -> n4;
+n1 -> n20;
+	n2 -> n33;
+	n3 -> n30;
+n3 -> n36;
+	n4 -> n2;
+n4 -> n19;
+	n5 -> n30;
+n5 -> n35;
+n5 -> n38;
+n5 -> n14;
+			n8 -> n13;
+n8 -> n31;
+	n9 -> n29;
+n9 -> n20;
+	n10 -> n25;
+			n13 -> n24;
+	n14 -> n7;
+	n15 -> n6;
+	n16 -> n27;
+n16 -> n15;
+n16 -> n29;
+n16 -> n23;
+	n17 -> n14;
+n17 -> n12;
+					n22 -> n5;
+n22 -> n30;
+n22 -> n36;
+	n23 -> n6;
+			n26 -> n27;
+n26 -> n4;
+n26 -> n16;
+	n27 -> n1;
+n27 -> n9;
+n27 -> n37;
+n27 -> n4;
+	n28 -> n38;
+n28 -> n12;
+	n29 -> n6;
+	n30 -> n34;
+n30 -> n28;
+n30 -> n17;
+n30 -> n8;
+		n32 -> n22;
+n32 -> n30;
+n32 -> n8;
+		n34 -> n35;
+n34 -> n8;
+n34 -> n12;
+	n35 -> n7;
+	n36 -> n5;
+n36 -> n21;
+	n37 -> n23;
+n37 -> n20;
+	n38 -> n7;
+}

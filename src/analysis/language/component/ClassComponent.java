@@ -1,4 +1,4 @@
-package analysis.component;
+package analysis.language.component;
 
 public abstract class ClassComponent {
 	

@@ -11,7 +11,7 @@ import explore.Explore;
 public class ConvertVisual  {
 	
 	private final static String CONFIG_PATH = "./src/assets/config.properties";
-	private final static int DPI_INCREASE = 8;
+	private final static int DPI_INCREASE = 2;
 	
 	private static String imagePath;
 	private static String sourcePath;
@@ -34,8 +34,9 @@ public class ConvertVisual  {
 	public static String convertClassStructure(HashMap<String, Class> reference, HashSet<String> clusters) {
 		String out = "digraph G {\n";
 		out += 	"\tnode[shape=record,style=filled,fillcolor=gray95];\r\n" + 
-				"\tedge[dir=back, arrowtail=empty];\n" +
-				"\tgraph[];\n";	//splines = ortho, nodesep = 1 for straight lines, looks rough, let user change how lines are displayed
+				"\tedge[dir=back, arrowtail=empty, concentrate=true];\n" +
+				"\tgraph[splines = ortho, ranksep = 1, ratio = fill];\n" +
+				"rankdir = TB;";	//splines = ortho, nodesep = 1 for straight lines, looks rough, let user change how lines are displayed
 
 		out += "\n";
 		
@@ -47,14 +48,23 @@ public class ConvertVisual  {
 			out += lab;
 		}
 		out += "\n";
+
+		int maxSize = 30;
+		int minSize = 16;
 		
 		for(String s: clusters) {
 			String[] pack = s.split("\\.");
 			String nom = "";
+			int fontSize = maxSize;
+			int penWidth = 1;
 			for(int i = 0; i < pack.length; i++) {
 				nom += (i == 0 ? "" : "_") + pack[i];
 				out += tabBuffer(i+1) + "subgraph cluster_" + nom + "{\n";
-				out += tabBuffer(i+1) + "\tlabel = \"" + nom + "\";\n";
+				out += tabBuffer(i+1) + "\tlabel = \"" + nom.replaceAll("_", "\\.") + "\";\n";
+				out += tabBuffer(i+1) + "\tfontsize = " + fontSize + ";\n";
+				out += tabBuffer(i+1) + "\tpenwidth = " + penWidth + ";\n";
+				fontSize -= 4;
+				penWidth += (penWidth + 1 > 6 ? 0 : 1);
 			}
 			for(String c : ref.keySet()) {
 				if(c.contains(s))

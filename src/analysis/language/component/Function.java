@@ -1,8 +1,7 @@
-package analysis.component;
+package analysis.language.component;
 
 import java.util.ArrayList;
 import analysis.DotPrintable;
-import analysis.component.Argument;
 
 public class Function extends ClassComponent implements DotPrintable{
 

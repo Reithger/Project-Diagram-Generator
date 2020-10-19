@@ -1,4 +1,4 @@
-package analysis.component;
+package analysis.language.component;
 
 import analysis.DotPrintable;
 

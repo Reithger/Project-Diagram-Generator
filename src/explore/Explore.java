@@ -3,14 +3,18 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import analysis.language.Class;
-import analysis.language.ClassFactory;
+import analysis.language.actor.GenericClass;
+import analysis.language.actor.GenericInterface;
+import analysis.language.file.FileFactory;
+import analysis.language.file.GenericFile;
 
 public class Explore{
 	
 //---  Instance Variables   -------------------------------------------------------------------
 		
-	private HashMap<String, Class> classes;
+	private HashMap<String, GenericFile> files;
+	private HashMap<String, GenericClass> classes;
+	private HashMap<String, GenericInterface> interfaces;
 	private HashSet<String> clusters;
 	private String rootPath;
 	
@@ -18,15 +22,17 @@ public class Explore{
 	
 	public Explore(File root, String partialCut) {
 		rootPath = root.getAbsolutePath();
-		classes = new HashMap<String, Class>();
+		files = new HashMap<String, GenericFile>();
+		classes = new HashMap<String, GenericClass>();
+		interfaces = new HashMap<String, GenericInterface>();
 		clusters = new HashSet<String>();
 		partialCut = partialCut.replaceAll("\\.", "/");
 		File use = new File(root.getAbsolutePath() + "/" + partialCut);
 		explore(use);
-		for(Class c : classes.values()) {
-			c.process(classes);
-			clusters.add(c.getContext(c.getName()));
+		for(GenericFile f : files.values()) {
+			f.process(classes);
 		}
+		//TODO: Reintegrate: clusters.add(c.getContext(c.getName()));
 	}
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -38,18 +44,30 @@ public class Explore{
 				explore(look);
 			}
 			else {
-				Class c = ClassFactory.generateClass(look, rootPath);
-				if(c != null) {
-					classes.put(c.getName(), c);
+				GenericFile f = FileFactory.generateFile(look, rootPath);
+				if(f == null) {
+					return;
+				}
+				if(f.isClassFile()) {
+					GenericClass gc = new GenericClass(f.getName(), f.getContext());
+					classes.put(gc.getName(), gc);
+				}
+				else if(f.isInterfaceFile()) {
+					GenericInterface gi = new GenericInterface(f.getName(), f.getContext());
+					interfaces.put(gi.getName(), gi);
 				}
 			}
 		}
 	}
-	
+		
 //---  Getter Methods   -----------------------------------------------------------------------
 	
-	public HashMap<String, Class> getClassStructure(){
+	public HashMap<String, GenericClass> getClasses(){
 		return classes;
+	}
+	
+	public HashMap<String, GenericInterface> getInterfaces(){
+		return interfaces;
 	}
 	
 	public HashSet<String> getClusters(){
@@ -59,9 +77,9 @@ public class Explore{
 //--  Setter Methods   ------------------------------------------------------------------------
 	
 	public static void setParameters(boolean inst, boolean func, boolean priv) {
-		Class.assignProcessStates(inst, func, priv);
+		GenericFile.assignProcessStates(inst, func, priv);
 	}
 	
 }
 
-	
+	 

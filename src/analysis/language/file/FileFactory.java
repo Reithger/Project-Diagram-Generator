@@ -1,16 +1,15 @@
-package analysis.language;
+package analysis.language.file;
 
 import java.io.File;
-import analysis.language.Class;
 
-public class ClassFactory {
+public class FileFactory {
 
-	public static Class generateClass(File f, String root) {
+	public static GenericFile generateFile(File f, String root) {
 		String name = f.getName();
 		String type = name.substring(name.lastIndexOf(".")+1);
 		switch(type) {
 			case "java":
-				return new JavaClass(f, root);
+				return new JavaFile(f, root);
 			default: 
 				return null;
 		}

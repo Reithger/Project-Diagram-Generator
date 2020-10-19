@@ -1,12 +1,13 @@
-package analysis.language;
+package analysis.language.file;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import analysis.language.Class;
+import analysis.language.actor.GenericClass;
+import analysis.language.actor.GenericInterface;
 
-public class JavaClass extends Class {
+public class JavaFile extends GenericFile {
 
 //---  Constants   ----------------------------------------------------------------------------
 	
@@ -20,17 +21,44 @@ public class JavaClass extends Class {
 
 //---  Constructors   -------------------------------------------------------------------------
 	
-	public JavaClass(File in, String root) {
+	public JavaFile(File in, String root) {
 		super(in, root);
 	}
 
 //---  Operations   ---------------------------------------------------------------------------
 	
 	@Override
-	public void process(HashMap<String, Class> reference) {
+	protected String findName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	protected ArrayList<String> preProcess(String in){
+		ArrayList<String> out = new ArrayList<String>();
+		in = in.replaceAll("\n", " ").replaceAll("  ", " ").replaceAll("\"[^\"]\"", "").replaceAll(";", ";\n").replaceAll("{", "{\n").replaceAll("}", "\n}");
+		String[] parsed = in.split("\n");
+		for(String s : parsed)
+			out.add(s.trim());
+		return out;
+	}
+	
+	@Override
+	public boolean isClassFile() {
+		for(String s : getFileContents()) {
+			if(s.matches("public class [^{]{")) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public GenericClass processClass(HashMap<String, GenericClass> reference) {
+		GenericClass out = new GenericClass(getName(), getContext());
 		int depth = 0;
 		boolean skipNextFunction = false;
-		for(String s : getFileContents()) {
+		for(String s : getFileContents()) {		//TODO: Instead of one pass through, do multiple while looking for specific things. Cleaner approach, if not as fast kinda
 			if(s.contains("//"))
 				s = s.substring(0, s.indexOf("//"));
 			s = s.trim().replaceAll(";", "");
@@ -39,31 +67,30 @@ public class JavaClass extends Class {
 				if(s.matches(IMPORT_PHRASE + ".*")) {
 					String[] imp = s.split("\\s++");
 					if(reference.get(imp[1]) != null) {
-						this.addClassAssociate(reference.get(imp[1]));
+						out.addClassAssociate(reference.get(imp[1]));
 					}
 				}
 				else {
-					if(s.contains("extends")) {
-						String[] use = cleanInput(s);
-						int posit = indexOf(use, "extends");
-						String nom = use[posit+1].replaceAll("\\{", "");
-						boolean found = false;
+					if(containsHierarchyData(s)) {
+						ArrayList<String> classes = getHierarchicalClasses(s);
 						
-						for(Class cl : this.getClassAssociates()) {
-							if(stripContext(cl.getName()).equals(nom)) {
-								found = true;
+						for(GenericClass cl : out.getClassAssociates()) {
+							String className = stripContext(cl.getName());
+							if(classes.contains(className)) {
+								classes.remove(className);
 							}
 						}
 						
-						if(!found) {
-							String outN = getContext(getName()) + "." +  nom;
+						for(String relat : classes) {
+							String outN = getContext(getName()) + "." +  relat;
 							if(reference.get(outN) != null) {
-								addClassAssociate(reference.get(outN));
+								out.addClassAssociate(reference.get(outN));
 							}
 						}
-					}
-					if(s.contains("implements")) {
 						
+					}
+					if(s.contains("abstract")) {
+						out.setAbstract(true);
 					}
 				}
 			}
@@ -84,6 +111,45 @@ public class JavaClass extends Class {
 			}
 			depth += s.replaceAll(REGEX_PARSE_BRACKET_CLOSED, "").replaceAll("[^{]", "").length();
 		}
+		return out;
+	}
+	
+	@Override
+	public boolean isInterfaceFile() {
+		for(String s : getFileContents()) {
+			if(s.matches("public interface [^{]{")) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public GenericInterface processInterface(HashMap<String, GenericClass> reference) {
+		
+	}
+	
+	private boolean containsHierarchyData(String line) {
+		return line.contains("extends") || line.contains("implements");
+	}
+	
+	private ArrayList<String> getHierarchicalClasses(String line) {
+		ArrayList<String> out = new ArrayList<String>();
+		
+		String[] use = cleanInput(line);
+		int posit = indexOf(use, "extends");
+		if(posit != -1) {
+			out.add(use[posit+1].replaceAll("\\{", ""));
+		}
+		
+		posit = indexOf(use, "implements");
+		
+		if(posit != -1) {
+			while(++posit < use.length) {
+				out.add(use[posit].replaceAll("\\{", ""));
+			}
+		}
+		
+		return out;
 	}
 	
 	private void processInstanceVariable(String in) {
@@ -210,5 +276,7 @@ public class JavaClass extends Class {
 		}
 		return -1;
 	}
+
+
 
 }

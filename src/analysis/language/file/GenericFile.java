@@ -1,0 +1,184 @@
+package analysis.language.file;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+import analysis.language.actor.GenericClass;
+import analysis.language.actor.GenericInterface;
+import analysis.language.component.Argument;
+import analysis.language.component.Constructor;
+import analysis.language.component.Function;
+import analysis.language.component.InstanceVariable;
+
+public abstract class GenericFile {
+	
+//---  Instance Variables   -------------------------------------------------------------------
+	
+	private static boolean procInstance;
+	private static boolean procFunction;
+	private static boolean procPrivate;
+	
+	private String contents;
+	private ArrayList<String> lines;
+	private String name;
+	private String context;
+	
+//---  Constructors   -------------------------------------------------------------------------
+	
+	public GenericFile(File in, String root) {
+		lines = new ArrayList<String>();
+		try {
+			Scanner sc = new Scanner(in);
+			while(sc.hasNextLine()) {
+				contents += sc.nextLine();
+			}
+			sc.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		lines = preProcess(contents);
+		name = findName();
+		context = in.getAbsolutePath().substring(root.length()).replaceAll("/", ".");
+	}
+	
+//---  Operations   ---------------------------------------------------------------------------
+
+	public void processClass(HashMap<String, GenericClass> classRef, HashMap<String, GenericInterface> interfaceRef) {
+		GenericClass out = classRef.get(getName());
+		for(GenericClass gc : extractAssociations(classRef)) {
+			out.addClassAssociate(gc);
+		}
+		for(GenericInterface gi : extractRealizations(interfaceRef)) {
+			out.addRealization(gi);
+		}
+		for(Function f : extractFunctions()) {
+			out.addFunction(f);
+		}
+		for(InstanceVariable iv : extractInstanceVariables()) {
+			out.addInstanceVariable(iv);
+		}
+		out.setInheritance(extractInheritance(classRef));
+		out.setAbstract(extractAbstract());
+	}
+
+	public void processInterface(GenericInterface in, HashMap<String, GenericClass> reference) {
+		GenericInterface out = in;
+		for(Function f : extractFunctions()) {
+			out.addFunction(f);
+		}
+		for(GenericClass gc : extractAssociations(reference)) {
+			out.addAssociation(gc);
+		}
+	}
+	
+	//-- Subclass Implement  ----------------------------------
+
+	public abstract boolean isClassFile();
+	
+	public abstract boolean isInterfaceFile();
+	
+	protected abstract String findName();
+	
+	/**
+	 * According to whatever rules of the language the file is for, process the lump sum String file contents into
+	 * significant lines of single spaced text.
+	 * 
+	 */
+	
+	protected abstract ArrayList<String> preProcess(String contents);
+
+	protected abstract boolean extractAbstract();
+	
+	protected abstract ArrayList<Function> extractFunctions();
+	
+	protected abstract ArrayList<InstanceVariable> extractInstanceVariables();
+	
+	protected abstract GenericClass extractInheritance(HashMap<String, GenericClass> ref);
+	
+	protected abstract ArrayList<GenericInterface> extractRealizations(HashMap<String, GenericInterface> ref);
+	
+	protected abstract ArrayList<GenericClass> extractAssociations(HashMap<String, GenericClass> ref);
+	
+	//-- Support Methods  -------------------------------------
+	
+	protected String stripContext(String in) {
+		return in.substring(in.lastIndexOf(".") + 1);
+	}
+	
+	/**
+	 * Assumes input tokens ArrayList<<r>String> is in format of [name, type, name, type, ...]
+	 * 
+	 * 
+	 * @param tokens
+	 * @return
+	 */
+	
+	protected ArrayList<Argument> compileArguments(ArrayList<String> tokens){
+		ArrayList<Argument> out = new ArrayList<Argument>();
+		for(int i = 0; i < tokens.size(); i += 2) {
+			out.add(new Argument(tokens.get(i), tokens.get(i + 1)));
+		}
+		return out;
+	}
+	
+	protected Function compileFunction(String vis, String name, String ret, ArrayList<Argument> arguments, boolean statStatic, boolean statAbstract) {
+		Function in = new Function(vis, name, arguments, ret);
+		in.setAbstract(statAbstract);
+		in.setStatic(statStatic);
+		return in;
+	}
+	
+	protected Constructor compileConstructor(String vis, String name, ArrayList<Argument> arguments) {
+		return new Constructor(vis, name, arguments);
+	}
+	
+	protected InstanceVariable compileInstanceVariable(String vis, String typ, String nom, boolean statStatic) {
+		InstanceVariable in = new InstanceVariable(vis, nom, typ);
+		in.setStatic(statStatic);
+		return in;
+	}
+	
+//---  Setter Methods   -----------------------------------------------------------------------
+	
+	public static void assignProcessStates(boolean inst, boolean func, boolean priv) {
+		procInstance = inst;
+		procFunction = func;
+		procPrivate = priv;
+	}
+	
+//---  Getter Methods   -----------------------------------------------------------------------
+	
+	protected ArrayList<String> getFileContents(){
+		return lines;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public String getContext() {
+		return context;
+	}
+	
+	protected String getContext(String in) {
+		if(!in.contains("."))
+			return "";
+		return in.substring(0, in.lastIndexOf("."));
+	}
+	
+	protected boolean getStatusInstanceVariable() {
+		return procInstance;
+	}
+	
+	protected boolean getStatusPrivate() {
+		return procPrivate;
+	}
+	
+	protected boolean getStatusFunction() {
+		return procFunction;
+	}
+	
+}

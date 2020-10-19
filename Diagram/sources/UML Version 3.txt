@@ -1,0 +1,235 @@
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[dir=back, arrowtail=empty, concentrate=true];
+	graph[splines = ortho, ranksep = 1, ratio = fill];
+rankdir = TB;
+	n1 [label = <{DisplayFormat|-String : type<BR/>-ArrayList&lt;String&gt; : data|+DisplayFormat(typ : String, inDat : ArrayList&lt;String&gt;) : DisplayFormat<BR/>+getType() : String<BR/>+getData() : ArrayList&lt;String&gt;<BR/>+getIndexData(ind : int) : String}>];
+	n2 [label = <{MainController|-InterpretInput : intInp|+MainController(in : Library) : MainController<BR/>+runProgram() : void}>];
+	n3 [label = <{RegistryItem|-String : name|+RegistryItem(nom : String) : RegistryItem<BR/>+getName() : String}>];
+	n4 [label = <{InterpretInput|-Library : library|+InterpretInput(in : Library) : InterpretInput<BR/>+interpret(sc : Scanner, input : String) : void}>];
+	n5 [label = <{MaterialType|-int : overdueCost<BR/>-int : timeLimit|+MaterialType(typ : String, cost : int, limit : int) : MaterialType<BR/>+getOverdueCost() : int<BR/>+getTimeLimit() : int}>];
+	n6 [label = <{ConvertModel|-Library : library<BR/>-int : reference<BR/>-HashMap&lt;String, DisplayFormat&gt; : hold|+ConvertModel(in : Library) : ConvertModel<BR/>+compileUserData(u : User) : DisplayFormat<BR/>+compileMaterialData(m : Material) : DisplayFormat<BR/>+compileOrganizationData(o : Organization) : DisplayFormat<BR/>+getUserData() : ArrayList&lt;DisplayFormat&gt;<BR/>+getMaterialData() : ArrayList&lt;DisplayFormat&gt;<BR/>+getOrganizationData() : ArrayList&lt;DisplayFormat&gt;<BR/>+getHeldDisplayFormat(val : String) : DisplayFormat}>];
+	n7 [label = <{CatalogueItem|-int : id|+CatalogueItem(in : int) : CatalogueItem<BR/>+getId() : int}>];
+	n8 [label = <{OrganizationCatalogue|-HashMap&lt;String, Integer&gt; : idMapping<BR/>-int : maxFines<BR/>-int : countOrganizations|+OrganizationCatalogue(in : int) : OrganizationCatalogue<BR/>+verifyOrganizationCheckout(userId : int) : boolean<BR/>+addUserToOrganization(userId : int, nom : String) : void<BR/>+compileOrganization(nom : String) : Organization<BR/>+getOrganizations() : ArrayList&lt;Organization&gt;<BR/>+getOrganizationByUser(userId : int) : Organization<BR/>+getOrganization(nom : String) : Organization}>];
+	n9 [label = <{UserCatalogue||+UserCatalogue(maxCheckout : int) : UserCatalogue<BR/>+validateUserCheckout(id : int) : boolean<BR/>+compileUser(userId : int, organization : String) : User<BR/>+getUser(id : int) : User<BR/>+getUsers() : ArrayList&lt;User&gt;}>];
+	n10 [label = <{MaterialTypeRegistry||<i>+compileMaterialType(nom : String, overdue : int, cost : int) : MaterialType</i><BR/><i>+getMaterialType(nom : String) : MaterialType</i>}>];
+	n11 [label = <{CheckoutTime|-long : checkedOutTime|+CheckoutTime(in : long) : CheckoutTime<BR/>+CheckoutTime() : CheckoutTime<BR/>+elapsedTimeDays() : int}>];
+	n12 [label = <{Catalogue|-HashMap&lt;Integer, CatalogueItem&gt; : registry|+Catalogue() : Catalogue<BR/>+addResource(in : CatalogueItem) : void<BR/>+getResource(id : int) : CatalogueItem<BR/>+getKeys() : Collection&lt;Integer&gt;}>];
+	n13 [label = <{Library|-UserCatalogue : users<BR/>-MaterialsCatalogue : materials<BR/>-OrganizationCatalogue : organizations|+Library() : Library<BR/>+stockMaterial(materialId : int, type : String) : boolean<BR/>+enrolUser(userId : int, organization : String) : boolean<BR/>+addOrganization(organization : String) : boolean<BR/>+checkoutMaterial(userId : int, materialId : int) : boolean<BR/>+returnMaterial(userId : int, materialId : int) : boolean<BR/>+payFee(organization : String, amount : int) : boolean<BR/>+getOrganizationFine(organization : String) : Integer<BR/>+getUserCatalogue() : UserCatalogue<BR/>+getMaterialCatalogue() : MaterialsCatalogue<BR/>+getOrganizationCatalogue() : OrganizationCatalogue<BR/>-validateCheckout(userId : int, materialId : int) : boolean}>];
+	n14 [label = <{MaterialsCatalogue||+MaterialsCatalogue() : MaterialsCatalogue<BR/>+validateCheckoutAvailability(id : int, matIds : int[]) : boolean<BR/>+checkAvailableMaterial(materialId : int) : boolean<BR/>+checkOverdueMaterials(ids : int[]) : boolean<BR/>+checkOverdueMaterial(id : int) : boolean<BR/>+calculateOverdueCost(id : int) : int<BR/>+compileMaterial(matId : int, mType : String) : Material<BR/>+getMaterials() : ArrayList&lt;Material&gt;<BR/>+getMaterial(id : int) : Material}>];
+	n15 [label = <{Registry|<i>-HashMap&lt;String, RegistryItem&gt; : registry</i>|<i>+registerEntry(in : RegistryItem) : void</i><BR/><i>+getEntry(name : String) : RegistryItem</i>}>];
+	n16 [label = <{User|-String : organization<BR/>-int[] : matIds<BR/>-int : numOut|+User(inId : int, inOrg : String, maxMaterials : int) : User<BR/>+addMaterial(in : int) : void<BR/>+removeMaterial(matId : int) : void<BR/>+verifyCanCheckOut() : boolean<BR/>+getOrganization() : String<BR/>+getCheckedOut() : int[]<BR/>+hasMaterial(matId : int) : boolean<BR/>+getCheckedOutCount() : int}>];
+	n17 [label = <{JUnitTest||+test() : void}>];
+	n18 [label = <{Material|-CheckoutTime : checkedOut<BR/>-MaterialType : type|+Material(inId : int, inType : MaterialType) : Material<BR/>+checkoutMaterial() : void<BR/>+returnMaterial() : void<BR/>+isAvailable() : boolean<BR/>+testOverdue() : boolean<BR/>+getMaterialType() : String<BR/>+getDaysCheckedOut() : int<BR/>+getOverdueLimit() : int<BR/>+getOverdueCost() : int<BR/>+setCheckoutTime(in : long) : void}>];
+	n19 [label = <{CommandLineInterface|<i>-ConvertModel : reference</i>|<i>+start() : void</i><BR/><i>+displayUsers() : void</i><BR/><i>-displayUser(d : DisplayFormat) : void</i><BR/><i>+displayMaterials() : void</i><BR/><i>-displayMaterial(d : DisplayFormat) : void</i><BR/><i>+displayOrganizations() : void</i><BR/><i>-displayOrganization(d : DisplayFormat) : void</i><BR/><i>+displayText(text : String) : void</i><BR/><i>+assignConvertModel(in : ConvertModel) : void</i><BR/><i>+libraryInputCommands() : void</i>}>];
+	n20 [label = <{Organization|-String : name<BR/>-int : fines<BR/>-HashSet&lt;Integer&gt; : members|+Organization(id : int, nom : String) : Organization<BR/>+addFines(in : int) : boolean<BR/>+deductFines(in : int) : boolean<BR/>+addUser(id : int) : void<BR/>+checkStatusMember(id : int) : boolean<BR/>+getName() : String<BR/>+getFines() : int}>];
+
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_view{
+			label = "version3.view";
+			fontsize = 26;
+			penwidth = 2;
+			n19;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_organization{
+				label = "version3.model.organization";
+				fontsize = 22;
+				penwidth = 3;
+				n8;
+				n20;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_test{
+			label = "version3.test";
+			fontsize = 26;
+			penwidth = 2;
+			n17;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_user{
+				label = "version3.model.user";
+				fontsize = 22;
+				penwidth = 3;
+				n9;
+				n16;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_controller{
+			label = "version3.controller";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_controller_conversion{
+				label = "version3.controller.conversion";
+				fontsize = 22;
+				penwidth = 3;
+				n1;
+				n6;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_catalogue{
+				label = "version3.model.catalogue";
+				fontsize = 22;
+				penwidth = 3;
+				n7;
+				n12;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_material{
+				label = "version3.model.material";
+				fontsize = 22;
+				penwidth = 3;
+				n5;
+				n10;
+				n11;
+				n14;
+				n18;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_registry{
+				label = "version3.model.registry";
+				fontsize = 22;
+				penwidth = 3;
+				n3;
+				n15;
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_controller{
+			label = "version3.controller";
+			fontsize = 26;
+			penwidth = 2;
+			n1;
+			n2;
+			n4;
+			n6;
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_material{
+				label = "version3.model.material";
+				fontsize = 22;
+				penwidth = 3;
+				subgraph cluster_version3_model_material_materialtype{
+					label = "version3.model.material.materialtype";
+					fontsize = 18;
+					penwidth = 4;
+					n5;
+					n10;
+			}
+		}
+	}
+}
+	subgraph cluster_version3{
+		label = "version3";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_version3_model{
+			label = "version3.model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_version3_model_library{
+				label = "version3.model.library";
+				fontsize = 22;
+				penwidth = 3;
+				n13;
+		}
+	}
+}
+
+		n2 -> n6;
+n2 -> n13;
+n2 -> n19;
+		n4 -> n13;
+n4 -> n19;
+	n5 -> n3;
+	n6 -> n13;
+n6 -> n18;
+n6 -> n20;
+n6 -> n16;
+		n8 -> n12;
+	n9 -> n12;
+	n10 -> n15;
+			n13 -> n14;
+n13 -> n10;
+n13 -> n8;
+n13 -> n9;
+	n14 -> n12;
+n14 -> n10;
+		n16 -> n7;
+	n17 -> n2;
+n17 -> n13;
+n17 -> n10;
+	n18 -> n7;
+n18 -> n5;
+	n19 -> n6;
+n19 -> n1;
+	n20 -> n7;
+}
