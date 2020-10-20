@@ -3,129 +3,17 @@ digraph G {
 	edge[dir=back, arrowtail=empty, concentrate=true];
 	graph[splines = ortho, ranksep = 1, ratio = fill];
 rankdir = TB;
-	n1 [label = <{Function|-String : visibility<BR/>-String : name<BR/>-String : returnType<BR/>-ArrayList&lt;Argument&gt; : arguments<BR/>-boolean : isAbstract<BR/>-boolean : isStatic|+Function(vis : String, nom : String, arg : ArrayList&lt;Argument&gt;, ret : String) : Function<BR/>+setAbstract(in : boolean) : void<BR/>+setStatic(in : boolean) : void<BR/>#getReturnType() : String}>];
-	n2 [label = <{ConvertVisual|<i>-String : imagePath</i><BR/><i>-String : sourcePath</i><BR/><i>-String : settingsPath</i>|<i>+assignPaths(img : String, src : String, sett : String) : void</i><BR/><i>+generateUMLDiagram(path : String, filter : String, name : String, a : boolean, b : boolean, c : boolean) : String</i><BR/><i>+convertClassStructure(reference : HashMap&lt;String, Class&gt;, clusters : HashSet&lt;String&gt;) : String</i><BR/><i>-tabBuffer(in : int) : String</i><BR/><i>+draw(dotData : String, name : String, type : String) : File</i>}>];
-	n3 [label = <{DotPrintable||<u>+getDot() : String</u>}>];
-	n4 [label = <{ImageDisplay|-String : imageName<BR/>-String : imagePath<BR/>-Image : reference<BR/>-double : zoom<BR/>-ElementPanel : p<BR/>-int : dragStartX<BR/>-int : dragStartY<BR/>-boolean : dragState|+ImageDisplay(path : String, in : ElementPanel) : ImageDisplay<BR/>+processClickInput(code : int) : void<BR/>+processKeyInput(code : char) : void<BR/>+processPressInput(code : int, x : int, y : int) : void<BR/>+processReleaseInput(code : int, x : int, y : int) : void<BR/>+processMouseWheelInput(scroll : int) : void<BR/>+processDragInput(code : int, x : int, y : int) : void<BR/>+drawPage() : void<BR/>+refresh() : void<BR/>+clear() : void<BR/>+resetPosition() : void<BR/>+setImagePath(in : String) : void<BR/>+increaseOriginX() : void<BR/>+increaseOriginY() : void<BR/>+decreaseOriginX() : void<BR/>+decreaseOriginY() : void<BR/>+dragOriginX(amount : int) : void<BR/>+dragOriginY(amount : int) : void<BR/>+increaseZoom() : void<BR/>+decreaseZoom() : void<BR/>+getImageName() : String<BR/>+getImagePath() : String<BR/>+getImage() : Image<BR/>+getZoom() : double<BR/>-formatImageName(in : String) : String}>];
-	n5 [label = <{Constructor||+Constructor(vis : String, nom : String, arg : ArrayList&lt;Argument&gt;) : Constructor}>];
-	n6 [label = <{GraphViz|-Properties : configFile<BR/>-String : osName<BR/>-String : cfgProp<BR/>-String : tempDir<BR/>-String : DOT<BR/>-StringBuilder : graph<BR/>-int : currentDpiPos|+GraphViz(workingPath : String, configPath : String) : GraphViz<BR/><i>+verifyDotPath(path : String) : boolean</i><BR/>+increaseDpi() : void<BR/>+decreaseDpi() : void<BR/>+writeGraphToFile(img : byte[], file : String) : int<BR/>+writeGraphToFile(img : byte[], to : File) : int<BR/>-writeDotSourceToFile(str : String, throws : )) : File<BR/>+readSource(input : String) : void<BR/>+getImageDpi() : int<BR/>+getDotSource() : String<BR/>+getGraph(dot_source : String, type : String) : byte[]<BR/>-get_img_stream(dot : File, type : String) : byte[]<BR/>+start_subgraph(clusterid : int) : String<BR/>+end_subgraph() : String<BR/>+start_graph() : String<BR/>+end_graph() : String<BR/>+clearGraph() : void<BR/>+add(line : String) : void<BR/>+addln(line : String) : void<BR/>+addln() : void}>];
-	n7 [label = <{Explore|-HashMap&lt;String, Class&gt; : classes<BR/>-HashSet&lt;String&gt; : clusters<BR/>-String : rootPath|+Explore(root : File, partialCut : String) : Explore<BR/>-explore(root : File) : void<BR/>+getClassStructure() : HashMap&lt;String, Class&gt;<BR/>+getClusters() : HashSet&lt;String&gt;<BR/><i>+setParameters(inst : boolean, func : boolean, priv : boolean) : void</i>}>];
-	n8 [label = <{Argument|-String : name<BR/>-String : type|+Argument(nom : String, typ : String) : Argument}>];
-	n9 [label = <{Main||<i>+main(args : String[]) : void</i><BR/><i>-runLoose() : void</i><BR/><i>-runReal() : void</i>}>];
-	n10 [label = <{<i>ClassComponent</i>||#fixForDot(in : String) : String}>];
-	n11 [label = <{ClassFactory||<i>+generateClass(f : File, root : String) : Class</i>}>];
-	n12 [label = <{<i>PopoutWindow</i>|-WindowFrame : frame<BR/>-ElementPanel : panel|+PopoutWindow() : PopoutWindow<BR/>+resize(wid : int, hei : int) : void<BR/>+dispose() : void<BR/>#allowScrollbars(set : boolean) : void<BR/><u>+clickAction(code : int, x : int, y : int) : void</u><BR/><u>+clickPressAction(code : int, x : int, y : int) : void</u><BR/><u>+clickReleaseAction(code : int, x : int, y : int) : void</u><BR/><u>+keyAction(code : char) : void</u><BR/><u>+scrollAction(scroll : int) : void</u><BR/><u>+dragAction(code : int, x : int, y : int) : void</u><BR/>#removeElementPrefixed(in : String) : void<BR/>+setTitle(in : String) : void<BR/>+getStoredText(ref : String) : String<BR/>#getElementPanel() : ElementPanel<BR/>+handleTextButton(nom : String, x : int, y : int, wid : int, hei : int, font : Font, phr : String, code : int, col : Color, col2 : Color) : void<BR/>+handleText(nom : String, x : int, y : int, wid : int, hei : int, font : Font, phr : String) : void<BR/>+handleTextEntry(nom : String, x : int, y : int, wid : int, hei : int, cod : int, phr : String) : void<BR/>+handleButton(nom : String, x : int, y : int, wid : int, hei : int, code : int) : void<BR/>+handleLine(nom : String, x : int, y : int, x2 : int, y2 : int, thck : int, col : Color) : void<BR/>+handleRectangle(nom : String, prior : int, x : int, y : int, wid : int, hei : int, col : Color, col2 : Color) : void}>];
-	n13 [label = <{PopoutConfig||+PopoutConfig() : PopoutConfig<BR/>-drawPage() : void<BR/>+failure() : void<BR/>+success() : void}>];
-	n14 [label = <{InstanceVariable|-String : visibility<BR/>-String : name<BR/>-String : type<BR/>-boolean : isStatic|+InstanceVariable(vis : String, nom : String, typ : String) : InstanceVariable<BR/>+setStatic(in : boolean) : void}>];
-	n15 [label = <{<i>JavaClass</i>||+JavaClass(in : File, root : String) : JavaClass<BR/>-processInstanceVariable(in : String) : void<BR/>-processFunction(in : String) : void<BR/>-testInstanceVariable(in : String) : boolean<BR/>-testFunction(in : String) : boolean<BR/>-cleanInput(in : String) : String[]<BR/>-bufferCharacter(out : String, in : String) : String<BR/>-compileType(line : String[], start : int) : String<BR/>-processVisibility(in : String) : String<BR/>+getType() : String<BR/>-indexOf(arr : String[], key : String) : int}>];
-	n16 [label = <{Display|-WindowFrame : frame<BR/>-ElementPanel : panel<BR/>-ElementPanel : image<BR/>-ImageDisplay : display<BR/>-String : dotAddress<BR/>-boolean[][] : state|+Display() : Display<BR/>-showImage(in : String) : void<BR/>-drawPanel() : void<BR/>-drawImage() : void<BR/>-fileConfiguration() : void<BR/>-verifyConfigFile(f : File) : boolean<BR/>-createConfigurationFile(config : File) : void<BR/>-readDirectories(config : File) : void<BR/>-writeConfigEntry(entry : String, contents : String) : void<BR/>-verifyDotAddress(path : String) : boolean<BR/>+retrieveFileReader(pathIn : String) : BufferedReader}>];
-	n17 [label = <{<i>Class</i>|<i>-boolean : procInstance</i><BR/><i>-boolean : procFunction</i><BR/><i>-boolean : procPrivate</i><BR/>-String : name<BR/>-boolean : isAbstract<BR/>-ArrayList&lt;String&gt; : lines<BR/>-ArrayList&lt;Class&gt; : associates<BR/>-ArrayList&lt;Function&gt; : functions<BR/>-ArrayList&lt;InstanceVariable&gt; : instanceVariables|+Class(in : File, root : String) : Class<BR/><u>+process(reference : HashMap&lt;String, Class&gt;) : void</u><BR/>+generateDot(val : int) : String<BR/>-formDotName() : String<BR/>+generateAssociations(ref : HashMap&lt;String, Integer&gt;) : String<BR/>#stripContext(in : String) : String<BR/>#compileArguments(tokens : ArrayList&lt;String&gt;) : ArrayList&lt;Argument&gt;<BR/>#compileFunction(vis : String, name : String, ret : String, arguments : ArrayList&lt;Argument&gt;, statStatic : boolean, statAbstract : boolean) : Function<BR/>#compileConstructor(vis : String, name : String, arguments : ArrayList&lt;Argument&gt;) : Constructor<BR/>#compileInstanceVariable(vis : String, typ : String, nom : String, statStatic : boolean) : InstanceVariable<BR/><i>+assignProcessStates(inst : boolean, func : boolean, priv : boolean) : void</i><BR/>#addClassAssociate(ref : Class) : void<BR/>#addFunction(in : Function) : void<BR/>#addConstructor(in : Constructor) : void<BR/>#addInstanceVariable(in : InstanceVariable) : void<BR/>#setAbstract(in : boolean) : void<BR/>#getStatusInstanceVariable() : boolean<BR/>#getStatusPrivate() : boolean<BR/>#getStatusFunction() : boolean<BR/><u>+getType() : String</u><BR/>+getAbstract() : boolean<BR/>+getName() : String<BR/>+getContext(in : String) : String<BR/>+getFunctions() : ArrayList&lt;Function&gt;<BR/>+getInstanceVariables() : ArrayList&lt;InstanceVariable&gt;<BR/>#getFileContents() : ArrayList&lt;String&gt;<BR/>+getClassAssociates() : ArrayList&lt;Class&gt;}>];
 
-	subgraph cluster_ui{
-		label = "ui";
-		fontsize = 30;
-		penwidth = 1;
-		subgraph cluster_ui_popups{
-			label = "ui.popups";
-			fontsize = 26;
-			penwidth = 2;
-			n12;
-			n13;
-	}
-}
-	subgraph cluster_ui{
-		label = "ui";
-		fontsize = 30;
-		penwidth = 1;
-		n4;
-		n12;
-		n13;
-		n16;
-}
-	subgraph cluster_explore{
-		label = "explore";
-		fontsize = 30;
-		penwidth = 1;
-		n7;
-}
-	subgraph cluster_graphviz{
-		label = "graphviz";
-		fontsize = 30;
-		penwidth = 1;
-		n2;
-		n6;
-}
-	subgraph cluster_analysis{
-		label = "analysis";
-		fontsize = 30;
-		penwidth = 1;
-		subgraph cluster_analysis_language{
-			label = "analysis.language";
-			fontsize = 26;
-			penwidth = 2;
-			n11;
-			n15;
-			n17;
-	}
-}
-	subgraph cluster_main{
-		label = "main";
-		fontsize = 30;
-		penwidth = 1;
-		n9;
-}
-	subgraph cluster_analysis{
-		label = "analysis";
-		fontsize = 30;
-		penwidth = 1;
-		n1;
-		n3;
-		n5;
-		n8;
-		n10;
-		n11;
-		n14;
-		n15;
-		n17;
-}
-	subgraph cluster_analysis{
-		label = "analysis";
-		fontsize = 30;
-		penwidth = 1;
-		subgraph cluster_analysis_component{
-			label = "analysis.component";
-			fontsize = 26;
-			penwidth = 2;
-			n1;
-			n5;
-			n8;
-			n10;
-			n14;
-	}
-}
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[dir=back, arrowtail=empty, concentrate=true];
+	graph[splines = ortho, ranksep = 1, ratio = fill];
+rankdir = TB;
 
-	n1 -> n3;
-n1 -> n8;
-n1 -> n10;
-	n2 -> n17;
-n2 -> n7;
-			n5 -> n1;
-		n7 -> n17;
-n7 -> n11;
-	n8 -> n3;
-	n9 -> n7;
-n9 -> n2;
-n9 -> n16;
-		n11 -> n17;
-		n13 -> n12;
-	n14 -> n3;
-n14 -> n10;
-	n15 -> n17;
-	n16 -> n2;
-n16 -> n6;
-n16 -> n13;
-	n17 -> n8;
-n17 -> n5;
-n17 -> n1;
-n17 -> n14;
+	subgraph_cluster_{
+		label = "";
+		fontsize = 30;
+		penwidth = 1;
+	}
+
 }

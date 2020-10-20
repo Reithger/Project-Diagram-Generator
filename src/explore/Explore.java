@@ -3,7 +3,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import analysis.language.actor.GenerateDot;
 import analysis.language.actor.GenericClass;
+import analysis.language.actor.GenericDefinition;
 import analysis.language.actor.GenericInterface;
 import analysis.language.file.FileFactory;
 import analysis.language.file.GenericFile;
@@ -15,7 +17,7 @@ public class Explore{
 	private HashMap<String, GenericFile> files;
 	private HashMap<String, GenericClass> classes;
 	private HashMap<String, GenericInterface> interfaces;
-	private HashSet<String> clusters;
+	private Cluster parent;
 	private String rootPath;
 	
 //---  Constructors   -------------------------------------------------------------------------
@@ -25,14 +27,13 @@ public class Explore{
 		files = new HashMap<String, GenericFile>();
 		classes = new HashMap<String, GenericClass>();
 		interfaces = new HashMap<String, GenericInterface>();
-		clusters = new HashSet<String>();
+		parent = new Cluster(new String[] {});
 		partialCut = partialCut.replaceAll("\\.", "/");
 		File use = new File(root.getAbsolutePath() + "/" + partialCut);
 		explore(use);
 		for(GenericFile f : files.values()) {
-			f.process(classes);
+			f.process(classes, interfaces, parent);
 		}
-		//TODO: Reintegrate: clusters.add(c.getContext(c.getName()));
 	}
 
 //---  Operations   ---------------------------------------------------------------------------
@@ -51,10 +52,12 @@ public class Explore{
 				if(f.isClassFile()) {
 					GenericClass gc = new GenericClass(f.getName(), f.getContext());
 					classes.put(gc.getName(), gc);
+					parent.addComponent(gc.getContextArray(), gc);
 				}
 				else if(f.isInterfaceFile()) {
 					GenericInterface gi = new GenericInterface(f.getName(), f.getContext());
 					interfaces.put(gi.getName(), gi);
+					parent.addComponent(gi.getContextArray(), gi);
 				}
 			}
 		}
@@ -70,8 +73,17 @@ public class Explore{
 		return interfaces;
 	}
 	
-	public HashSet<String> getClusters(){
-		return clusters;
+	public HashMap<String, GenericDefinition> getDefinitions(){
+		HashMap<String, GenericDefinition> out = new HashMap<String, GenericDefinition>();
+		for(String s : classes.keySet())
+			out.put(s, classes.get(s));
+		for(String s : interfaces.keySet())
+			out.put(s, interfaces.get(s));
+		return out;
+	}
+	
+	public Cluster getClusterRoot(){
+		return parent;
 	}
 	
 //--  Setter Methods   ------------------------------------------------------------------------
@@ -81,5 +93,3 @@ public class Explore{
 	}
 	
 }
-
-	 

@@ -3,14 +3,17 @@ package analysis.language.file;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import analysis.language.actor.GenericClass;
+import analysis.language.actor.GenericDefinition;
 import analysis.language.actor.GenericInterface;
 import analysis.language.component.Argument;
 import analysis.language.component.Constructor;
 import analysis.language.component.Function;
 import analysis.language.component.InstanceVariable;
+import explore.Cluster;
 
 public abstract class GenericFile {
 	
@@ -32,7 +35,7 @@ public abstract class GenericFile {
 		try {
 			Scanner sc = new Scanner(in);
 			while(sc.hasNextLine()) {
-				contents += sc.nextLine();
+				contents += sc.nextLine() + "\n";
 			}
 			sc.close();
 		}
@@ -46,9 +49,19 @@ public abstract class GenericFile {
 	
 //---  Operations   ---------------------------------------------------------------------------
 
-	public void processClass(HashMap<String, GenericClass> classRef, HashMap<String, GenericInterface> interfaceRef) {
+	public void process(HashMap<String, GenericClass> classRef, HashMap<String, GenericInterface> interfaceRef, Cluster parent) {
+		HashSet<GenericDefinition> neighbors = parent.getCluster(context.split("\\.")).getComponents();
+		if(isClassFile()) {
+			processClass(classRef, interfaceRef, neighbors);
+		}
+		else {
+			processInterface(interfaceRef.get(getName()), classRef, neighbors);
+		}
+	}
+	
+	public void processClass(HashMap<String, GenericClass> classRef, HashMap<String, GenericInterface> interfaceRef, HashSet<GenericDefinition> neighbors) {
 		GenericClass out = classRef.get(getName());
-		for(GenericClass gc : extractAssociations(classRef)) {
+		for(GenericClass gc : extractAssociations(classRef, neighbors)) {
 			out.addClassAssociate(gc);
 		}
 		for(GenericInterface gi : extractRealizations(interfaceRef)) {
@@ -64,12 +77,12 @@ public abstract class GenericFile {
 		out.setAbstract(extractAbstract());
 	}
 
-	public void processInterface(GenericInterface in, HashMap<String, GenericClass> reference) {
+	public void processInterface(GenericInterface in, HashMap<String, GenericClass> reference, HashSet<GenericDefinition> neighbors) {
 		GenericInterface out = in;
 		for(Function f : extractFunctions()) {
 			out.addFunction(f);
 		}
-		for(GenericClass gc : extractAssociations(reference)) {
+		for(GenericClass gc : extractAssociations(reference, neighbors)) {
 			out.addAssociation(gc);
 		}
 	}
@@ -100,7 +113,7 @@ public abstract class GenericFile {
 	
 	protected abstract ArrayList<GenericInterface> extractRealizations(HashMap<String, GenericInterface> ref);
 	
-	protected abstract ArrayList<GenericClass> extractAssociations(HashMap<String, GenericClass> ref);
+	protected abstract ArrayList<GenericClass> extractAssociations(HashMap<String, GenericClass> ref, HashSet<GenericDefinition> neighbor);
 	
 	//-- Support Methods  -------------------------------------
 	
@@ -162,13 +175,7 @@ public abstract class GenericFile {
 	public String getContext() {
 		return context;
 	}
-	
-	protected String getContext(String in) {
-		if(!in.contains("."))
-			return "";
-		return in.substring(0, in.lastIndexOf("."));
-	}
-	
+
 	protected boolean getStatusInstanceVariable() {
 		return procInstance;
 	}

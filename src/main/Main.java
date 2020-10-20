@@ -14,6 +14,7 @@ import ui.Display;
  *  - Explore
  *  - Class
  *  
+ *  TODO: Oversight of redundant names in separate packages for many reference locales
  * TODO: Options for 'splines = ortho' and 'nodesep = 1' separately
  * TODO: JavaClass needs to specify inheritance/directed association/etc. in associates
  * TODO: Show package hierarchy for easy means of filtering what packages are examined (already possible, just remember to make it look nice for the user)
@@ -22,6 +23,8 @@ import ui.Display;
  * @author Ada Clevinger
  *
  */
+
+//Single line test
 
 public class Main {
 
@@ -37,20 +40,16 @@ public class Main {
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 	
-	private final static String NAME = "Self";
+	private final static String NAME = "Self 2";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		//runReal();
 		runLoose();
 	}
 	
 	private static void runLoose() {
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
-		File f = new File(PATH2);
-		Explore.setParameters(true,  true,  true);
-		Explore expl = new Explore(f, "");
-		String dot = ConvertVisual.convertClassStructure(expl.getClassStructure(), expl.getClusters());
-		ConvertVisual.draw(dot, NAME, "jpg");
+		ConvertVisual.generateUMLDiagram(PATH2, "", NAME, true, true, true);
 	}
 	
 	private static void runReal() {

@@ -3,9 +3,13 @@ package analysis.language.file;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import analysis.language.actor.GenericClass;
+import analysis.language.actor.GenericDefinition;
 import analysis.language.actor.GenericInterface;
+import analysis.language.component.Function;
+import analysis.language.component.InstanceVariable;
 
 public class JavaFile extends GenericFile {
 
@@ -26,27 +30,46 @@ public class JavaFile extends GenericFile {
 	}
 
 //---  Operations   ---------------------------------------------------------------------------
+
+	@Override
+	public boolean isClassFile() {
+		for(String s : getFileContents()) {
+			if(s.matches("public class [^\\{]*\\{")) {
+				System.out.println(s);
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	@Override
-	protected String findName() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isInterfaceFile() {
+		for(String s : getFileContents()) {
+			if(s.matches("public interface [^\\{]*\\{")) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
 	protected ArrayList<String> preProcess(String in){
 		ArrayList<String> out = new ArrayList<String>();
-		in = in.replaceAll("\n", " ").replaceAll("  ", " ").replaceAll("\"[^\"]\"", "").replaceAll(";", ";\n").replaceAll("{", "{\n").replaceAll("}", "\n}");
+		in = in.replaceAll("//[^\n]*\n", "\n");
+		in = in.replaceAll("\n", " ").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\"[^\"]\"", "").replaceAll(";", ";\n").replaceAll("\\*/",  "\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "");
+		in = bufferCharacter(in, "\\{");
+		in = bufferCharacter(in, "\\}");
 		String[] parsed = in.split("\n");
 		for(String s : parsed)
-			out.add(s.trim());
+			if(!s.equals(""))
+				out.add(s.trim());
 		return out;
 	}
 	
 	@Override
-	public boolean isClassFile() {
-		for(String s : getFileContents()) {
-			if(s.matches("public class [^{]{")) {
+	protected boolean extractAbstract() {
+		for(String line : getFileContents()) {
+			if(line.matches("public abstract class .*")) {
 				return true;
 			}
 		}
@@ -54,105 +77,91 @@ public class JavaFile extends GenericFile {
 	}
 
 	@Override
-	public GenericClass processClass(HashMap<String, GenericClass> reference) {
-		GenericClass out = new GenericClass(getName(), getContext());
-		int depth = 0;
-		boolean skipNextFunction = false;
-		for(String s : getFileContents()) {		//TODO: Instead of one pass through, do multiple while looking for specific things. Cleaner approach, if not as fast kinda
-			if(s.contains("//"))
-				s = s.substring(0, s.indexOf("//"));
-			s = s.trim().replaceAll(";", "");
-			depth -= s.replaceAll(REGEX_PARSE_BRACKET_OPEN, "").replaceAll("[^}]", "").length();
-			if(depth == 0) {
-				if(s.matches(IMPORT_PHRASE + ".*")) {
-					String[] imp = s.split("\\s++");
-					if(reference.get(imp[1]) != null) {
-						out.addClassAssociate(reference.get(imp[1]));
-					}
-				}
-				else {
-					if(containsHierarchyData(s)) {
-						ArrayList<String> classes = getHierarchicalClasses(s);
-						
-						for(GenericClass cl : out.getClassAssociates()) {
-							String className = stripContext(cl.getName());
-							if(classes.contains(className)) {
-								classes.remove(className);
-							}
-						}
-						
-						for(String relat : classes) {
-							String outN = getContext(getName()) + "." +  relat;
-							if(reference.get(outN) != null) {
-								out.addClassAssociate(reference.get(outN));
-							}
-						}
-						
-					}
-					if(s.contains("abstract")) {
-						out.setAbstract(true);
-					}
-				}
+	protected ArrayList<Function> extractFunctions() {
+		ArrayList<Function> out = new ArrayList<Function>();
+		for(String line : getFileContents()) {
+			if(testFunction(line)) {
+				out.add(processFunction(line));
 			}
-			else if(depth == 1) {
-				String use = s;
-				if(testInstanceVariable(use)) {
-					processInstanceVariable(use);
-				}
-				else if(testFunction(use) && !skipNextFunction) {
-					processFunction(use);
-				}
-				else if(use.contains("@Override")) {
-					skipNextFunction = true;
-				}
-				else {
-					skipNextFunction = false;
-				}
-			}
-			depth += s.replaceAll(REGEX_PARSE_BRACKET_CLOSED, "").replaceAll("[^{]", "").length();
 		}
 		return out;
 	}
-	
+
 	@Override
-	public boolean isInterfaceFile() {
-		for(String s : getFileContents()) {
-			if(s.matches("public interface [^{]{")) {
-				return true;
+	protected ArrayList<InstanceVariable> extractInstanceVariables() {
+		ArrayList<InstanceVariable> out = new ArrayList<InstanceVariable>();
+		for(String line : getFileContents()) {
+			if(testInstanceVariable(line)) {
+				out.add(processInstanceVariable(line));
 			}
 		}
-		return false;
-	}
-	
-	public GenericInterface processInterface(HashMap<String, GenericClass> reference) {
-		
-	}
-	
-	private boolean containsHierarchyData(String line) {
-		return line.contains("extends") || line.contains("implements");
-	}
-	
-	private ArrayList<String> getHierarchicalClasses(String line) {
-		ArrayList<String> out = new ArrayList<String>();
-		
-		String[] use = cleanInput(line);
-		int posit = indexOf(use, "extends");
-		if(posit != -1) {
-			out.add(use[posit+1].replaceAll("\\{", ""));
-		}
-		
-		posit = indexOf(use, "implements");
-		
-		if(posit != -1) {
-			while(++posit < use.length) {
-				out.add(use[posit].replaceAll("\\{", ""));
-			}
-		}
-		
 		return out;
 	}
-	
-	private void processInstanceVariable(String in) {
+
+	@Override
+	protected GenericClass extractInheritance(HashMap<String, GenericClass> ref) {
+		for(String line : getFileContents()) {
+			if(line.matches("public (abstract)? class.*") && line.contains("extends")){
+				String[] use = cleanInput(line);
+				int posit = indexOf(use, "extends");
+				return ref.get(use[posit + 1]);
+			}
+		}
+		return null;
+	}
+
+	@Override
+	protected ArrayList<GenericInterface> extractRealizations(HashMap<String, GenericInterface> ref) {
+		ArrayList<GenericInterface> out = new ArrayList<GenericInterface>();
+		for(String line : getFileContents()) {
+			if(line.matches("public (abstract)? class.*") && line.contains("implements")){
+				String[] use = cleanInput(line);
+				int posit = indexOf(use, "implements");
+				while(++posit < use.length) {
+					if(ref.get(use[posit]) == null) {
+						out.add(ref.get(use[posit]));
+					}
+				}
+			}
+		}
+		return out;
+	}
+
+	@Override
+	protected ArrayList<GenericClass> extractAssociations(HashMap<String, GenericClass> ref, HashSet<GenericDefinition> neighbors) {
+		ArrayList<GenericClass> out = new ArrayList<GenericClass>();
+		for(String line : getFileContents()) {
+			if(line.matches("import .*;")){
+				String[] use = cleanInput(line)[1].split("\\.");
+				String nom = use[use.length - 1];
+				if(ref.get(nom) != null)
+					out.add(ref.get(nom));
+			}
+			else {
+				for(GenericDefinition gd : neighbors) {
+					if(line.contains(gd.getName())) {
+						out.add(ref.get(gd.getName()));
+					}
+				}
+			}
+		}
+		return out;
+	}
+
+	@Override
+	protected String findName() {
+		for(String line : getFileContents()) {
+			if(line.matches("public (abstract )?(class|interface).*")){
+				String[] use = cleanInput(line);
+				int posit = indexOf(use, "class");
+				posit = (posit == -1 ? indexOf(use, "interface") : posit);
+				return use[posit + 1];
+			}
+		}
+		return null;
+	}
+
+	private InstanceVariable processInstanceVariable(String in) {
 		boolean underline = false;
 		if(in.contains("static")) {
 			underline = true;	//TODO: Do the formatting here
@@ -160,12 +169,12 @@ public class JavaFile extends GenericFile {
 		String[] cont = cleanInput(in);
 		String vis = processVisibility(cont[0]);
 		String typ = compileType(cont, 1);
-		addInstanceVariable(compileInstanceVariable(vis, cont[cont.length - 1], typ, underline));
+		return compileInstanceVariable(vis, cont[cont.length - 1], typ, underline);
 	}
 	
-	private void processFunction(String in) {
+	private Function processFunction(String in) {
 		if(!getStatusPrivate() && in.contains("private")) {
-			return;
+			return null;
 		}
 		boolean stat = false;
 		boolean abs = false;
@@ -189,10 +198,10 @@ public class JavaFile extends GenericFile {
 			args.add(type);
 		}
 		if(ret.equals("")) {
-			addFunction(compileConstructor(vis, name, compileArguments(args)));
+			return compileConstructor(vis, name, compileArguments(args));
 		}
 		else {
-			addFunction(compileFunction(vis, name, ret, compileArguments(args), stat, abs));
+			return compileFunction(vis, name, ret, compileArguments(args), stat, abs);
 		}
 	};
 	
@@ -276,7 +285,6 @@ public class JavaFile extends GenericFile {
 		}
 		return -1;
 	}
-
 
 
 }

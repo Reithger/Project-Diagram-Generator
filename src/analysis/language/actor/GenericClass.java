@@ -1,6 +1,7 @@
 package analysis.language.actor;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import analysis.language.component.Constructor;
@@ -9,19 +10,15 @@ import analysis.language.component.InstanceVariable;
 
 /**
  * The platonic ideal of a Class
- * 
+ * TODO: Reflexive Association!
  * @author Ada Clevinger
  *
  */
 
-public class GenericClass implements GenerateDot {
+public class GenericClass extends GenericDefinition{
 
 //---  Instance Variables   -------------------------------------------------------------------
 
-	/** Class name, pretty standard*/
-	private String name;
-	/** This is the package hierarchy that contains this Class*/
-	private String context;
 	private boolean isAbstract;
 	
 	private GenericClass inheritance;
@@ -35,8 +32,7 @@ public class GenericClass implements GenerateDot {
 //---  Constructors   -------------------------------------------------------------------------
 	
 	public GenericClass(String inName, String inContext) {
-		name = inName;
-		context = inContext;
+		super(inName, inContext);
 		associates = new ArrayList<GenericClass>();
 		functions = new ArrayList<Function>();
 		instanceVariables = new ArrayList<InstanceVariable>();
@@ -61,11 +57,24 @@ public class GenericClass implements GenerateDot {
 		return pref + out + post;
 	};
 
-	public String generateAssociations(HashMap<String, Integer> ref) {
+	public String generateRelationships(HashMap<String, Integer> ref) {
 		int val = ref.get(getName());
-		String out = "\t";
+		String out = "";
+		if(inheritance != null) {
+			out = "\tn" + val + " -> n" + ref.get(inheritance.getName()) + "[arrowhead=onormal];\n";
+		}
 		for(GenericClass c : associates) {
-			out += "n" + val + " -> n" + ref.get(c.getName()) + ";\n";
+			out += "\tn" + val + " -> n" + ref.get(c.getName());
+			if(c.hasAssociate(this)) {
+				out += "[arrowhead=none]";
+			}
+			else {
+				out += "[arrowhead=normal]";
+			}
+			out += ";\n";
+		}
+		for(GenericInterface i : realizations) {
+			out += "\tn" + val + " -> n" + ref.get(i.getName()) + "[arrowhead=onormal line=dotted];\n";
 		}
 		return out;
 	}
@@ -76,6 +85,15 @@ public class GenericClass implements GenerateDot {
 			out = "<i>" + out + "</i>";
 		}
 		return out;
+	}
+	
+	private boolean hasAssociate(GenericClass gc) {
+		for(GenericClass c : associates) {
+			if(this.compareTo(gc) == 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 //---  Setter Methods   -----------------------------------------------------------------------
@@ -124,17 +142,7 @@ public class GenericClass implements GenerateDot {
 	public boolean getAbstract() {
 		return isAbstract;
 	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public String getContext(String in) {
-		if(!in.contains("."))
-			return "";
-		return in.substring(0, in.lastIndexOf("."));
-	}
-	
+
 	public ArrayList<Function> getFunctions() {
 		return functions;
 	}
@@ -146,5 +154,6 @@ public class GenericClass implements GenerateDot {
 	public ArrayList<GenericClass> getClassAssociates(){
 		return associates;
 	}
-	
+
+
 }

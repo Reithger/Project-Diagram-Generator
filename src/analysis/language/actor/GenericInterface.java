@@ -6,19 +6,13 @@ import java.util.HashMap;
 import analysis.language.component.Function;
 
 
-public class GenericInterface implements GenerateDot {
+public class GenericInterface extends GenericDefinition{
 
-	/** Class name, pretty standard*/
-	private String name;
-	/** This is the package hierarchy that contains this Class*/
-	private String context;
-	
 	private ArrayList<Function> functions;
 	private ArrayList<GenericClass> associates;	//solid line, empty arrowhead
 	
 	public GenericInterface(String inName, String inContext) {
-		name = inName;
-		context = inContext;
+		super(inName, inContext);
 		functions = new ArrayList<Function>();
 	}
 	
@@ -30,10 +24,6 @@ public class GenericInterface implements GenerateDot {
 		associates.add(in);
 	}
 	
-	public String getName() {
-		return name;
-	}
-
 	@Override
 	public String generateDot(int val) {
 		// TODO Auto-generated method stub
@@ -41,7 +31,7 @@ public class GenericInterface implements GenerateDot {
 	}
 
 	@Override
-	public String generateAssociations(HashMap<String, Integer> ref) {
+	public String generateRelationships(HashMap<String, Integer> ref) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -6,6 +6,6 @@ public interface GenerateDot {
 
 	public abstract String generateDot(int val);
 	
-	public abstract String generateAssociations(HashMap<String, Integer> ref);
+	public abstract String generateRelationships(HashMap<String, Integer> ref);
 	
 }
