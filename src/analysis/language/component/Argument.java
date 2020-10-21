@@ -1,8 +1,6 @@
 package analysis.language.component;
 
-import analysis.DotPrintable;
-
-public class Argument implements DotPrintable{
+public class Argument {
 
 	private String name;
 	private String type;
@@ -11,10 +9,13 @@ public class Argument implements DotPrintable{
 		name = nom;
 		type = typ;
 	}
+		
+	public String getName() {
+		return name;
+	}
 	
-	@Override
-	public String getDot() {
-		return name + " : " + type;
+	public String getType() {
+		return type;
 	}
 	
 }

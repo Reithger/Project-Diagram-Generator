@@ -1,10 +1,6 @@
 package main;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import explore.Explore;
-import graphviz.ConvertVisual;
+import image.ConvertVisual;
 import ui.Display;
 
 /**
@@ -40,7 +36,7 @@ public class Main {
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 	
-	private final static String NAME = "Self 2";
+	private final static String NAME = "UML Generator Diagram";
 	
 	public static void main(String[] args) throws Exception{
 		//runReal();
@@ -49,7 +45,7 @@ public class Main {
 	
 	private static void runLoose() {
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
-		ConvertVisual.generateUMLDiagram(PATH2, "", NAME, true, true, true);
+		ConvertVisual.generateUMLDiagram(PATH2, "", NAME, false, false, false);
 	}
 	
 	private static void runReal() {

@@ -1,9 +1,10 @@
 package explore;
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
 
-import analysis.language.actor.GenerateDot;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
 import analysis.language.actor.GenericClass;
 import analysis.language.actor.GenericDefinition;
 import analysis.language.actor.GenericInterface;
@@ -14,7 +15,7 @@ public class Explore{
 	
 //---  Instance Variables   -------------------------------------------------------------------
 		
-	private HashMap<String, GenericFile> files;
+	private ArrayList<GenericFile> files;
 	private HashMap<String, GenericClass> classes;
 	private HashMap<String, GenericInterface> interfaces;
 	private Cluster parent;
@@ -24,15 +25,15 @@ public class Explore{
 	
 	public Explore(File root, String partialCut) {
 		rootPath = root.getAbsolutePath();
-		files = new HashMap<String, GenericFile>();
+		files = new ArrayList<GenericFile>();
 		classes = new HashMap<String, GenericClass>();
 		interfaces = new HashMap<String, GenericInterface>();
 		parent = new Cluster(new String[] {});
 		partialCut = partialCut.replaceAll("\\.", "/");
 		File use = new File(root.getAbsolutePath() + "/" + partialCut);
 		explore(use);
-		for(GenericFile f : files.values()) {
-			f.process(classes, interfaces, parent);
+		for(GenericFile f : files) {
+			f.process(getDefinitionMapping(), interfaces, parent);
 		}
 	}
 
@@ -51,29 +52,39 @@ public class Explore{
 				}
 				if(f.isClassFile()) {
 					GenericClass gc = new GenericClass(f.getName(), f.getContext());
-					classes.put(gc.getName(), gc);
+					classes.put(gc.getFullName(), gc);
 					parent.addComponent(gc.getContextArray(), gc);
 				}
 				else if(f.isInterfaceFile()) {
 					GenericInterface gi = new GenericInterface(f.getName(), f.getContext());
-					interfaces.put(gi.getName(), gi);
+					interfaces.put(gi.getFullName(), gi);
 					parent.addComponent(gi.getContextArray(), gi);
 				}
+				files.add(f);
 			}
 		}
 	}
 		
 //---  Getter Methods   -----------------------------------------------------------------------
 	
-	public HashMap<String, GenericClass> getClasses(){
-		return classes;
+	public Collection<GenericClass> getClasses(){
+		return classes.values();
 	}
 	
-	public HashMap<String, GenericInterface> getInterfaces(){
-		return interfaces;
+	public Collection<GenericInterface> getInterfaces(){
+		return interfaces.values();
 	}
 	
-	public HashMap<String, GenericDefinition> getDefinitions(){
+	public ArrayList<GenericDefinition> getDefinitions(){
+		ArrayList<GenericDefinition> out = new ArrayList<GenericDefinition>();
+		for(String s : classes.keySet())
+			out.add(classes.get(s));
+		for(String s : interfaces.keySet())
+			out.add(interfaces.get(s));
+		return out;
+	}
+	
+	public HashMap<String, GenericDefinition> getDefinitionMapping(){
 		HashMap<String, GenericDefinition> out = new HashMap<String, GenericDefinition>();
 		for(String s : classes.keySet())
 			out.put(s, classes.get(s));

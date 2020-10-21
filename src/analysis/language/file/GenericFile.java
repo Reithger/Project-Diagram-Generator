@@ -44,45 +44,56 @@ public abstract class GenericFile {
 		}
 		lines = preProcess(contents);
 		name = findName();
-		context = in.getAbsolutePath().substring(root.length()).replaceAll("/", ".");
+		context = in.getAbsolutePath().substring(root.length() + 1).replaceAll("\\\\", "/");
+		if(context.contains("/")) {
+			context = context.substring(0, context.lastIndexOf("/"));
+		}
+		context = context.replaceAll("/", ".");
 	}
 	
 //---  Operations   ---------------------------------------------------------------------------
 
-	public void process(HashMap<String, GenericClass> classRef, HashMap<String, GenericInterface> interfaceRef, Cluster parent) {
+	public void process(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericInterface> interfaceRef, Cluster parent) {
 		HashSet<GenericDefinition> neighbors = parent.getCluster(context.split("\\.")).getComponents();
 		if(isClassFile()) {
 			processClass(classRef, interfaceRef, neighbors);
 		}
-		else {
-			processInterface(interfaceRef.get(getName()), classRef, neighbors);
+		else if(isInterfaceFile()){
+			processInterface(interfaceRef.get(getFullName()), classRef, neighbors);
 		}
 	}
 	
-	public void processClass(HashMap<String, GenericClass> classRef, HashMap<String, GenericInterface> interfaceRef, HashSet<GenericDefinition> neighbors) {
-		GenericClass out = classRef.get(getName());
-		for(GenericClass gc : extractAssociations(classRef, neighbors)) {
-			out.addClassAssociate(gc);
-		}
-		for(GenericInterface gi : extractRealizations(interfaceRef)) {
-			out.addRealization(gi);
-		}
-		for(Function f : extractFunctions()) {
-			out.addFunction(f);
-		}
-		for(InstanceVariable iv : extractInstanceVariables()) {
-			out.addInstanceVariable(iv);
-		}
+	public void processClass(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericInterface> interfaceRef, HashSet<GenericDefinition> neighbors) {
+		GenericClass out = (GenericClass)(classRef.get(getFullName()));
 		out.setInheritance(extractInheritance(classRef));
 		out.setAbstract(extractAbstract());
+		HashSet<String> bar = new HashSet<String>();
+		for(GenericInterface gi : extractRealizations(interfaceRef)) {
+			out.addRealization(gi);
+			bar.add(gi.getFullName());
+		}
+		for(GenericDefinition gc : extractAssociations(classRef, neighbors)) {
+			if(!gc.equals(out.getInheritance()) && !bar.contains(gc.getFullName()))		//TODO: What if a class both extends and associates with another class?
+				out.addAssociation(gc);
+		}
+		if(getStatusFunction()) {
+			for(Function f : extractFunctions()) {
+				out.addFunction(f);
+			}
+		}
+		if(getStatusInstanceVariable()) {
+			for(InstanceVariable iv : extractInstanceVariables()) {
+				out.addInstanceVariable(iv);
+			}
+		}
 	}
 
-	public void processInterface(GenericInterface in, HashMap<String, GenericClass> reference, HashSet<GenericDefinition> neighbors) {
+	public void processInterface(GenericInterface in, HashMap<String, GenericDefinition> reference, HashSet<GenericDefinition> neighbors) {
 		GenericInterface out = in;
 		for(Function f : extractFunctions()) {
 			out.addFunction(f);
 		}
-		for(GenericClass gc : extractAssociations(reference, neighbors)) {
+		for(GenericDefinition gc : extractAssociations(reference, neighbors)) {
 			out.addAssociation(gc);
 		}
 	}
@@ -109,11 +120,11 @@ public abstract class GenericFile {
 	
 	protected abstract ArrayList<InstanceVariable> extractInstanceVariables();
 	
-	protected abstract GenericClass extractInheritance(HashMap<String, GenericClass> ref);
+	protected abstract GenericClass extractInheritance(HashMap<String, GenericDefinition> ref);
 	
 	protected abstract ArrayList<GenericInterface> extractRealizations(HashMap<String, GenericInterface> ref);
 	
-	protected abstract ArrayList<GenericClass> extractAssociations(HashMap<String, GenericClass> ref, HashSet<GenericDefinition> neighbor);
+	protected abstract ArrayList<GenericDefinition> extractAssociations(HashMap<String, GenericDefinition> ref, HashSet<GenericDefinition> neighbor);
 	
 	//-- Support Methods  -------------------------------------
 	
@@ -175,7 +186,11 @@ public abstract class GenericFile {
 	public String getContext() {
 		return context;
 	}
-
+	
+	public String getFullName() {
+		return getContext() + "/" + getName();
+	}
+	
 	protected boolean getStatusInstanceVariable() {
 		return procInstance;
 	}

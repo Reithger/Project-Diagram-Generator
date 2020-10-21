@@ -1,15 +1,11 @@
 package analysis.language.component;
 
 import java.util.ArrayList;
-import analysis.DotPrintable;
 
-public class Function extends ClassComponent implements DotPrintable{
+public class Function extends ClassComponent{
 
 //---  Instance Variables   -------------------------------------------------------------------
 	
-	private String visibility;
-	private String name;
-	private String returnType;
 	private ArrayList<Argument> arguments;
 	private boolean isAbstract;	//italics
 	private boolean isStatic;	//underline
@@ -17,10 +13,8 @@ public class Function extends ClassComponent implements DotPrintable{
 //---  Constructors   -------------------------------------------------------------------------
 	
 	public Function(String vis, String nom, ArrayList<Argument> arg, String ret) {
-		visibility = vis;
-		name = nom;
+		super(ret, nom, vis);
 		arguments = arg;
-		returnType = ret;
 	}
 	
 //---  Setter Methods   -----------------------------------------------------------------------
@@ -35,27 +29,16 @@ public class Function extends ClassComponent implements DotPrintable{
 	
 //---  Getter Methods   -----------------------------------------------------------------------
 	
-	@Override
-	public String getDot() {
-		String out = visibility + name + "(";
-		for(int i = 0; i < arguments.size(); i++){
-			out += arguments.get(i).getDot() + (i + 1 < arguments.size() ? ", " : "");
-		}
-		out += ")" + getReturnType();
-
-		out = fixForDot(out);
-		
-		if(isAbstract) {
-			out = "<u>" + out + "</u>";
-		}
-		if(isStatic) {
-			out = "<i>" + out + "</i>";
-		}
-		return out;
+	public ArrayList<Argument> getArguments(){
+		return arguments;
 	}
 
-	protected String getReturnType() {
-		return " : " + returnType;
+	public boolean getAbstract() {
+		return isAbstract;
+	}
+	
+	public boolean getStatic() {
+		return isStatic;
 	}
 	
 }

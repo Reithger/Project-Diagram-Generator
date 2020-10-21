@@ -2,16 +2,25 @@ package analysis.language.component;
 
 public abstract class ClassComponent {
 	
-//---  Constants   ----------------------------------------------------------------------------
-
-	private final static String[] BAD_CHARACTERS_LABELS = new String[] {"<", ">"};
-	private final static String[] GOOD_CHARACTERS_LABELS = new String[] {"&lt;", "&gt;"};
+	private String name;
+	private String type;
+	private String visibility;
 	
-	protected String fixForDot(String in) {
-		for(int i = 0; i < BAD_CHARACTERS_LABELS.length; i++) {
-			in = in.replaceAll(BAD_CHARACTERS_LABELS[i], GOOD_CHARACTERS_LABELS[i]);
-		}
-		return in;
+	public ClassComponent(String typ, String nom, String vis) {
+		type = typ;
+		name = nom;
+		visibility = vis;
 	}
 	
+	public String getVisibility() {
+		return visibility;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public String getName() {
+		return name;
+	}
 }

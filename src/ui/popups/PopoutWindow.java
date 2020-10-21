@@ -55,7 +55,8 @@ public abstract class PopoutWindow {
 				clickPressAction(code, x, y);
 			}
 			
-			public void clickReleasedBehaviour(int code, int x, int y) {
+			@Override
+			public void clickReleaseBehaviour(int code, int x, int y) {
 				clickReleaseAction(code, x, y);
 			}
 			

@@ -8,7 +8,6 @@ public class Constructor extends Function{
 		super(vis, nom, arg, null);
 	}
 	
-	@Override
 	public String getReturnType() {
 		return "";
 	}

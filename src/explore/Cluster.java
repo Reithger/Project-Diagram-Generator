@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import analysis.language.actor.GenericClass;
 import analysis.language.actor.GenericDefinition;
 
 public class Cluster {
@@ -26,7 +25,6 @@ public class Cluster {
 //---  Operations   ---------------------------------------------------------------------------
 	
 	public void addComponent(String[] path, GenericDefinition in) {
-		System.out.println(in.getName());
 		if(path == null || path.length == 0) {
 			composite.add(in);
 		}
@@ -46,7 +44,7 @@ public class Cluster {
 		}
 		Cluster next = findChild(path[0]);
 		if(next == null) {
-			next = new Cluster(mergePath(path));
+			next = new Cluster(mergePath(path[0]));
 			children.add(next);
 		}
 		next.addCluster(tearArray(path));
@@ -102,17 +100,19 @@ public class Cluster {
 
 //---  Mechanics   ----------------------------------------------------------------------------
 	
-	private String[] mergePath(String[] tack) {
-		String[] out = new String[address.length + tack.length];
+	private String[] mergePath(String tack) {
+		String[] out = new String[address.length + 1];
 		for(int i = 0; i < address.length; i++)
 			out[i] = address[i];
-		for(int i = address.length; i < out.length; i++)
-			out[i] = tack[i - address.length];
+		out[out.length-1] = tack;
 		return out;
 	}
 	
 	private String[] tearArray(String[] in) {
-		return Arrays.copyOfRange(in, 1, in.length - 1);
+		if(in.length <= 1) {
+			return new String[] {};
+		}
+		return Arrays.copyOfRange(in, 1, in.length);
 	}
 
 	public void debugPrintOut() {
@@ -122,7 +122,7 @@ public class Cluster {
 	private void debugPrintOut(int d) {
 		System.out.println(tabBuffer(d) + getAddress());
 		for(GenericDefinition gd : getComponents()) {
-			System.out.println(tabBuffer(d) + gd.getName());
+			System.out.println(tabBuffer(d) + "  " + gd.getName());
 		}
 		for(Cluster c : getChildren()) {
 			c.debugPrintOut(d + 1);
