@@ -10,8 +10,8 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
 
-import graphviz.ConvertVisual;
-import graphviz.GraphViz;
+import image.ConvertVisual;
+import image.GraphViz;
 import input.Communication;
 import ui.popups.PopoutConfig;
 import visual.frame.WindowFrame;

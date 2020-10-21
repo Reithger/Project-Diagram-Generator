@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.Color;
 import java.awt.Image;
 
 import visual.panel.ElementPanel;
