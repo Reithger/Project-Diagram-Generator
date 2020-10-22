@@ -39,8 +39,8 @@ public class Main {
 	private final static String NAME = "UML Generator Diagram";
 	
 	public static void main(String[] args) throws Exception{
-		//runReal();
-		runLoose();
+		runReal();
+		//runLoose();
 	}
 	
 	private static void runLoose() {
