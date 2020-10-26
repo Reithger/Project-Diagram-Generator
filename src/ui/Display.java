@@ -7,13 +7,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
-import java.util.Scanner;
 
+import filemeta.FileChooser;
+import filemeta.config.Config;
 import image.ConvertVisual;
-import image.GraphViz;
-import input.Communication;
-import ui.popups.PopoutConfig;
 import visual.frame.WindowFrame;
 import visual.panel.ElementPanel;
 
@@ -22,12 +19,18 @@ public class Display {
 	private final static int DEFAULT_WIDTH = 800;
 	private final static int DEFAULT_HEIGHT = 600;
 	private final static double VERTICAL_RATIO = 1.0 / 4;
-	private final static String DOT_ADDRESS_VAR = "dotAddress";
+	public final static String DOT_ADDRESS_VAR = "dotAddress";
 	public final static String ADDRESS_SETTINGS = "./Diagram/settings/";
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 	private final static String DEFAULT_CONFIG_PATH = "/assets/config.properties";
+	
+	private final static String DEFAULT_CONFIG_COMMENT = "##############################################################\r\n" + 
+			"#                       Configurations                       #\r\n" + 
+			"##############################################################\r\n" + 
+			"# Format as 'name = address', the \" = \" spacing is necessary\r\n" + 
+			"# It's awkward but it makes the file reading easier and I'm telling you this directly";
 	
 	private final static String ENTRY_LABEL_PROJECT_ROOT = "text_entry_root";
 	private final static String ENTRY_LABEL_SUB_PACKAGE = "text_entry_sub";
@@ -52,7 +55,6 @@ public class Display {
 	private ElementPanel panel;
 	private ElementPanel image;
 	private ImageDisplay display;
-	private String dotAddress;
 	private boolean[][] state;
 	
 	//TODO: Automatically detect package hierarchy and give option to only view a subset of them; has to provide root path to /src/ folder then designate a package separately
@@ -97,12 +99,10 @@ public class Display {
 			
 			public void keyBehaviour(char code) {
 				display.processKeyInput(code);
-				drawImage();
 			}
 			
 			public void clickBehaviour(int code, int x, int y) {
 				display.processClickInput(code);
-				drawImage();
 			}
 
 			@Override
@@ -113,18 +113,15 @@ public class Display {
 			
 			public void clickPressBehaviour(int code, int x, int y) {
 				display.processPressInput(code, x, y);
-				drawImage();
 			}
 			
 			public void clickReleaseBehaviour(int code, int x, int y) {
 				display.processReleaseInput(code, x, y);
-				drawImage();
 			}
 			
 			@Override
 			public void dragBehaviour(int code, int x, int y) {
 				display.processDragInput(code, x, y);
-				drawImage();
 			}
 		};
 		
@@ -229,125 +226,31 @@ public class Display {
 	//-- File Configuration  ----------------------------------
 	
 	private void fileConfiguration() {
-		File settings = new File(ADDRESS_SETTINGS);
-		File images = new File(ADDRESS_IMAGES);
-		File source = new File(ADDRESS_SOURCES);
-		images.mkdirs();
-		source.mkdirs();
-		settings.mkdirs();
-		File config = new File(ADDRESS_CONFIG);
-		if(!config.exists() || !verifyConfigFile(config)){
-			createConfigurationFile(config);
-		}
-		readDirectories(config);
-	}
-	
-	private boolean verifyConfigFile(File f) {
-		try {
-			Scanner sc = new Scanner(f);
-			String line;
-			while(sc.hasNextLine()) {
-				line = sc.nextLine();
-				if(!line.matches("#.*")) { //TODO: This is a bad verification, doesn't extend
-					if(!line.matches(DOT_ADDRESS_VAR + " = .*")) {
-						sc.close();
-						return false;
-					}
-				}
+		Config c = new Config("", new UMLConfigValidation());
+		c.addFilePath("Diagram");
+		c.addFilePath("Diagram/settings");
+		c.addFilePath("Diagram/images");
+		c.addFilePath("Diagram/sources");
+		c.addFile("Diagram/settings", "config.txt", DEFAULT_CONFIG_COMMENT);
+		c.addFileEntry("Diagram/settings", "config.txt", DOT_ADDRESS_VAR, "Where is your dot program located? It will be called externally.", "?");
+		
+		c.softWriteConfig();
+		
+		while(!c.verifyConfig()) {
+			switch(c.getErrorCode()) {
+				case UMLConfigValidation.CODE_FAILURE_DOT_ADDRESS:
+					c.setConfigFileEntry("Diagram/settings/config.txt", DOT_ADDRESS_VAR, FileChooser.promptSelectFile("C:/", true, true).getAbsolutePath());
+					break;
+				case UMLConfigValidation.CODE_FAILURE_FILE_MISSING:
+					c.initializeDefaultConfig();
+					break;
+				default:
+					break;
 			}
-			sc.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			//TODO: Error window popup
-		}
-		return true;
-	}
-	
-	private void createConfigurationFile(File config) {
-		try {
-			if(config.exists()) {
-				config.delete();
-			}
-			config.createNewFile();
-			BufferedReader defaultConfig = retrieveFileReader(DEFAULT_CONFIG_PATH);
-			RandomAccessFile write = new RandomAccessFile(config, "rw");
-			int c = defaultConfig.read();
-			while(c != -1) {
-				write.write(c);
-				c = defaultConfig.read();
-			}
-			write.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			//TODO: Error window popup
 		}
 	}
 	
-	private void readDirectories(File config) {
-		try {
-			Scanner sc = new Scanner(config);
-			String line;
-			while(sc.hasNextLine()) {
-				line = sc.nextLine();
-				if(line.matches(DOT_ADDRESS_VAR + " = .*")) {
-					dotAddress = line.substring((DOT_ADDRESS_VAR + " = ").length());
-					if(dotAddress.contentEquals("?") || !verifyDotAddress(dotAddress)) {
-						PopoutConfig pop = new PopoutConfig();
-						while(!verifyDotAddress(dotAddress)) {
-							dotAddress = null;
-							while(Communication.get("dot") == null) {}
-							dotAddress = Communication.get("dot");
-							Communication.set("dot", null);
-							pop.failure();
-						}
-						pop.success();
-						writeConfigEntry(DOT_ADDRESS_VAR, dotAddress);
-					}
-				}
-			}
-			sc.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			//TODO: Error window popup
-		}
-	}
-	
-	private void writeConfigEntry(String entry, String contents) {
-		try {
-			File config = new File(ADDRESS_CONFIG);
-			Scanner sc = new Scanner(config);
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while(sc.hasNextLine()) {
-				line = sc.nextLine();
-				if(line.matches(entry + ".*")) {
-					sb.append(entry + " = " + contents + "\n");
-				}
-				else {
-					sb.append(line + "\n");
-				}
-			}
-			sc.close();
-			config.delete();
-			config.createNewFile();
-			RandomAccessFile write = new RandomAccessFile(config, "rw");
-			write.writeBytes(sb.toString());
-			write.close();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			//TODO: Error window popup
-		}
-	}
-	
-	private boolean verifyDotAddress(String path) {
-		return GraphViz.verifyDotPath(path);
-	}
-	
-//---  Mechanical   ---------------------------------------------------------------------------
+
 
 	public BufferedReader retrieveFileReader(String pathIn) {
 		String path = pathIn.replace("\\", "/");
@@ -363,5 +266,4 @@ public class Display {
 		}
 		return new BufferedReader(new InputStreamReader(is));
 	}
-	
 }
