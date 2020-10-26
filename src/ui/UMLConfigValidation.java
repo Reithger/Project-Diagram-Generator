@@ -2,9 +2,9 @@ package ui;
 
 import java.io.File;
 
+import filemeta.config.Config;
+import filemeta.config.ValidateFiles;
 import image.GraphViz;
-import visual.filemeta.config.Config;
-import visual.filemeta.config.ValidateFiles;
 
 public class UMLConfigValidation implements ValidateFiles {
 

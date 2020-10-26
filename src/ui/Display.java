@@ -8,9 +8,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import filemeta.FileChooser;
+import filemeta.config.Config;
 import image.ConvertVisual;
-import visual.filemeta.FileChooser;
-import visual.filemeta.config.Config;
 import visual.frame.WindowFrame;
 import visual.panel.ElementPanel;
 
