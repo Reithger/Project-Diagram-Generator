@@ -2,8 +2,10 @@ package explore;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import analysis.language.actor.GenericClass;
 import analysis.language.actor.GenericDefinition;
@@ -21,34 +23,49 @@ public class Explore{
 	private Cluster parent;
 	private String rootPath;
 	
+	private HashSet<String> ignore;
+	
 //---  Constructors   -------------------------------------------------------------------------
 	
-	public Explore(File root, String partialCut) {
+	public Explore(File root) {
 		rootPath = root.getAbsolutePath();
+		ignore = new HashSet<String>();
 		files = new ArrayList<GenericFile>();
 		classes = new HashMap<String, GenericClass>();
 		interfaces = new HashMap<String, GenericInterface>();
 		parent = new Cluster(new String[] {});
-		partialCut = partialCut.replaceAll("\\.", "/");
-		File use = new File(root.getAbsolutePath() + "/" + partialCut);
-		explore(use);
-		for(GenericFile f : files) {
-			f.process(getDefinitionMapping(), interfaces, parent);
+		if(rootPath.charAt(rootPath.length() - 1) != '/') {
+			rootPath += "/";
 		}
 	}
 
 //---  Operations   ---------------------------------------------------------------------------
 	
+	public void ignorePackage(String path) {
+		ignore.add(path);
+	}
+	
+	public void run() {
+		File use = new File(rootPath);
+		explore(use);
+		for(GenericFile f : files) {
+			f.process(getDefinitionMapping(), interfaces, parent);
+		}
+	}
+	
 	private void explore(File root) {
 		for(String s : root.list()) {
 			File look = new File(root.getAbsolutePath() + "/" + s);
-			if(look.isDirectory()) {
+			if(!look.exists()) {
+				continue;
+			}
+			if(look.isDirectory() && !ignore(look.getAbsolutePath())) {
 				explore(look);
 			}
-			else {
+			else if(look.isFile()){
 				GenericFile f = FileFactory.generateFile(look, rootPath);
 				if(f == null) {
-					return;
+					continue;
 				}
 				if(f.isClassFile()) {
 					GenericClass gc = new GenericClass(f.getName(), f.getContext());
@@ -63,6 +80,16 @@ public class Explore{
 				files.add(f);
 			}
 		}
+	}
+	
+	private boolean ignore(String path) {
+		return ignore.contains(formPackagePath(path));
+	}
+	
+	private String formPackagePath(String path) {
+		String out = path.substring(rootPath.length());
+		out = out.replaceAll("\\\\", ".");
+		return out;
 	}
 		
 //---  Getter Methods   -----------------------------------------------------------------------

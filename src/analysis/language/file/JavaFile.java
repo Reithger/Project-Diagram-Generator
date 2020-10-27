@@ -52,15 +52,20 @@ public class JavaFile extends GenericFile {
 	protected ArrayList<String> preProcess(String in){
 		ArrayList<String> out = new ArrayList<String>();
 		in = in.replaceAll("//[^\n]*\n", "\n");
-		in = in.replaceAll("\n", " ").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\"[^\"]\"", "").replaceAll(";", ";\n").replaceAll("\\*/",  "\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "");
+		in = in.replaceAll("\n", " ").replaceAll("/\\*.*?\\*/", "").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\"[^\"]*\"", "").replaceAll(";", ";\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "");
 		in = bufferCharacter(in, "\\{");
 		in = bufferCharacter(in, "\\}");
 		in = bufferCharacter(in, "\\)");
 		in = bufferCharacter(in, "\\(");
-		String[] parsed = in.split("\n");
+		while(in.contains("  ")) {
+			in = in.replaceAll("  ", " ");
+		}
+		in = in.replaceAll("(\n|$) ", "\n");
+		String[] parsed = in.trim().split("\n");
 		for(String s : parsed)
-			if(s != null && !s.trim().equals(""))
+			if(s != null && s.trim() != null && !s.trim().equals("")) {
 				out.add(s.trim());
+			}
 		return out;
 	}
 	
@@ -187,10 +192,11 @@ public class JavaFile extends GenericFile {
 	@Override
 	protected String findName() {
 		for(String line : getFileContents()) {
-			if(line.matches("public (abstract )?(class|interface).*")){
+			if(line.matches("\\s*public (abstract )?(class|interface|enum).*")){
 				String[] use = cleanInput(line);
 				int posit = indexOf(use, "class");
 				posit = (posit == -1 ? indexOf(use, "interface") : posit);
+				posit = (posit == -1 ? indexOf(use, "enum") : posit);
 				return use[posit + 1];
 			}
 		}

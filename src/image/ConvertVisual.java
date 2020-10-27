@@ -2,6 +2,8 @@ package image;
 
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+
 import explore.Explore;
 
 public class ConvertVisual  {
@@ -19,10 +21,15 @@ public class ConvertVisual  {
 		settingsPath = sett;
 	}
 	
-	public static String generateUMLDiagram(String path, String filter, String name, boolean inst, boolean func, boolean priv) {
+	public static String generateUMLDiagram(String path, ArrayList<String> ignore, String name, boolean inst, boolean func, boolean priv) {
 		File f = new File(path);
 		Explore.setParameters(inst, func, priv);
-		DotProcess.setProject(new Explore(f, filter));
+		Explore e = new Explore(f);
+		for(String s : ignore) {
+			e.ignorePackage(s);
+		}
+		e.run();
+		DotProcess.setProject(e);
 		return draw(DotProcess.generateDot(), name, "jpg").getAbsolutePath();
 	}
 	

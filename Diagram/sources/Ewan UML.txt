@@ -1,0 +1,57 @@
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[concentrate=true];
+	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
+	rankdir = TB;
+
+	n0 [label = <{GameController||}>];
+	n1 [label = <{GameModel||}>];
+	n2 [label = <{Jewel||}>];
+	n3 [label = <{Tile||}>];
+	n4 [label = <{Player||}>];
+	n5 [label = <{Card||}>];
+	n6 [label = <{Turtle||}>];
+	n7 [label = <{RobotTurtle||}>];
+	n8 [label = <{Board||}>];
+	n9 [label = <{Deck||}>];
+	n10 [label = <{GameView||}>];
+	subgraph cluster_{
+		label = "";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_{
+			label = "";
+			fontsize = 26;
+			penwidth = 2;
+			n5;
+			n2;
+			n4;
+			n3;
+			n6;
+			n7;
+			n9;
+			n1;
+			n8;
+			n10;
+			n0;
+		}
+	}
+	n0 -> n1[arrowhead=normal];
+	n0 -> n10[arrowhead=normal];
+	n1 -> n8[arrowhead=normal];
+	n1 -> n4[arrowhead=normal];
+	n1 -> n9[arrowhead=normal];
+	n1 -> n5[arrowhead=normal];
+	n2 -> n3[arrowhead=onormal];
+	n4 -> n9[arrowhead=normal];
+	n6 -> n3[arrowhead=onormal];
+	n7 -> n0[arrowhead=normal];
+	n8 -> n3[arrowhead=normal];
+	n8 -> n6[arrowhead=normal];
+	n8 -> n2[arrowhead=normal];
+	n9 -> n5[arrowhead=normal];
+	n10 -> n8[arrowhead=normal];
+	n10 -> n9[arrowhead=normal];
+	n10 -> n6[arrowhead=normal];
+
+}

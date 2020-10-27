@@ -1,0 +1,97 @@
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[concentrate=true];
+	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
+	rankdir = TB;
+
+	n0 [label = <{SettingsPage||}>];
+	n1 [label = <{Pen||}>];
+	n2 [label = <{DrawingBoard||}>];
+	n3 [label = <{PixelArtDrawer||}>];
+	n4 [label = <{<i>Page</i>||}>];
+	n5 [label = <{Main||}>];
+	n6 [label = <{<i>Tile</i>||}>];
+	n7 [label = <{TileFactory||}>];
+	n8 [label = <{Layer||}>];
+	n9 [label = <{DrawingPage||}>];
+	n10 [label = <{Picture||}>];
+	n11 [label = <{Animation||}>];
+	n12 [label = <{TileBig||}>];
+	n13 [label = <{TileGrid||}>];
+	n14 [label = <{SettingsBar||}>];
+	n15 [label = <{FilePage||}>];
+	n16 [label = <{&lt;&lt;interface&gt;&gt;<BR/>Display||}>];
+	subgraph cluster_{
+		label = "";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_drawsurface{
+			label = "drawsurface";
+			fontsize = 26;
+			penwidth = 2;
+			n16;
+			n11;
+			n8;
+			n2;
+			n10;
+		}
+		subgraph cluster_meta{
+			label = "meta";
+			fontsize = 26;
+			penwidth = 2;
+			n3;
+			n5;
+		}
+		subgraph cluster_settings{
+			label = "settings";
+			fontsize = 26;
+			penwidth = 2;
+			n1;
+			n14;
+			subgraph cluster_settings_pages{
+				label = "settings.pages";
+				fontsize = 22;
+				penwidth = 3;
+				n9;
+				n15;
+				n4;
+				n0;
+				subgraph cluster_settings_pages_tile{
+					label = "settings.pages.tile";
+					fontsize = 18;
+					penwidth = 4;
+					n6;
+					n7;
+					n13;
+					n12;
+				}
+			}
+		}
+	}
+	n2 -> n16[arrowhead=normal];
+	n2 -> n11[arrowhead=normal];
+	n2 -> n8[arrowhead=normal];
+	n3 -> n2[arrowhead=normal];
+	n3 -> n14[arrowhead=normal];
+	n3 -> n1[arrowhead=normal];
+	n4 -> n6[arrowhead=normal];
+	n5 -> n3[arrowhead=normal];
+	n7 -> n12[arrowhead=normal];
+	n7 -> n13[arrowhead=normal];
+	n8 -> n8[arrowhead=none];
+	n8 -> n16[arrowhead=onormal, style=dashed];
+	n9 -> n4[arrowhead=onormal];
+	n10 -> n8[arrowhead=normal];
+	n10 -> n16[arrowhead=onormal, style=dashed];
+	n11 -> n10[arrowhead=normal];
+	n11 -> n16[arrowhead=onormal, style=dashed];
+	n12 -> n6[arrowhead=onormal];
+	n13 -> n6[arrowhead=onormal];
+	n14 -> n9[arrowhead=normal];
+	n14 -> n15[arrowhead=normal];
+	n14 -> n4[arrowhead=normal];
+	n15 -> n4[arrowhead=onormal];
+	n15 -> n7[arrowhead=normal];
+	n16 -> n16[arrowhead=none];
+
+}

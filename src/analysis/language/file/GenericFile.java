@@ -32,10 +32,13 @@ public abstract class GenericFile {
 	
 	public GenericFile(File in, String root) {
 		lines = new ArrayList<String>();
+		contents = "";
 		try {
 			Scanner sc = new Scanner(in);
 			while(sc.hasNextLine()) {
-				contents += sc.nextLine() + "\n";
+				String nex = sc.nextLine();
+				if(nex != null)
+					contents += nex + "\n";
 			}
 			sc.close();
 		}
@@ -44,11 +47,14 @@ public abstract class GenericFile {
 		}
 		lines = preProcess(contents);
 		name = findName();
-		context = in.getAbsolutePath().substring(root.length() + 1).replaceAll("\\\\", "/");
+		context = in.getAbsolutePath().substring(root.length()).replaceAll("\\\\", "/");
 		if(context.contains("/")) {
 			context = context.substring(0, context.lastIndexOf("/"));
 		}
 		context = context.replaceAll("/", ".");
+		if(context.equals(in.getName())) {
+			context = "";
+		}
 	}
 	
 //---  Operations   ---------------------------------------------------------------------------
