@@ -4,93 +4,87 @@ digraph G {
 	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
 	rankdir = TB;
 
-	n0 [label = <{FileEntry||}>];
-	n1 [label = <{TestValidateFile||}>];
-	n2 [label = <{ConfigFileParser||}>];
-	n3 [label = <{Config||}>];
-	n4 [label = <{Communication||}>];
-	n5 [label = <{test||}>];
-	n6 [label = <{FileChooser||}>];
-	n7 [label = <{ConfigBlueprint||}>];
-	n8 [label = <{Tutorial||}>];
-	n9 [label = <{KeyComponent||}>];
-	n10 [label = <{ConfigFile||}>];
-	n11 [label = <{Folder||}>];
-	n12 [label = <{Callback||}>];
-	n13 [label = <{ClickRegionRectangle||}>];
-	n14 [label = <{ClickComponent||}>];
-	n15 [label = <{&lt;&lt;interface&gt;&gt;<BR/>Detectable||}>];
-	n16 [label = <{&lt;&lt;interface&gt;&gt;<BR/>ValidateFiles||}>];
+	n0 [label = <{ConvertBoard||}>];
+	n1 [label = <{GameInitiator||}>];
+	n2 [label = <{Move||}>];
+	n3 [label = <{Tile||}>];
+	n4 [label = <{TurtleColors||}>];
+	n5 [label = <{Bug||}>];
+	n6 [label = <{IndexCalculator||}>];
+	n7 [label = <{Turtle||}>];
+	n8 [label = <{Engine||}>];
+	n9 [label = <{ProgramMesseges||}>];
+	n10 [label = <{ModelManager||}>];
+	n11 [label = <{TurtleAddingManager||}>];
+	n12 [label = <{Turn||}>];
+	n13 [label = <{Jewel||}>];
+	n14 [label = <{AddATurtleInterface||}>];
+	n15 [label = <{BoardView||}>];
+	n16 [label = <{Board||}>];
 	subgraph cluster_{
 		label = "";
 		fontsize = 30;
 		penwidth = 1;
-		subgraph cluster_filemeta{
-			label = "filemeta";
-			fontsize = 26;
-			penwidth = 2;
-			n6;
-			subgraph cluster_filemeta_config{
-				label = "filemeta.config";
-				fontsize = 22;
-				penwidth = 3;
-				n3;
-				n2;
-				n16;
-				subgraph cluster_filemeta_config_blueprint{
-					label = "filemeta.config.blueprint";
-					fontsize = 18;
-					penwidth = 4;
-					n7;
-					n0;
-					n11;
-					n10;
-				}
-			}
-		}
-		subgraph cluster_input{
-			label = "input";
-			fontsize = 26;
-			penwidth = 2;
-			n13;
-			n9;
-			n12;
-			n15;
-			n14;
-			n4;
-		}
-		subgraph cluster_test{
-			label = "test";
+		subgraph cluster_Controller{
+			label = "Controller";
 			fontsize = 26;
 			penwidth = 2;
 			n1;
-			n5;
+			n9;
 			n8;
 		}
+		subgraph cluster_Model{
+			label = "Model";
+			fontsize = 26;
+			penwidth = 2;
+			n11;
+			n6;
+			n13;
+			n2;
+			n12;
+			n3;
+			n10;
+			n4;
+			n7;
+			n5;
+			n0;
+			n16;
+		}
+		subgraph cluster_View{
+			label = "View";
+			fontsize = 26;
+			penwidth = 2;
+			n14;
+			n15;
+		}
 	}
-	n1 -> n5[arrowhead=none];
-	n1 -> n3[arrowhead=normal];
-	n1 -> n16[arrowhead=onormal, style=dashed];
-	n3 -> n7[arrowhead=normal];
-	n3 -> n16[arrowhead=none];
-	n3 -> n2[arrowhead=normal];
-	n5 -> n5[arrowhead=none];
-	n5 -> n6[arrowhead=normal];
-	n5 -> n3[arrowhead=normal];
-	n5 -> n12[arrowhead=normal];
-	n5 -> n4[arrowhead=normal];
-	n5 -> n1[arrowhead=none];
-	n7 -> n11[arrowhead=normal];
-	n8 -> n5[arrowhead=normal];
-	n10 -> n2[arrowhead=normal];
+	n0 -> n16[arrowhead=normal];
+	n0 -> n7[arrowhead=normal];
+	n0 -> n13[arrowhead=normal];
+	n1 -> n8[arrowhead=normal];
+	n2 -> n16[arrowhead=normal];
+	n2 -> n7[arrowhead=normal];
+	n2 -> n13[arrowhead=normal];
+	n7 -> n3[arrowhead=onormal];
+	n8 -> n10[arrowhead=normal];
+	n8 -> n14[arrowhead=none];
+	n8 -> n15[arrowhead=none];
+	n8 -> n9[arrowhead=normal];
+	n10 -> n9[arrowhead=normal];
+	n10 -> n16[arrowhead=normal];
+	n10 -> n5[arrowhead=normal];
+	n10 -> n4[arrowhead=normal];
+	n10 -> n11[arrowhead=normal];
 	n10 -> n0[arrowhead=normal];
-	n11 -> n11[arrowhead=none];
-	n11 -> n10[arrowhead=normal];
-	n12 -> n12[arrowhead=none];
-	n13 -> n15[arrowhead=onormal, style=dashed];
-	n14 -> n15[arrowhead=normal];
-	n15 -> n15[arrowhead=none];
-	n16 -> n16[arrowhead=none];
-	n16 -> n3[arrowhead=none];
+	n10 -> n2[arrowhead=normal];
+	n10 -> n12[arrowhead=normal];
+	n11 -> n16[arrowhead=normal];
+	n11 -> n4[arrowhead=normal];
+	n11 -> n6[arrowhead=normal];
+	n12 -> n16[arrowhead=normal];
+	n12 -> n7[arrowhead=normal];
+	n13 -> n3[arrowhead=onormal];
+	n16 -> n7[arrowhead=normal];
+	n16 -> n13[arrowhead=normal];
 
 }

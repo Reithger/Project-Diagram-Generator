@@ -62,10 +62,11 @@ public class JavaFile extends GenericFile {
 		}
 		in = in.replaceAll("(\n|$) ", "\n");
 		String[] parsed = in.trim().split("\n");
-		for(String s : parsed)
+		for(String s : parsed) {
 			if(s != null && s.trim() != null && !s.trim().equals("")) {
 				out.add(s.trim());
 			}
+		}
 		return out;
 	}
 	
@@ -144,13 +145,23 @@ public class JavaFile extends GenericFile {
 		for(String line : getFileContents()) {
 			if(line.matches("import .*;")){
 				String name = processImportName(line);
-				GenericDefinition use = ref.get(name);
-				if(use != null && !out.contains(use))
-					out.add(use);
+				if(!name.contains("*")) {
+					GenericDefinition use = ref.get(name);
+					if(use != null && !out.contains(use))
+						out.add(use);
+				}
+				else {
+					String cont = name.substring(0, name.length() - 2);
+					for(String s : ref.keySet()) {
+						if(s.matches(cont + "/.*") && !out.contains(ref.get(s))) {
+							out.add(ref.get(s));
+						}
+					}
+				}
 			}
 			else {
 				for(GenericDefinition gd : neighbors) {
-					if(line.matches(".*[^a-zA-Z\\d]+" + gd.getName() + "[^a-zA-Z\\d]+.*") && ref.get(gd.getFullName()) != null && !out.contains(gd)) {
+					if(isInPackageDependency(line, gd.getName()) && ref.get(gd.getFullName()) != null && !out.contains(gd)) {
 						if(!findName().equals(gd.getName()) || (!isClassDefinition(line) && !isConstructor(line)))
 							out.add(ref.get(gd.getFullName()));
 					}
@@ -158,6 +169,10 @@ public class JavaFile extends GenericFile {
 			}
 		}
 		return out;
+	}
+	
+	private boolean isInPackageDependency(String line, String name) {
+		return line.matches(".*([^a-zA-Z\\d]+|^)" + name + "[^a-zA-Z\\d]+.*");
 	}
 	
 	private boolean isClassDefinition(String line) {

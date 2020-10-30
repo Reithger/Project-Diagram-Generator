@@ -156,14 +156,18 @@ public class DotProcess {
 	protected static String generateDotAssociations(GenericDefinition gd) {
 		String out = "";
 		for(GenericDefinition c : gd.getClassAssociates()) {
-			out += "\tn" + reference.get(gd.getFullName()) + " -> n" + reference.get(c.getFullName());
-			if(c.hasAssociate(gd)) {
-				out += "[arrowhead=none]";
+			int mV = reference.get(gd.getFullName());
+			int yV = reference.get(c.getFullName());
+			if(!c.hasAssociate(gd) || mV < yV) {  //Processes numerically, so if mutual, only draw if first time seeing
+				out += "\tn" + mV + " -> n" + yV;
+				if(c.hasAssociate(gd)) {
+					out += "[arrowhead=none]";
+				}
+				else {
+					out += "[arrowhead=normal]";
+				}
+				out += ";\n";
 			}
-			else {
-				out += "[arrowhead=normal]";
-			}
-			out += ";\n";
 		}
 		return out;
 	}

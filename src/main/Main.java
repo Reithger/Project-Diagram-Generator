@@ -34,14 +34,14 @@ public class Main {
 	private final static String PATH7 = "C:/Users/Borinor/eclipse-workspace/Pixel Art Program V3.0/src";
 	private final static String PATH8 = "C:/Users/Borinor/git/RobotTurtle/src";
 	private final static String PATH9 = "C:/Users/Borinor/git/Olivia Saralin RobotTurtle";
-	private final static String PATH10 = "C:/Users/Borinor/git/Ewan RobotTurtle/";
+	private final static String PATH10 = "C:\\Users\\Borinor\\git\\Hasala-Robot-Turtles\\Milestone_3_Final_Files\\RobotTurtlesV2\\src\\main\\java";
 	
 	public final static String ADDRESS_SETTINGS = "./Diagram/settings/";
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 	
-	private final static String NAME = "Test Ignore";
+	private final static String NAME = "Hasala Robot Turtle UML - Fixed Again";
 	
 	public static void main(String[] args) throws Exception{
 		runReal();
@@ -51,8 +51,8 @@ public class Main {
 	private static void runLoose() {
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		ArrayList<String> ignore = new ArrayList<String>();
-		ignore.add("analysis.language.actor");
-		ConvertVisual.generateUMLDiagram(PATH2, ignore, NAME, false, false, false);
+		ignore.add("test");
+		ConvertVisual.generateUMLDiagram(PATH10, ignore, NAME, false, false, false);
 	}
 	
 	private static void runReal() {
