@@ -1,25 +1,17 @@
 package image;
 
-import java.util.ArrayList;
-
-import analysis.language.component.Argument;
-import analysis.language.component.Function;
-import analysis.language.component.InstanceVariable;
-
 public class DotComponent {
 
 	private final static String[] BAD_CHARACTERS_LABELS = new String[] {"<", ">"};
 	private final static String[] GOOD_CHARACTERS_LABELS = new String[] {"&lt;", "&gt;"};
 	
-	public static String dotFunction(Function f) {
-		String out = f.getVisibility() + f.getName() + "(";
-		ArrayList<Argument> args = f.getArguments();
-		for(int i = 0; i < args.size(); i++){
-			Argument arg = args.get(i);
-			out += dotArgument(arg) + (i + 1 < args.size() ? ", " : "");
+	public static String dotFunction(String vis, String name, String type, String[] argName, String[] argType, boolean isAbstract, boolean isStatic) {
+		String out = vis + name + "(";
+		for(int i = 0; i < argName.length; i++){
+			out += dotArgument(argName[i], argType[i]) + (i + 1 < argName.length ? ", " : "");
 		}
 		out += ")";
-		String ret = f.getType();
+		String ret = type;
 
 		if(ret != null) {
 			out += " : " + ret;
@@ -27,23 +19,23 @@ public class DotComponent {
 		
 		out = fixForDot(out);
 		
-		if(f.getAbstract()) {
+		if(isAbstract) {
 			out = "<u>" + out + "</u>";
 		}
-		if(f.getStatic()) {
+		if(isStatic) {
 			out = "<i>" + out + "</i>";
 		}
 		return out;
 	}
 	
-	public static String dotArgument(Argument arg) {
-		return arg.getName() + " : " + arg.getType();
+	public static String dotArgument(String nom, String typ) {
+		return nom + " : " + typ;
 	}
 	
-	public static String dotInstanceVariable(InstanceVariable iv) {
-		String out = iv.getVisibility() + iv.getName() + " : " + iv.getType();
+	public static String dotInstanceVariable(String vis, String name, String type, boolean isStatic) {
+		String out = vis + name + " : " + type;
 		out = fixForDot(out);
-		if(iv.getStatic()) {
+		if(isStatic) {
 			out = "<i>" + out + "</i>";
 		}
 		return out;

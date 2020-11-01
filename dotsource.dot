@@ -4,87 +4,148 @@ digraph G {
 	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
 	rankdir = TB;
 
-	n0 [label = <{ConvertBoard||}>];
-	n1 [label = <{GameInitiator||}>];
-	n2 [label = <{Move||}>];
-	n3 [label = <{Tile||}>];
-	n4 [label = <{TurtleColors||}>];
-	n5 [label = <{Bug||}>];
-	n6 [label = <{IndexCalculator||}>];
-	n7 [label = <{Turtle||}>];
-	n8 [label = <{Engine||}>];
-	n9 [label = <{ProgramMesseges||}>];
-	n10 [label = <{ModelManager||}>];
-	n11 [label = <{TurtleAddingManager||}>];
-	n12 [label = <{Turn||}>];
-	n13 [label = <{Jewel||}>];
-	n14 [label = <{AddATurtleInterface||}>];
-	n15 [label = <{BoardView||}>];
-	n16 [label = <{Board||}>];
+	n0 [label = <{Function||}>];
+	n1 [label = <{JavaFile||}>];
+	n2 [label = <{ConvertVisual||}>];
+	n3 [label = <{PopoutPackageNavigator||}>];
+	n4 [label = <{UMLConfigValidation||}>];
+	n5 [label = <{InstanceVariable||}>];
+	n6 [label = <{Cluster||}>];
+	n7 [label = <{DotProcess||}>];
+	n8 [label = <{GenericInterface||}>];
+	n9 [label = <{Argument||}>];
+	n10 [label = <{DotComponent||}>];
+	n11 [label = <{<i>GenericFile</i>||}>];
+	n12 [label = <{Display||}>];
+	n13 [label = <{Constructor||}>];
+	n14 [label = <{GraphViz||}>];
+	n15 [label = <{GenericEnum||}>];
+	n16 [label = <{GenericClass||}>];
+	n17 [label = <{<i>ClassComponent</i>||}>];
+	n18 [label = <{FileFactory||}>];
+	n19 [label = <{Main||}>];
+	n20 [label = <{Node||}>];
+	n21 [label = <{<i>GenericDefinition</i>||}>];
+	n22 [label = <{Explore||}>];
 	subgraph cluster_{
 		label = "";
 		fontsize = 30;
 		penwidth = 1;
-		subgraph cluster_Controller{
-			label = "Controller";
+		subgraph cluster_analysis{
+			label = "analysis";
 			fontsize = 26;
 			penwidth = 2;
-			n1;
-			n9;
-			n8;
+			subgraph cluster_analysis_language{
+				label = "analysis.language";
+				fontsize = 22;
+				penwidth = 3;
+				subgraph cluster_analysis_language_actor{
+					label = "analysis.language.actor";
+					fontsize = 18;
+					penwidth = 4;
+					n21;
+					n15;
+					n16;
+					n8;
+				}
+				subgraph cluster_analysis_language_component{
+					label = "analysis.language.component";
+					fontsize = 18;
+					penwidth = 4;
+					n13;
+					n0;
+					n5;
+					n9;
+					n17;
+				}
+			}
+			subgraph cluster_analysis_process{
+				label = "analysis.process";
+				fontsize = 22;
+				penwidth = 3;
+				n6;
+				n22;
+				subgraph cluster_analysis_process_file{
+					label = "analysis.process.file";
+					fontsize = 18;
+					penwidth = 4;
+					n1;
+					n18;
+					n11;
+				}
+			}
 		}
-		subgraph cluster_Model{
-			label = "Model";
+		subgraph cluster_image{
+			label = "image";
 			fontsize = 26;
 			penwidth = 2;
-			n11;
-			n6;
-			n13;
-			n2;
-			n12;
-			n3;
 			n10;
-			n4;
 			n7;
-			n5;
-			n0;
-			n16;
+			n14;
+			n2;
 		}
-		subgraph cluster_View{
-			label = "View";
+		subgraph cluster_main{
+			label = "main";
 			fontsize = 26;
 			penwidth = 2;
-			n14;
-			n15;
+			n19;
+		}
+		subgraph cluster_ui{
+			label = "ui";
+			fontsize = 26;
+			penwidth = 2;
+			n3;
+			n4;
+			n12;
+			n20;
 		}
 	}
-	n0 -> n16[arrowhead=normal];
-	n0 -> n7[arrowhead=normal];
-	n0 -> n13[arrowhead=normal];
-	n1 -> n8[arrowhead=normal];
-	n2 -> n16[arrowhead=normal];
+	n0 -> n17[arrowhead=onormal];
+	n0 -> n9[arrowhead=normal];
+	n1 -> n11[arrowhead=onormal];
+	n1 -> n21[arrowhead=normal];
+	n1 -> n1[arrowhead=none];
+	n2 -> n22[arrowhead=normal];
 	n2 -> n7[arrowhead=normal];
-	n2 -> n13[arrowhead=normal];
-	n7 -> n3[arrowhead=onormal];
-	n8 -> n10[arrowhead=normal];
-	n8 -> n14[arrowhead=none];
-	n8 -> n15[arrowhead=none];
-	n8 -> n9[arrowhead=normal];
-	n10 -> n9[arrowhead=normal];
-	n10 -> n16[arrowhead=normal];
-	n10 -> n5[arrowhead=normal];
-	n10 -> n4[arrowhead=normal];
-	n10 -> n11[arrowhead=normal];
-	n10 -> n0[arrowhead=normal];
-	n10 -> n2[arrowhead=normal];
-	n10 -> n12[arrowhead=normal];
+	n2 -> n14[arrowhead=normal];
+	n3 -> n20[arrowhead=normal];
+	n4 -> n14[arrowhead=normal];
+	n4 -> n12[arrowhead=none];
+	n5 -> n17[arrowhead=onormal];
+	n6 -> n21[arrowhead=normal];
+	n6 -> n6[arrowhead=none];
+	n7 -> n16[arrowhead=normal];
+	n7 -> n21[arrowhead=normal];
+	n7 -> n6[arrowhead=normal];
+	n7 -> n22[arrowhead=normal];
+	n7 -> n10[arrowhead=normal];
+	n8 -> n21[arrowhead=onormal];
 	n11 -> n16[arrowhead=normal];
-	n11 -> n4[arrowhead=normal];
+	n11 -> n21[arrowhead=normal];
+	n11 -> n15[arrowhead=normal];
+	n11 -> n8[arrowhead=normal];
 	n11 -> n6[arrowhead=normal];
-	n12 -> n16[arrowhead=normal];
-	n12 -> n7[arrowhead=normal];
-	n13 -> n3[arrowhead=onormal];
-	n16 -> n7[arrowhead=normal];
-	n16 -> n13[arrowhead=normal];
+	n11 -> n11[arrowhead=none];
+	n12 -> n2[arrowhead=normal];
+	n12 -> n3[arrowhead=normal];
+	n12 -> n12[arrowhead=none];
+	n13 -> n0[arrowhead=onormal];
+	n13 -> n9[arrowhead=normal];
+	n14 -> n14[arrowhead=none];
+	n15 -> n21[arrowhead=onormal];
+	n16 -> n21[arrowhead=onormal];
+	n16 -> n5[arrowhead=normal];
+	n18 -> n11[arrowhead=normal];
+	n18 -> n1[arrowhead=normal];
+	n19 -> n2[arrowhead=normal];
+	n19 -> n12[arrowhead=normal];
+	n20 -> n20[arrowhead=none];
+	n21 -> n13[arrowhead=normal];
+	n21 -> n0[arrowhead=normal];
+	n21 -> n21[arrowhead=none];
+	n22 -> n21[arrowhead=normal];
+	n22 -> n18[arrowhead=normal];
+	n22 -> n11[arrowhead=normal];
+	n22 -> n6[arrowhead=normal];
 
 }

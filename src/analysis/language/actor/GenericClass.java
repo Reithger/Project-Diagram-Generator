@@ -6,7 +6,6 @@ import analysis.language.component.InstanceVariable;
 
 /**
  * The platonic ideal of a Class
- * TODO: Reflexive Association!
  * @author Ada Clevinger
  *
  */
@@ -17,9 +16,9 @@ public class GenericClass extends GenericDefinition{
 
 	private boolean isAbstract;
 	
-	private GenericClass inheritance;
+	private GenericDefinition inheritance;
 	
-	private ArrayList<GenericInterface> realizations;	//dotted line, empty arrowhead
+	private ArrayList<GenericDefinition> realizations;	//dotted line, empty arrowhead
 	
 	private ArrayList<InstanceVariable> instanceVariables;
 	
@@ -29,7 +28,7 @@ public class GenericClass extends GenericDefinition{
 		super(inName, inContext);
 		instanceVariables = new ArrayList<InstanceVariable>();
 		inheritance = null;
-		realizations = new ArrayList<GenericInterface>();
+		realizations = new ArrayList<GenericDefinition>();
 	}
 	
 //---  Setter Methods   -----------------------------------------------------------------------
@@ -38,7 +37,13 @@ public class GenericClass extends GenericDefinition{
 		instanceVariables.add(in);
 	}
 	
-	public void addRealization(GenericInterface in) {
+	public void addInstanceVariable(String vis, String nom, String typ, boolean isStatic) {
+		InstanceVariable iv = new InstanceVariable(vis, nom, typ);
+		iv.setStatic(isStatic);
+		addInstanceVariable(iv);
+	}
+	
+	public void addRealization(GenericDefinition in) {
 		realizations.add(in);
 	}
 	
@@ -46,17 +51,49 @@ public class GenericClass extends GenericDefinition{
 		isAbstract = in;
 	}
 	
-	public void setInheritance(GenericClass ref) {
+	public void setInheritance(GenericDefinition ref) {
 		inheritance = ref;
 	}
 	
 //---  Getter Methods   -----------------------------------------------------------------------
 	
-	public GenericClass getInheritance() {
+	//-- Instance Variables  ----------------------------------
+	
+	public ArrayList<InstanceVariable> getInstanceVariables() {
+		return instanceVariables;
+	}
+	
+	public InstanceVariable getInstanceVariableAt(int index) {
+		return getInstanceVariables().get(index);
+	}
+	
+	public int getNumberInstanceVariables() {
+		return getInstanceVariables().size();
+	}
+	
+	public String getInstanceVariableTypeAt(int index) {
+		return getInstanceVariableAt(index).getType();
+	}
+	
+	public String getInstanceVariableVisibilityAt(int index) {
+		return getInstanceVariableAt(index).getVisibility();
+	}
+	
+	public String getInstanceVariableNameAt(int index) {
+		return getInstanceVariableAt(index).getName();
+	}
+
+	public boolean getInstanceVariableStaticAt(int index) {
+		return getInstanceVariableAt(index).getStatic();
+	}
+	
+	//-- GenericClass  ----------------------------------------
+	
+	public GenericDefinition getInheritance() {
 		return inheritance;
 	}
 	
-	public ArrayList<GenericInterface> getRealizations(){
+	public ArrayList<GenericDefinition> getRealizations(){
 		return realizations;
 	}
 
@@ -64,8 +101,4 @@ public class GenericClass extends GenericDefinition{
 		return isAbstract;
 	}
 
-	public ArrayList<InstanceVariable> getInstanceVariables(){
-		return instanceVariables;
-	}
-	
 }

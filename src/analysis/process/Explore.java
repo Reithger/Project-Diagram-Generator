@@ -1,25 +1,23 @@
-package explore;
+package analysis.process;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import analysis.language.actor.GenericClass;
 import analysis.language.actor.GenericDefinition;
-import analysis.language.actor.GenericInterface;
-import analysis.language.file.FileFactory;
-import analysis.language.file.GenericFile;
+import analysis.process.file.FileFactory;
+import analysis.process.file.GenericFile;
 
 public class Explore{
 	
 //---  Instance Variables   -------------------------------------------------------------------
 		
 	private ArrayList<GenericFile> files;
-	private HashMap<String, GenericClass> classes;
-	private HashMap<String, GenericInterface> interfaces;
+	private HashMap<String, GenericDefinition> classes;
+	private HashMap<String, GenericDefinition> interfaces;
+	private HashMap<String, GenericDefinition> enums;
 	private Cluster parent;
 	private String rootPath;
 	
@@ -31,8 +29,9 @@ public class Explore{
 		rootPath = root.getAbsolutePath();
 		ignore = new HashSet<String>();
 		files = new ArrayList<GenericFile>();
-		classes = new HashMap<String, GenericClass>();
-		interfaces = new HashMap<String, GenericInterface>();
+		classes = new HashMap<String, GenericDefinition>();
+		interfaces = new HashMap<String, GenericDefinition>();
+		enums = new HashMap<String, GenericDefinition>();
 		parent = new Cluster(new String[] {});
 		if(rootPath.charAt(rootPath.length() - 1) != '/') {
 			rootPath += "/";
@@ -63,21 +62,29 @@ public class Explore{
 				explore(look);
 			}
 			else if(look.isFile()){
-				GenericFile f = FileFactory.generateFile(look, rootPath);
-				if(f == null) {
+				ArrayList<GenericFile> gfs = FileFactory.generateFile(look, rootPath);
+				if(gfs == null) {
 					continue;
 				}
-				if(f.isClassFile()) {
-					GenericClass gc = new GenericClass(f.getName(), f.getContext());
-					classes.put(gc.getFullName(), gc);
-					parent.addComponent(gc.getContextArray(), gc);
+				for(GenericFile f : gfs) {
+					if(f == null) {
+						continue;
+					}
+					GenericDefinition gd = f.getDefinition();
+					if(f.isClassFile()) {
+						classes.put(gd.getFullName(), gd);
+						parent.addComponent(gd.getContextArray(), gd);
+					}
+					else if(f.isInterfaceFile()) {
+						interfaces.put(gd.getFullName(), gd);
+						parent.addComponent(gd.getContextArray(), gd);
+					}
+					else if(f.isEnumFile()) {
+						enums.put(gd.getFullName(), gd);
+						parent.addComponent(gd.getContextArray(), gd);
+					}
+					files.add(f);
 				}
-				else if(f.isInterfaceFile()) {
-					GenericInterface gi = new GenericInterface(f.getName(), f.getContext());
-					interfaces.put(gi.getFullName(), gi);
-					parent.addComponent(gi.getContextArray(), gi);
-				}
-				files.add(f);
 			}
 		}
 	}
@@ -94,12 +101,16 @@ public class Explore{
 		
 //---  Getter Methods   -----------------------------------------------------------------------
 	
-	public Collection<GenericClass> getClasses(){
+	public Collection<GenericDefinition> getClasses(){
 		return classes.values();
 	}
 	
-	public Collection<GenericInterface> getInterfaces(){
+	public Collection<GenericDefinition> getInterfaces(){
 		return interfaces.values();
+	}
+	
+	public Collection<GenericDefinition> getEnums(){
+		return enums.values();
 	}
 	
 	public ArrayList<GenericDefinition> getDefinitions(){
@@ -108,6 +119,8 @@ public class Explore{
 			out.add(classes.get(s));
 		for(String s : interfaces.keySet())
 			out.add(interfaces.get(s));
+		for(String s : enums.keySet())
+			out.add(enums.get(s));
 		return out;
 	}
 	
@@ -117,6 +130,8 @@ public class Explore{
 			out.put(s, classes.get(s));
 		for(String s : interfaces.keySet())
 			out.put(s, interfaces.get(s));
+		for(String s : enums.keySet())
+			out.put(s, enums.get(s));
 		return out;
 	}
 	

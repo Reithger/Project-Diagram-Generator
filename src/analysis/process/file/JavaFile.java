@@ -1,16 +1,11 @@
-package analysis.language.file;
+package analysis.process.file;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import analysis.language.actor.GenericClass;	//Let GenericFile deal with these
 import analysis.language.actor.GenericDefinition;
-import analysis.language.actor.GenericInterface;
-import analysis.language.component.Function;
-import analysis.language.component.InstanceVariable;
 
 public class JavaFile extends GenericFile {
 
@@ -19,40 +14,37 @@ public class JavaFile extends GenericFile {
 	private final static String TYPE = ".java";
 	private final static String[] KEY_BUFFER_PHRASES = new String[] {"(", ")"};
 	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static"};
+	private final static String REGEX_VISIBILITY_FILE_DEF = "((public|private|protected) )?";
 
 //---  Constructors   -------------------------------------------------------------------------
 	
 	public JavaFile(File in, String root) {
 		super(in, root);
 	}
+	
+	public JavaFile(ArrayList<String> lines, String context) {
+		super(lines, context);
+	}
 
 //---  Operations   ---------------------------------------------------------------------------
 
 	@Override
-	public boolean isClassFile() {
+	public boolean detectInternalClasses() {
+		int counter = 0;
 		for(String s : getFileContents()) {
-			if(s.matches("public (abstract )?class.*")) {
-				return true;
+			if(isFileDefinition(s)) {
+				counter++;
 			}
 		}
-		return false;
+		return counter > 1;
 	}
-	
-	@Override
-	public boolean isInterfaceFile() {
-		for(String s : getFileContents()) {
-			if(s.matches("public interface .*")) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
 	@Override
 	protected ArrayList<String> preProcess(String in){
 		ArrayList<String> out = new ArrayList<String>();
 		in = in.replaceAll("//[^\n]*\n", "\n");
-		in = in.replaceAll("\n", " ").replaceAll("/\\*.*?\\*/", "").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\"[^\"]*\"", "").replaceAll(";", ";\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "");
+		in = in.replaceAll("\n", " ").replaceAll("/\\*.*?\\*/", "").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\\\"", "").replaceAll("\"[^\"]*\"", "").replaceAll(";", ";\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "\n}\n");
+
 		in = bufferCharacter(in, "\\{");
 		in = bufferCharacter(in, "\\}");
 		in = bufferCharacter(in, "\\)");
@@ -69,6 +61,134 @@ public class JavaFile extends GenericFile {
 		}
 		return out;
 	}
+
+	private String removeEquals(String in) {
+		if(in.contains("=")) {
+			return in.substring(in.indexOf("="));
+		}
+		return in;
+	}
+	
+	private String processImportName(String line) {
+		String[] use = cleanInput(line)[1].split("\\.");
+		String nom = use[use.length - 1];
+		String context = use[0];
+		for(int i = 1; i < use.length - 1; i++) {
+			context += "." + use[i];
+		}
+		return formFullName(context, nom);
+	}
+	
+	private String formFullName(String context, String name) {
+		return context + "/" + name;
+	}
+	
+	private void processInstanceVariable(String in) {
+		in = removeEquals(in);
+		boolean underline = false;
+		if(in.contains("static")) {
+			underline = true;	//TODO: Do the formatting here
+		}
+		String[] cont = cleanInput(in);
+		String vis = processVisibility(cont[0]);
+		String typ = compileType(cont, 1);
+		addInstanceVariableToClass(vis, cont[cont.length - 1], typ, underline);
+	}
+	
+	private void processFunction(String in) {
+		boolean stat = false;
+		boolean abs = false;
+		if(in.contains("static")) {
+			stat = true;	//TODO: Do the formatting here
+		}
+		if(in.contains("abstract")) {
+			abs = true;
+		}
+		String[] cont = cleanInput(in);
+		int argStart = indexOf(cont, "(");
+		String vis = processVisibility(cont[0]);
+		String name = cont[argStart-1];
+		String ret = argStart == 2 ? "" : compileType(cont, 1);
+		ArrayList<String> argNom = new ArrayList<String>();
+		ArrayList<String> argTyp = new ArrayList<String>();
+		for(int i = argStart + 1; i < cont.length - 2; i += 2) {
+			if(cont[i].equals(")"))
+				break;
+			String type = compileType(cont, i);
+			i += type.replaceAll("[^,]", "").length();
+			String nom = cont[i + 1].replaceAll(",", "");
+			argNom.add(nom);
+			argTyp.add(type);
+		}
+		if(ret.equals("")) {
+			addConstructorToDef(vis, name, argNom, argTyp);
+		}
+		else {
+			addFunctionToDef(vis, name, ret, argNom, argTyp, stat, abs);
+		}
+	};
+
+	//-- Extraction  ------------------------------------------
+	
+	@Override
+	public ArrayList<GenericFile> extractInternalClasses(){
+		ArrayList<GenericFile> out = new ArrayList<GenericFile>();
+		String context = getContext();
+		ArrayList<String> headerInfo = new ArrayList<String>();
+		for(String s : getFileContents()) {
+			if(s.matches("import .*")) {
+				headerInfo.add(s);
+			}
+		}
+		searchFile(getFileContents(), out, headerInfo, 0, context);
+		for(int i = 0; i < out.size(); i++) {
+			if(out.get(i).getName() == null) {
+				out.remove(i);
+				i--;
+			}
+		}
+		return out;
+	}
+	
+	private int searchFile(ArrayList<String> contents, ArrayList<GenericFile> out, ArrayList<String> header, int currLine, String context) {
+		if(currLine >= contents.size()) {
+			return currLine;
+		}
+		ArrayList<String> lines = new ArrayList<String>();
+		for(String s : header) {
+			lines.add(s);
+		}
+		int dep = 0;
+		boolean active = false;
+		for(int i = currLine; i < contents.size(); i++) {
+			String line = contents.get(i);
+			if(isFileDefinition(line) && i != currLine) {
+				if(!active) {
+					i = searchFile(contents, out, header, i, context);
+				}
+				else {
+					active = true;
+				}
+			}
+			else {
+				lines.add(line);
+			}
+			if(active) {
+				if(line.contains("{")) {
+					dep++;
+				}
+				if(line.contains("}")) {
+					dep--;
+				}
+				if(dep == 0) {
+					out.add(new JavaFile(lines, context));
+					return i + 1;
+				}
+			}
+		}
+		out.add(new JavaFile(lines, context));
+		return contents.size();
+	}
 	
 	@Override
 	protected boolean extractAbstract() {
@@ -81,29 +201,25 @@ public class JavaFile extends GenericFile {
 	}
 
 	@Override
-	protected ArrayList<Function> extractFunctions() {
-		ArrayList<Function> out = new ArrayList<Function>();		//TODO: Preprocess merges @Override into function line which invalidates it
+	protected void extractFunctions() {
 		for(String line : getFileContents()) {
 			if(testFunction(line)) {
-				out.add(processFunction(line));
+				processFunction(line);
 			}
 		}
-		return out;
 	}
 
 	@Override
-	protected ArrayList<InstanceVariable> extractInstanceVariables() {
-		ArrayList<InstanceVariable> out = new ArrayList<InstanceVariable>();
+	protected void extractInstanceVariables() {
 		for(String line : getFileContents()) {
 			if(testInstanceVariable(line)) {
-				out.add(processInstanceVariable(line));
+				processInstanceVariable(line);
 			}
 		}
-		return out;
 	}
 
 	@Override
-	protected GenericClass extractInheritance(HashMap<String, GenericDefinition> ref) {
+	protected GenericDefinition extractInheritance(HashMap<String, GenericDefinition> ref) {
 		for(String line : getFileContents()) {
 			if(isClassDefinition(line) && line.contains("extends")){
 				String[] use = cleanInput(line);
@@ -111,7 +227,7 @@ public class JavaFile extends GenericFile {
 				String name = use[posit + 1];
 				for(GenericDefinition gd : ref.values()) {
 					if(gd.getName().equals(name)) {
-						return (GenericClass)gd;
+						return gd;
 					}
 				}
 			}
@@ -120,15 +236,15 @@ public class JavaFile extends GenericFile {
 	}
 
 	@Override
-	protected ArrayList<GenericInterface> extractRealizations(HashMap<String, GenericInterface> ref) {
-		ArrayList<GenericInterface> out = new ArrayList<GenericInterface>();
+	protected ArrayList<GenericDefinition> extractRealizations(HashMap<String, GenericDefinition> ref) {
+		ArrayList<GenericDefinition> out = new ArrayList<GenericDefinition>();
 		for(String line : getFileContents()) {
 			if(isClassDefinition(line) && line.contains("implements")){
 				String[] use = cleanInput(line);
 				int posit = indexOf(use, "implements");
 				while(++posit < use.length) {
 					String name = use[posit];
-					for(GenericInterface gi : ref.values()) {
+					for(GenericDefinition gi : ref.values()) {
 						if(gi.getName().equals(name)) {
 							out.add(gi);
 						}
@@ -162,7 +278,7 @@ public class JavaFile extends GenericFile {
 			else {
 				for(GenericDefinition gd : neighbors) {
 					if(isInPackageDependency(line, gd.getName()) && ref.get(gd.getFullName()) != null && !out.contains(gd)) {
-						if(!findName().equals(gd.getName()) || (!isClassDefinition(line) && !isConstructor(line)))
+						if(!findName().equals(gd.getName()) || (!isFileDefinition(line) && !isConstructor(line)))
 							out.add(ref.get(gd.getFullName()));
 					}
 				}
@@ -171,43 +287,10 @@ public class JavaFile extends GenericFile {
 		return out;
 	}
 	
-	private boolean isInPackageDependency(String line, String name) {
-		return line.matches(".*([^a-zA-Z\\d]+|^)" + name + "[^a-zA-Z\\d]+.*");
-	}
-	
-	private boolean isClassDefinition(String line) {
-		return line.matches("public (abstract )?class.*");
-	}
-	
-	private boolean isConstructor(String line) {
-		return line.matches("(public|private|protected) " + getName() + "\\s*\\(.*");
-	}
-	
-	private String removeEquals(String in) {
-		if(in.contains("=")) {
-			return in.substring(in.indexOf("="));
-		}
-		return in;
-	}
-	
-	private String processImportName(String line) {
-		String[] use = cleanInput(line)[1].split("\\.");
-		String nom = use[use.length - 1];
-		String context = use[0];
-		for(int i = 1; i < use.length - 1; i++) {
-			context += "." + use[i];
-		}
-		return formFullName(context, nom);
-	}
-	
-	private String formFullName(String context, String name) {
-		return context + "/" + name;
-	}
-
 	@Override
 	protected String findName() {
 		for(String line : getFileContents()) {
-			if(line.matches("\\s*public (abstract )?(class|interface|enum).*")){
+			if(isFileDefinition(line)){
 				String[] use = cleanInput(line);
 				int posit = indexOf(use, "class");
 				posit = (posit == -1 ? indexOf(use, "interface") : posit);
@@ -217,50 +300,54 @@ public class JavaFile extends GenericFile {
 		}
 		return null;
 	}
+	
+	//-- Analyze Line  ----------------------------------------
 
-	private InstanceVariable processInstanceVariable(String in) {
-		in = removeEquals(in);
-		boolean underline = false;
-		if(in.contains("static")) {
-			underline = true;	//TODO: Do the formatting here
-		}
-		String[] cont = cleanInput(in);
-		String vis = processVisibility(cont[0]);
-		String typ = compileType(cont, 1);
-		return compileInstanceVariable(vis, cont[cont.length - 1], typ, underline);
+	protected boolean isFileDefinition(String line) {
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?(class|interface|enum) .*");
 	}
 	
-	private Function processFunction(String in) {
-		boolean stat = false;
-		boolean abs = false;
-		if(in.contains("static")) {
-			stat = true;	//TODO: Do the formatting here
+	private boolean isInPackageDependency(String line, String name) {
+		return line.matches(".*([^a-zA-Z\\d]+|^)" + name + "[^a-zA-Z\\d]+.*") && !line.matches("package .*");
+	}
+	
+	private boolean isClassDefinition(String line) {
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?class .*");
+	}
+	
+	private boolean isConstructor(String line) {
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + getName() + "\\s*\\(.*");
+	}
+
+	@Override
+	public boolean isClassFile() {
+		for(String s : getFileContents()) {
+			if(s.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?class .*")) {
+				return true;
+			}
 		}
-		if(in.contains("abstract")) {
-			abs = true;
+		return false;
+	}
+	
+	@Override
+	public boolean isInterfaceFile() {
+		for(String s : getFileContents()) {
+			if(s.matches(REGEX_VISIBILITY_FILE_DEF + "interface .*")) {
+				return true;
+			}
 		}
-		String[] cont = cleanInput(in);
-		int argStart = indexOf(cont, "(");
-		String vis = processVisibility(cont[0]);
-		String name = cont[argStart-1];
-		String ret = argStart == 2 ? "" : compileType(cont, 1);
-		ArrayList<String> args = new ArrayList<String>();
-		for(int i = argStart + 1; i < cont.length - 2; i += 2) {
-			if(cont[i].equals(")"))
-				break;
-			String type = compileType(cont, i);
-			i += type.replaceAll("[^,]", "").length();
-			String nom = cont[i + 1].replaceAll(",", "");
-			args.add(nom);
-			args.add(type);
+		return false;
+	}
+	
+	@Override
+	public boolean isEnumFile() {
+		for(String s : getFileContents()) {
+			if(s.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?enum .*")) {
+				return true;
+			}
 		}
-		if(ret.equals("")) {
-			return compileConstructor(vis, name, compileArguments(args));
-		}
-		else {
-			return compileFunction(vis, name, ret, compileArguments(args), stat, abs);
-		}
-	};
+		return false;
+	}
 	
 //---  Tester Methods   -----------------------------------------------------------------------
 	

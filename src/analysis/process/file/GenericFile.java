@@ -1,4 +1,4 @@
-package analysis.language.file;
+package analysis.process.file;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -8,12 +8,9 @@ import java.util.Scanner;
 
 import analysis.language.actor.GenericClass;
 import analysis.language.actor.GenericDefinition;
+import analysis.language.actor.GenericEnum;
 import analysis.language.actor.GenericInterface;
-import analysis.language.component.Argument;
-import analysis.language.component.Constructor;
-import analysis.language.component.Function;
-import analysis.language.component.InstanceVariable;
-import explore.Cluster;
+import analysis.process.Cluster;
 
 public abstract class GenericFile {
 	
@@ -27,6 +24,7 @@ public abstract class GenericFile {
 	private ArrayList<String> lines;
 	private String name;
 	private String context;
+	private GenericDefinition gen;
 	
 //---  Constructors   -------------------------------------------------------------------------
 	
@@ -55,11 +53,26 @@ public abstract class GenericFile {
 		if(context.equals(in.getName())) {
 			context = "";
 		}
+		if(isClassFile()) {
+			gen = new GenericClass(getName(), getContext());
+		}
+		else if(isInterfaceFile()) {
+			gen = new GenericInterface(getName(), getContext());
+		}
+		else if(isEnumFile()) {
+			gen = new GenericEnum(getName(), getContext());
+		}
+	}
+	
+	public GenericFile(ArrayList<String> inLines, String inContext) {
+		lines = inLines;
+		name = findName();
+		context = inContext;
 	}
 	
 //---  Operations   ---------------------------------------------------------------------------
 
-	public void process(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericInterface> interfaceRef, Cluster parent) {
+	public void process(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericDefinition> interfaceRef, Cluster parent) {
 		HashSet<GenericDefinition> neighbors = parent.getCluster(context.split("\\.")).getComponents();
 		if(isClassFile()) {
 			processClass(classRef, interfaceRef, neighbors);
@@ -67,14 +80,17 @@ public abstract class GenericFile {
 		else if(isInterfaceFile()){
 			processInterface(interfaceRef.get(getFullName()), classRef, neighbors);
 		}
+		else if(isEnumFile()) {
+			processEnum(classRef.get(getFullName()), classRef, neighbors);
+		}
 	}
 	
-	public void processClass(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericInterface> interfaceRef, HashSet<GenericDefinition> neighbors) {
+	public void processClass(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericDefinition> interfaceRef, HashSet<GenericDefinition> neighbors) {
 		GenericClass out = (GenericClass)(classRef.get(getFullName()));
 		out.setInheritance(extractInheritance(classRef));
 		out.setAbstract(extractAbstract());
 		HashSet<String> bar = new HashSet<String>();
-		for(GenericInterface gi : extractRealizations(interfaceRef)) {
+		for(GenericDefinition gi : extractRealizations(interfaceRef)) {
 			out.addRealization(gi);
 			bar.add(gi.getFullName());
 		}
@@ -83,24 +99,26 @@ public abstract class GenericFile {
 				out.addAssociation(gc);
 		}
 		if(getStatusFunction()) {
-			for(Function f : extractFunctions()) {
-				out.addFunction(f);
-			}
+			extractFunctions();
 		}
 		if(getStatusInstanceVariable()) {
-			for(InstanceVariable iv : extractInstanceVariables()) {
-				out.addInstanceVariable(iv);
-			}
+			extractInstanceVariables();
 		}
 	}
 
-	public void processInterface(GenericInterface in, HashMap<String, GenericDefinition> reference, HashSet<GenericDefinition> neighbors) {
-		GenericInterface out = in;
-		for(Function f : extractFunctions()) {
-			out.addFunction(f);
+	public void processInterface(GenericDefinition in, HashMap<String, GenericDefinition> reference, HashSet<GenericDefinition> neighbors) {
+		GenericDefinition out = in;
+		if(getStatusFunction()) {
+			extractFunctions();
 		}
 		for(GenericDefinition gc : extractAssociations(reference, neighbors)) {
 			out.addAssociation(gc);
+		}
+	}
+	
+	public void processEnum(GenericDefinition in, HashMap<String, GenericDefinition> reference, HashSet<GenericDefinition> neighbors) {
+		for(GenericDefinition gc : extractAssociations(reference, neighbors)) {
+			in.addAssociation(gc);
 		}
 	}
 	
@@ -109,6 +127,12 @@ public abstract class GenericFile {
 	public abstract boolean isClassFile();
 	
 	public abstract boolean isInterfaceFile();
+	
+	public abstract boolean isEnumFile();
+	
+	public abstract boolean detectInternalClasses();
+	
+	public abstract ArrayList<GenericFile> extractInternalClasses();
 	
 	protected abstract String findName();
 	
@@ -122,13 +146,13 @@ public abstract class GenericFile {
 
 	protected abstract boolean extractAbstract();
 	
-	protected abstract ArrayList<Function> extractFunctions();
+	protected abstract void extractFunctions();
 	
-	protected abstract ArrayList<InstanceVariable> extractInstanceVariables();
+	protected abstract void extractInstanceVariables();
 	
-	protected abstract GenericClass extractInheritance(HashMap<String, GenericDefinition> ref);
+	protected abstract GenericDefinition extractInheritance(HashMap<String, GenericDefinition> ref);
 	
-	protected abstract ArrayList<GenericInterface> extractRealizations(HashMap<String, GenericInterface> ref);
+	protected abstract ArrayList<GenericDefinition> extractRealizations(HashMap<String, GenericDefinition> ref);
 	
 	protected abstract ArrayList<GenericDefinition> extractAssociations(HashMap<String, GenericDefinition> ref, HashSet<GenericDefinition> neighbor);
 	
@@ -138,37 +162,18 @@ public abstract class GenericFile {
 		return in.substring(in.lastIndexOf(".") + 1);
 	}
 	
-	/**
-	 * Assumes input tokens ArrayList<<r>String> is in format of [name, type, name, type, ...]
-	 * 
-	 * 
-	 * @param tokens
-	 * @return
-	 */
+	protected void addFunctionToDef(String vis, String name, String ret, ArrayList<String> argNom, ArrayList<String> argTyp, boolean statStatic, boolean statAbstract) {
+		gen.addFunction(vis, name, ret, argNom, argTyp, statStatic, statAbstract);
+	}
 	
-	protected ArrayList<Argument> compileArguments(ArrayList<String> tokens){
-		ArrayList<Argument> out = new ArrayList<Argument>();
-		for(int i = 0; i < tokens.size(); i += 2) {
-			out.add(new Argument(tokens.get(i), tokens.get(i + 1)));
+	protected void addConstructorToDef(String vis, String name, ArrayList<String> argNom, ArrayList<String> argTyp) {
+		gen.addConstructor(vis, name, argNom, argTyp);
+	}
+	
+	protected void addInstanceVariableToClass(String vis, String typ, String nom, boolean statStatic) {
+		if(isClassFile()) {
+			((GenericClass)gen).addInstanceVariable(vis, typ, nom, statStatic);
 		}
-		return out;
-	}
-	
-	protected Function compileFunction(String vis, String name, String ret, ArrayList<Argument> arguments, boolean statStatic, boolean statAbstract) {
-		Function in = new Function(vis, name, arguments, ret);
-		in.setAbstract(statAbstract);
-		in.setStatic(statStatic);
-		return in;
-	}
-	
-	protected Constructor compileConstructor(String vis, String name, ArrayList<Argument> arguments) {
-		return new Constructor(vis, name, arguments);
-	}
-	
-	protected InstanceVariable compileInstanceVariable(String vis, String typ, String nom, boolean statStatic) {
-		InstanceVariable in = new InstanceVariable(vis, nom, typ);
-		in.setStatic(statStatic);
-		return in;
 	}
 	
 //---  Setter Methods   -----------------------------------------------------------------------
@@ -185,6 +190,10 @@ public abstract class GenericFile {
 		return lines;
 	}
 
+	public GenericDefinition getDefinition() {
+		return gen;
+	}
+	
 	public String getName() {
 		return name;
 	}

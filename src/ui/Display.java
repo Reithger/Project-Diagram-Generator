@@ -160,7 +160,7 @@ public class Display {
 		panel.setScrollBarHorizontal(false);
 		panel.setScrollBarVertical(false);
 		
-		display = new ImageDisplay("/assets/fun.jpg", image);
+		display = new ImageDisplay("/assets/Complexity.jpg", image);
 		
 		image.setScrollBarHorizontal(false);
 		image.setScrollBarVertical(false);

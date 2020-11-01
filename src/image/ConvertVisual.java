@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import explore.Explore;
+import analysis.process.Explore;
 
 public class ConvertVisual  {
 	

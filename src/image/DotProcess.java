@@ -1,15 +1,11 @@
 package image;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import analysis.language.actor.GenericClass;
 import analysis.language.actor.GenericDefinition;
-import analysis.language.actor.GenericInterface;
-import analysis.language.component.Function;
-import analysis.language.component.InstanceVariable;
-import explore.Cluster;
-import explore.Explore;
+import analysis.process.Cluster;
+import analysis.process.Explore;
 
 public class DotProcess {
 
@@ -39,6 +35,8 @@ public class DotProcess {
 		
 		out += processInterfaces();
 
+		out += processEnums();
+		
 		out = processClusters(out, explore.getClusterRoot(), 1, 30, 1);
 		
 		out += processAssociations();
@@ -60,29 +58,41 @@ public class DotProcess {
 	
 	private static String processClasses() {
 		String out = "";
-		for(GenericClass gc : explore.getClasses()) {
+		for(GenericDefinition gc : explore.getClasses()) {
 			reference.put(gc.getFullName(), count++);
-			out += generateClassDot(gc, reference.get(gc.getFullName()));
+			out += generateClassDot((GenericClass)gc, reference.get(gc.getFullName()));
 		}
 		return out;
 	}
 	
 	private static String processInterfaces() {
 		String out = "";
-		for(GenericInterface gc : explore.getInterfaces()) {
+		for(GenericDefinition gc : explore.getInterfaces()) {
 			reference.put(gc.getFullName(), count++);
 			out += generateInterfaceDot(gc, reference.get(gc.getFullName()));
 		}
 		return out;
 	}
 	
+	private static String processEnums() {
+		String out = "";
+		for(GenericDefinition ge : explore.getEnums()) {
+			reference.put(ge.getFullName(), count++);
+			out += generateEnumDot(ge, reference.get(ge.getFullName()));
+		}
+		return out;
+	}
+	
 	private static String processAssociations() {
 		String out = "";
-		for(GenericClass c : explore.getClasses()) {
-			out += generateDotClassAssociations(c);
+		for(GenericDefinition c : explore.getClasses()) {
+			out += generateDotClassAssociations((GenericClass)c);
 		}
-		for(GenericInterface c : explore.getInterfaces()) {
+		for(GenericDefinition c : explore.getInterfaces()) {
 			out += generateDotInterfaceAssociations(c);
+		}
+		for(GenericDefinition c : explore.getEnums()) {
+			out += generateDotEnumAssociations(c);
 		}
 		return out;
 	}
@@ -92,17 +102,11 @@ public class DotProcess {
 	public static String generateClassDot(GenericClass gc, int val) {
 		String pref = "\tn" + val + " [label = <{";
 		String out = formDotName(gc) + "|";
-		ArrayList<InstanceVariable> ivs =  gc.getInstanceVariables();
-		for(int i = 0; i < ivs.size(); i++) {
-			InstanceVariable iv = ivs.get(i);
-			out += DotComponent.dotInstanceVariable(iv) + (i + 1 < ivs.size() ? "<BR/>" : "");
+		for(int i = 0; i < gc.getNumberInstanceVariables(); i++) {
+			out += DotComponent.dotInstanceVariable(gc.getInstanceVariableVisibilityAt(i), gc.getInstanceVariableNameAt(i), gc.getInstanceVariableTypeAt(i), gc.getInstanceVariableStaticAt(i)) + (i + 1 < gc.getNumberInstanceVariables() ? "<BR/>" : "");
 		}
 		out += "|";
-		ArrayList<Function> funcs = gc.getFunctions();
-		for(int i = 0; i < funcs.size(); i++) {
-			Function func = funcs.get(i);
-			out += DotComponent.dotFunction(func) + (i + 1 < funcs.size() ? "<BR/>" : "");
-		}
+		out += getFunctionDot(gc);
 		String post = "}>];\n";
 		return pref + out + post;
 	};
@@ -114,7 +118,7 @@ public class DotProcess {
 			out = "\tn" + val + " -> n" + reference.get(gc.getInheritance().getFullName()) + "[arrowhead=onormal];\n";
 		}
 		out += generateDotAssociations(gc);
-		for(GenericInterface i : gc.getRealizations()) {
+		for(GenericDefinition i : gc.getRealizations()) {
 			out += "\tn" + val + " -> n" + reference.get(i.getFullName()) + "[arrowhead=onormal, style=dashed];\n";
 		}
 		return out;
@@ -130,15 +134,11 @@ public class DotProcess {
 
 	//-- GenericInterface  ------------------------------------
 
-	public static String generateInterfaceDot(GenericInterface gi, int val) {
+	public static String generateInterfaceDot(GenericDefinition gi, int val) {
 		String pref = "\tn" + val + " [label = <{";
 		String out = formInterfaceName() + "<BR/>" + gi.getName() + "|";
 		out += "|";
-		ArrayList<Function> funcs = gi.getFunctions();
-		for(int i = 0; i < funcs.size(); i++) {
-			Function func = funcs.get(i);
-			out += DotComponent.dotFunction(func) + (i + 1 < funcs.size() ? "<BR/>" : "");
-		}
+		out += getFunctionDot(gi);
 		String post = "}>];\n";
 		return pref + out + post;
 	}
@@ -147,7 +147,26 @@ public class DotProcess {
 		return HTML_LT + HTML_LT + "interface" + HTML_GT + HTML_GT ;
 	}
 	
-	public static String generateDotInterfaceAssociations(GenericInterface gi) {
+	public static String generateDotInterfaceAssociations(GenericDefinition gi) {
+		return generateDotAssociations(gi);
+	}
+	
+	//-- Generic Enum  ----------------------------------------
+	
+	public static String generateEnumDot(GenericDefinition gi, int val) {
+		String pref = "\tn" + val + " [label = <{";
+		String out = formEnumName() + "<BR/>" + gi.getName() + "|";
+		out += "|";
+		out += getFunctionDot(gi);
+		String post = "}>];\n";
+		return pref + out + post;
+	}
+	
+	private static String formEnumName() {
+		return HTML_LT + HTML_LT + "enumeration" + HTML_GT + HTML_GT ;
+	}
+	
+	public static String generateDotEnumAssociations(GenericDefinition gi) {
 		return generateDotAssociations(gi);
 	}
 	
@@ -158,7 +177,7 @@ public class DotProcess {
 		for(GenericDefinition c : gd.getClassAssociates()) {
 			int mV = reference.get(gd.getFullName());
 			int yV = reference.get(c.getFullName());
-			if(!c.hasAssociate(gd) || mV < yV) {  //Processes numerically, so if mutual, only draw if first time seeing
+			if(!c.hasAssociate(gd) || mV <= yV) {  //Processes numerically, so if mutual, only draw if first time seeing
 				out += "\tn" + mV + " -> n" + yV;
 				if(c.hasAssociate(gd)) {
 					out += "[arrowhead=none]";
@@ -171,7 +190,19 @@ public class DotProcess {
 		}
 		return out;
 	}
-
+	
+	//-- Helper  ----------------------------------------------
+	
+	private static String getFunctionDot(GenericDefinition gd) {
+		String out = "";
+		for(int i = 0; i < gd.getNumberFunctions(); i++) {
+			String[] argNom = gd.getFunctionArgumentNamesAt(i);
+			String[] argTyp = gd.getFunctionArgumentTypesAt(i);
+			out += DotComponent.dotFunction(gd.getFunctionVisibilityAt(i), gd.getFunctionNameAt(i), gd.getFunctionTypeAt(i), argNom, argTyp, gd.getFunctionAbstractAt(i), gd.getFunctionStaticAt(i)) + (i + 1 < gd.getNumberFunctions() ? "<BR/>" : "");
+		}
+		return out;
+	}
+	
 	//-- Clusters  --------------------------------------------
 	
 	private static String processClusters(String out, Cluster next, int depth, int fontSize, int penWidth) {

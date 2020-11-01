@@ -25,7 +25,7 @@ public class PopoutPackageNavigator extends PopoutWindow{
 	private int codeCounter;
 	
 	public PopoutPackageNavigator(String inRoot) {
-		super(300, 600);
+		super(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		allowScrollbars(true);
 		Communication.set(COMM_CODE, null);
 		p = getHandlePanel();

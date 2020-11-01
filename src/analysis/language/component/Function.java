@@ -17,6 +17,14 @@ public class Function extends ClassComponent{
 		arguments = arg;
 	}
 	
+	public Function(String vis, String nom, String ret, ArrayList<String> argNom, ArrayList<String> argTyp) {
+		super(ret, nom, vis);
+		arguments = new ArrayList<Argument>();
+		for(int i = 0; i < argNom.size(); i++) {
+			arguments.add(new Argument(argNom.get(i), argTyp.get(i)));
+		}
+	}
+	
 //---  Setter Methods   -----------------------------------------------------------------------
 	
 	public void setAbstract(boolean in) {
@@ -32,7 +40,23 @@ public class Function extends ClassComponent{
 	public ArrayList<Argument> getArguments(){
 		return arguments;
 	}
+	
+	public int getNumberArguments() {
+		return getArguments().size();
+	}
 
+	public Argument getArgumentAt(int index) {
+		return arguments.get(index);
+	}
+	
+	public String getArgumentNameAt(int index) {
+		return getArgumentAt(index).getName();
+	}
+	
+	public String getArgumentTypeAt(int index) {
+		return getArgumentAt(index).getType();
+	}
+	
 	public boolean getAbstract() {
 		return isAbstract;
 	}
