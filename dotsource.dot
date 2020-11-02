@@ -4,148 +4,116 @@ digraph G {
 	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
 	rankdir = TB;
 
-	n0 [label = <{Function||}>];
-	n1 [label = <{JavaFile||}>];
-	n2 [label = <{ConvertVisual||}>];
-	n3 [label = <{PopoutPackageNavigator||}>];
-	n4 [label = <{UMLConfigValidation||}>];
-	n5 [label = <{InstanceVariable||}>];
-	n6 [label = <{Cluster||}>];
-	n7 [label = <{DotProcess||}>];
-	n8 [label = <{GenericInterface||}>];
-	n9 [label = <{Argument||}>];
-	n10 [label = <{DotComponent||}>];
-	n11 [label = <{<i>GenericFile</i>||}>];
-	n12 [label = <{Display||}>];
-	n13 [label = <{Constructor||}>];
-	n14 [label = <{GraphViz||}>];
-	n15 [label = <{GenericEnum||}>];
-	n16 [label = <{GenericClass||}>];
-	n17 [label = <{<i>ClassComponent</i>||}>];
-	n18 [label = <{FileFactory||}>];
-	n19 [label = <{Main||}>];
-	n20 [label = <{Node||}>];
-	n21 [label = <{<i>GenericDefinition</i>||}>];
-	n22 [label = <{Explore||}>];
+	n0 [label = <{StepForwardCard||}>];
+	n1 [label = <{Tile||}>];
+	n2 [label = <{GameController||}>];
+	n3 [label = <{View||}>];
+	n4 [label = <{Board||}>];
+	n5 [label = <{RobotTurtle||}>];
+	n6 [label = <{TurnLeftCard||}>];
+	n7 [label = <{TurnRightCard||}>];
+	n8 [label = <{InstructionPage||}>];
+	n9 [label = <{GameOverPage||}>];
+	n10 [label = <{FreeSpace||}>];
+	n11 [label = <{GameModel||}>];
+	n12 [label = <{UpdateView||}>];
+	n13 [label = <{SetView||}>];
+	n14 [label = <{Jewel||}>];
+	n15 [label = <{BugCard||}>];
 	subgraph cluster_{
 		label = "";
 		fontsize = 30;
 		penwidth = 1;
-		subgraph cluster_analysis{
-			label = "analysis";
-			fontsize = 26;
-			penwidth = 2;
-			subgraph cluster_analysis_language{
-				label = "analysis.language";
-				fontsize = 22;
-				penwidth = 3;
-				subgraph cluster_analysis_language_actor{
-					label = "analysis.language.actor";
-					fontsize = 18;
-					penwidth = 4;
-					n21;
-					n15;
-					n16;
-					n8;
-				}
-				subgraph cluster_analysis_language_component{
-					label = "analysis.language.component";
-					fontsize = 18;
-					penwidth = 4;
-					n13;
-					n0;
-					n5;
-					n9;
-					n17;
-				}
-			}
-			subgraph cluster_analysis_process{
-				label = "analysis.process";
-				fontsize = 22;
-				penwidth = 3;
-				n6;
-				n22;
-				subgraph cluster_analysis_process_file{
-					label = "analysis.process.file";
-					fontsize = 18;
-					penwidth = 4;
-					n1;
-					n18;
-					n11;
-				}
-			}
-		}
-		subgraph cluster_image{
-			label = "image";
+		subgraph cluster_Board{
+			label = "Board";
 			fontsize = 26;
 			penwidth = 2;
 			n10;
-			n7;
 			n14;
+			n1;
+			n4;
+			n5;
+		}
+		subgraph cluster_{
+			label = "";
+			fontsize = 26;
+			penwidth = 2;
 			n2;
 		}
-		subgraph cluster_main{
-			label = "main";
+		subgraph cluster_GameModel{
+			label = "GameModel";
 			fontsize = 26;
 			penwidth = 2;
-			n19;
+			n15;
+			n11;
+			n6;
+			n7;
+			n0;
 		}
-		subgraph cluster_ui{
-			label = "ui";
+		subgraph cluster_gameView{
+			label = "gameView";
 			fontsize = 26;
 			penwidth = 2;
+			n13;
 			n3;
-			n4;
+			n9;
 			n12;
-			n20;
+			n8;
 		}
 	}
-	n0 -> n17[arrowhead=onormal];
-	n0 -> n9[arrowhead=normal];
-	n1 -> n11[arrowhead=onormal];
-	n1 -> n21[arrowhead=normal];
-	n1 -> n1[arrowhead=none];
-	n2 -> n22[arrowhead=normal];
+	n0 -> n1[arrowhead=normal];
+	n0 -> n4[arrowhead=normal];
+	n0 -> n5[arrowhead=normal];
+	n0 -> n10[arrowhead=normal];
+	n0 -> n14[arrowhead=normal];
+	n2 -> n0[arrowhead=normal];
+	n2 -> n6[arrowhead=normal];
 	n2 -> n7[arrowhead=normal];
-	n2 -> n14[arrowhead=normal];
-	n3 -> n20[arrowhead=normal];
+	n2 -> n11[arrowhead=normal];
+	n2 -> n15[arrowhead=normal];
+	n2 -> n3[arrowhead=normal];
+	n2 -> n8[arrowhead=normal];
+	n2 -> n9[arrowhead=normal];
+	n2 -> n12[arrowhead=normal];
+	n2 -> n13[arrowhead=normal];
+	n4 -> n1[arrowhead=normal];
+	n4 -> n5[arrowhead=normal];
 	n4 -> n14[arrowhead=normal];
-	n4 -> n12[arrowhead=none];
-	n5 -> n17[arrowhead=onormal];
-	n6 -> n21[arrowhead=normal];
-	n6 -> n6[arrowhead=none];
-	n7 -> n16[arrowhead=normal];
-	n7 -> n21[arrowhead=normal];
-	n7 -> n6[arrowhead=normal];
-	n7 -> n22[arrowhead=normal];
+	n4 -> n10[arrowhead=normal];
+	n5 -> n1[arrowhead=onormal];
+	n6 -> n1[arrowhead=normal];
+	n6 -> n4[arrowhead=normal];
+	n6 -> n5[arrowhead=normal];
+	n6 -> n10[arrowhead=normal];
+	n6 -> n14[arrowhead=normal];
+	n7 -> n1[arrowhead=normal];
+	n7 -> n4[arrowhead=normal];
+	n7 -> n5[arrowhead=normal];
 	n7 -> n10[arrowhead=normal];
-	n8 -> n21[arrowhead=onormal];
-	n11 -> n16[arrowhead=normal];
-	n11 -> n21[arrowhead=normal];
+	n7 -> n14[arrowhead=normal];
+	n8 -> n3[arrowhead=onormal];
+	n8 -> n12[arrowhead=normal];
+	n10 -> n1[arrowhead=onormal];
+	n11 -> n1[arrowhead=normal];
+	n11 -> n4[arrowhead=normal];
+	n11 -> n5[arrowhead=normal];
+	n11 -> n10[arrowhead=normal];
+	n11 -> n14[arrowhead=normal];
 	n11 -> n15[arrowhead=normal];
-	n11 -> n8[arrowhead=normal];
+	n11 -> n0[arrowhead=normal];
 	n11 -> n6[arrowhead=normal];
-	n11 -> n11[arrowhead=none];
-	n12 -> n2[arrowhead=normal];
-	n12 -> n3[arrowhead=normal];
-	n12 -> n12[arrowhead=none];
-	n13 -> n0[arrowhead=onormal];
-	n13 -> n9[arrowhead=normal];
-	n14 -> n14[arrowhead=none];
-	n15 -> n21[arrowhead=onormal];
-	n16 -> n21[arrowhead=onormal];
-	n16 -> n5[arrowhead=normal];
-	n18 -> n11[arrowhead=normal];
-	n18 -> n1[arrowhead=normal];
-	n19 -> n2[arrowhead=normal];
-	n19 -> n12[arrowhead=normal];
-	n20 -> n20[arrowhead=none];
-	n21 -> n13[arrowhead=normal];
-	n21 -> n0[arrowhead=normal];
-	n21 -> n21[arrowhead=none];
-	n22 -> n21[arrowhead=normal];
-	n22 -> n18[arrowhead=normal];
-	n22 -> n11[arrowhead=normal];
-	n22 -> n6[arrowhead=normal];
+	n11 -> n7[arrowhead=normal];
+	n12 -> n3[arrowhead=onormal];
+	n12 -> n13[arrowhead=none];
+	n13 -> n3[arrowhead=onormal];
+	n14 -> n1[arrowhead=onormal];
+	n15 -> n1[arrowhead=normal];
+	n15 -> n4[arrowhead=normal];
+	n15 -> n5[arrowhead=normal];
+	n15 -> n10[arrowhead=normal];
+	n15 -> n14[arrowhead=normal];
+	n15 -> n6[arrowhead=normal];
+	n15 -> n0[arrowhead=normal];
+	n15 -> n7[arrowhead=normal];
 
 }

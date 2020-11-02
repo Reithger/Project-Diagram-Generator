@@ -68,6 +68,15 @@ public abstract class GenericFile {
 		lines = inLines;
 		name = findName();
 		context = inContext;
+		if(isClassFile()) {
+			gen = new GenericClass(getName(), getContext());
+		}
+		else if(isInterfaceFile()) {
+			gen = new GenericInterface(getName(), getContext());
+		}
+		else if(isEnumFile()) {
+			gen = new GenericEnum(getName(), getContext());
+		}
 	}
 	
 //---  Operations   ---------------------------------------------------------------------------

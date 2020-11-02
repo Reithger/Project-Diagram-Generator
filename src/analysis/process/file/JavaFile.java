@@ -43,7 +43,7 @@ public class JavaFile extends GenericFile {
 	protected ArrayList<String> preProcess(String in){
 		ArrayList<String> out = new ArrayList<String>();
 		in = in.replaceAll("//[^\n]*\n", "\n");
-		in = in.replaceAll("\n", " ").replaceAll("/\\*.*?\\*/", "").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\\\"", "").replaceAll("\"[^\"]*\"", "").replaceAll(";", ";\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "\n}\n");
+		in = in.replaceAll("\n", " ").replaceAll("/\\*.*?\\*/", "").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\\\\\"", "").replaceAll("\"[^\"]*\"", "").replaceAll(";", ";\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "\n}\n");
 
 		in = bufferCharacter(in, "\\{");
 		in = bufferCharacter(in, "\\}");
