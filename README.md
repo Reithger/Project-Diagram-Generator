@@ -2,6 +2,8 @@
  Program that takes the root folder of a programming project and automatically generates a UML diagram for that entire project; will only process .java files for now as that is what I am familiar with
 
 ## How to use this
+- If you're code-aware and want rapid construction of the same project, download this project and find the Main.java class in the Main package; there's a function called 'runLoose()' that takes a path and output name directly to automatically construct the same project's UML every time you run it, which is way faster than doing it through the UI, although you could change the project while the UI and its settings were open and do rapid reconstruction that way as well.
+
 - To use it as-is, download the 'Project Diagram Generator.jar' file; this is a runnable .jar (basically an .exe) that gives you a GUI for viewing and generating the diagrams you generate (they are really pleasing to look at when it's a good design).
 
 - You will need to download Graphviz, as that is the software used to make the graphs after your project has been converted into a generic UML format. The first time you run the program, it will configure itself by asking you to direct it to the graphviz/bin/dot.exe file, which it saves in a folder beside the .jar alongside folders to hold the images you generate and the graphviz source files to replicate or edit them manually.
