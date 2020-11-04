@@ -273,6 +273,7 @@ public class Display {
 				case UMLConfigValidation.CODE_FAILURE_DOT_ADDRESS:
 					PopoutAlert pA = new PopoutAlert(400, 250, "Please navigate to and select the path for your graphviz/bin/dot.exe file in the following navigation tool");
 					c.setConfigFileEntry("Diagram/settings/config.txt", DOT_ADDRESS_VAR, FileChooser.promptSelectFile("C:/", true, true).getAbsolutePath());
+					pA.dispose();
 					break;
 				case UMLConfigValidation.CODE_FAILURE_FILE_MISSING:
 					c.initializeDefaultConfig();

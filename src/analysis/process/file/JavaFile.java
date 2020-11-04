@@ -42,8 +42,20 @@ public class JavaFile extends GenericFile {
 	@Override
 	protected ArrayList<String> preProcess(String in){
 		ArrayList<String> out = new ArrayList<String>();
-		in = in.replaceAll("//[^\n]*\n", "\n");
-		in = in.replaceAll("\n", " ").replaceAll("/\\*.*?\\*/", "").replaceAll("\t", "").replaceAll("  ", " ").replaceAll("\\\\\"", "").replaceAll("\"[^\"]*\"", "").replaceAll(";", ";\n").replaceAll("\\{", "\\{\n").replaceAll("\\}", "\n}\n");
+		while(in.contains("\\\\")) {
+			in = in.replace("\\\\", "");		//remove instances of \\ (double backslashes) as being redundant to important \" searching
+		}
+		in = in.replaceAll("\\\\\"", "");		//remove \" String occurrences
+		in = in.replaceAll("\"[^\"]*?\"", "\"\"");	//remove String literals
+		in = in.replaceAll("//.*?\n", "\n");	//remove comments
+		in = in.replaceAll("(?<=@.*)\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
+		in = in.replaceAll("\n", " ");			//remove new lines, add space gaps
+		in = in.replaceAll("/\\*.*?\\*/", "");	//remove multi-line comments (/* ... */) with non-greedy regex (? symbol) for minimal removal
+		in = in.replaceAll("\t", "");			//remove tabs
+		in = in.replaceAll("  ", " ");			//shorten whitespace
+		in = in.replaceAll(";", ";\n");			//add newlines back in at all ;
+		in = in.replaceAll("\\{", "\\{\n");		//add newlines around {
+		in = in.replaceAll("\\}", "\n}\n");		//add newlines around }
 
 		in = bufferCharacter(in, "\\{");
 		in = bufferCharacter(in, "\\}");
@@ -202,9 +214,17 @@ public class JavaFile extends GenericFile {
 
 	@Override
 	protected void extractFunctions() {
+		boolean skip = false;
 		for(String line : getFileContents()) {
+			if(skip) {
+				skip = false;
+				continue;
+			}
 			if(testFunction(line)) {
 				processFunction(line);
+			}
+			else if(line.contains("@Override")) {
+				skip = true;
 			}
 		}
 	}
@@ -353,11 +373,11 @@ public class JavaFile extends GenericFile {
 	
 	private boolean testInstanceVariable(String in) {
 		in = removeEquals(in);
-		return getStatusInstanceVariable() && !(!getStatusPrivate() && in.matches("private.*")) && in.matches("\\s*(private|public|protected)[^{]*") && !in.contains("final") && !in.contains("abstract") && !in.contains("(");
+		return getStatusInstanceVariable() && !(!getStatusPrivate() && in.matches("private.*")) && in.matches("(private|public|protected)[^{]*") && !in.contains("final") && !in.contains("abstract") && !in.contains("(");
 	}
 	
 	private boolean testFunction(String in) {
-		return getStatusFunction() && !(!getStatusPrivate() && in.matches("private.*")) && in.matches("\\s*(private|public|protected).*") && !in.contains(" new ") && in.contains("(") && !in.contains("=");
+		return getStatusFunction() && !(!getStatusPrivate() && in.matches("private.*")) && in.matches("(private|public|protected).*") && !in.contains(" new ") && in.contains("(") && !in.contains("=");
 	}
 
 //---  Support Methods   ----------------------------------------------------------------------
