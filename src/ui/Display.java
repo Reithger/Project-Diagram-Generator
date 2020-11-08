@@ -60,19 +60,31 @@ public class Display {
 																{CODE_SHOW_PRIVATE}
 																};
 	
+																private String GENERATE_RECT_NAME = "generate_rect";
+																
 	private WindowFrame frame;
 	private HandlePanel panel;
 	private HandlePanel image;
 	private ImageDisplay display;
 	private boolean[][] state;
 	
-	//TODO: Automatically detect package hierarchy and give option to only view a subset of them; has to provide root path to /src/ folder then designate a package separately
+	private boolean testing = false;
 	
 	public Display() {
 		fileConfiguration();
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		frame = new WindowFrame(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		panel = new HandlePanel(0, (int)(DEFAULT_HEIGHT * (1 - VERTICAL_RATIO)), DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * VERTICAL_RATIO)) {
+		int panelX = 0;
+		int panelY = (int)(DEFAULT_HEIGHT * (1 - VERTICAL_RATIO));
+		panel = new HandlePanel(panelX, panelY, DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * VERTICAL_RATIO)) {
+			
+			private LoadingAnimation lA;
+			
+			@Override
+			public void mouseMoveBehaviour(int x, int y) {
+				if(lA != null)
+					lA.setLocation(panelX + x - lA.getWidth()/ 2, panelY + y + lA.getHeight() / 2);
+			}
 			
 			@Override
 			public void clickBehaviour(int code, int x, int y) {
@@ -95,6 +107,7 @@ public class Display {
 							String name = this.getElementStoredText(ENTRY_LABEL_SAVE_NAME);
 							String path = ConvertVisual.generateUMLDiagram(rootPath, ignore, name, state[0][0], state[1][0], state[2][0]);
 							showImage(path);
+							PopoutAlert pa = new PopoutAlert(300, 250, "UML generated to: \"" + path + "\".");
 						}
 						break;
 					case CODE_NAVIGATE_SRC:
@@ -202,14 +215,14 @@ public class Display {
 		int subCode = -51;
 		
 		int posX = wid / 5;
-		int posY = hei / 5;
+		int posY = hei / 5 + hei/20;
 		int chngY = hei / 4;
 		int horzWid = wid / 3;
 		int vertHei = hei / 6;
 		int extend = wid / 6;
 		
 		panel.handleRectangle("rect_entry_root", false, 10, posX + extend / 2, posY, horzWid + extend, vertHei, Color.white, Color.black);
-		panel.handleTextEntry(ENTRY_LABEL_PROJECT_ROOT, false, posX + extend / 2, posY, horzWid + extend, vertHei, subCode--, DEFAULT_FONT, DEFAULT_SRC_TEXT);
+		panel.handleTextEntry(ENTRY_LABEL_PROJECT_ROOT, false, posX + extend / 2, posY, horzWid + extend, vertHei, subCode--, DEFAULT_FONT, testing ? "C:/Users/Borinor/eclipse-workspace/Project Diagram Generator/src/" : DEFAULT_SRC_TEXT);
 		panel.handleImageButton("filepath_src_button", false, posX + wid * 9 / 48 + extend, posY, iconSize, iconSize, "src/assets/plus_icon.png", CODE_NAVIGATE_SRC);
 		panel.handleRectangle("filepath_src_rect", false, 5, posX + wid * 9 / 48 + extend, posY, iconSize, iconSize, Color.white, Color.black);
 		posY += chngY;
@@ -223,7 +236,7 @@ public class Display {
 	
 		posX += wid * 7 / 24;
 		
-		panel.handleRectangle("rect_generate", false, 10, posX, posY, wid / 6, hei / 6, Color.gray, Color.black);
+		panel.handleRectangle(GENERATE_RECT_NAME, false, 10, posX, posY, wid / 6, hei / 6, Color.gray, Color.black);
 		panel.handleText("butt_text", false, posX, posY, wid / 6, hei / 6, DEFAULT_FONT, "Generate");
 		panel.handleButton("butt_generate", false, posX, posY, wid / 6, hei / 6, CODE_GENERATE_UML);
 		

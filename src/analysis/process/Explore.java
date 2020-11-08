@@ -46,13 +46,18 @@ public class Explore{
 	
 	public void run() {
 		File use = new File(rootPath);
+		System.out.println("Begun exploring files");
 		explore(use);
+		System.out.println("Finished exploring files");
+		System.out.println("Begun processing files");
 		for(GenericFile f : files) {
-			f.process(getDefinitionMapping(), interfaces, parent);
+			f.process(getDefinitionMapping(), parent);
 		}
+		System.out.println("Finished processing files");
 	}
 	
 	private void explore(File root) {
+		System.out.println(root.getName());
 		for(String s : root.list()) {
 			File look = new File(root.getAbsolutePath() + "/" + s);
 			if(!look.exists()) {
@@ -71,18 +76,21 @@ public class Explore{
 						continue;
 					}
 					GenericDefinition gd = f.getDefinition();
+					boolean canAdd = false;
 					if(f.isClassFile()) {
 						classes.put(gd.getFullName(), gd);
-						parent.addComponent(gd.getContextArray(), gd);
+						canAdd = true;
 					}
 					else if(f.isInterfaceFile()) {
 						interfaces.put(gd.getFullName(), gd);
-						parent.addComponent(gd.getContextArray(), gd);
+						canAdd = true;
 					}
 					else if(f.isEnumFile()) {
 						enums.put(gd.getFullName(), gd);
-						parent.addComponent(gd.getContextArray(), gd);
+						canAdd = true;
 					}
+					if(canAdd)
+						parent.addComponent(gd.getContextArray(), gd.getFullName());
 					files.add(f);
 				}
 			}

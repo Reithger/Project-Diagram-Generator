@@ -18,8 +18,6 @@ public class GenericClass extends GenericDefinition{
 	
 	private GenericDefinition inheritance;
 	
-	private ArrayList<GenericDefinition> realizations;	//dotted line, empty arrowhead
-	
 	private ArrayList<InstanceVariable> instanceVariables;
 	
 //---  Constructors   -------------------------------------------------------------------------
@@ -28,7 +26,6 @@ public class GenericClass extends GenericDefinition{
 		super(inName, inContext);
 		instanceVariables = new ArrayList<InstanceVariable>();
 		inheritance = null;
-		realizations = new ArrayList<GenericDefinition>();
 	}
 	
 //---  Setter Methods   -----------------------------------------------------------------------
@@ -43,8 +40,11 @@ public class GenericClass extends GenericDefinition{
 		addInstanceVariable(iv);
 	}
 	
-	public void addRealization(GenericDefinition in) {
-		realizations.add(in);
+	@Override
+	public void addAssociation(GenericDefinition gd) {
+		if(inheritance == null || !gd.equals(inheritance)) {	//TODO: While I don't allow multiple associations
+			super.addAssociation(gd);
+		}
 	}
 	
 	public void setAbstract(boolean in) {
@@ -91,10 +91,6 @@ public class GenericClass extends GenericDefinition{
 	
 	public GenericDefinition getInheritance() {
 		return inheritance;
-	}
-	
-	public ArrayList<GenericDefinition> getRealizations(){
-		return realizations;
 	}
 
 	public boolean getAbstract() {

@@ -148,7 +148,12 @@ public class DotProcess {
 	}
 	
 	public static String generateDotInterfaceAssociations(GenericDefinition gi) {
-		return generateDotAssociations(gi);
+		int val = reference.get(gi.getFullName());
+		String out = "";
+		for(GenericDefinition i : gi.getRealizations()) {
+			out += "\tn" + val + " -> n" + reference.get(i.getFullName()) + "[arrowhead=onormal, style=solid];\n";
+		}
+		return out + generateDotAssociations(gi);
 	}
 	
 	//-- Generic Enum  ----------------------------------------
@@ -167,7 +172,12 @@ public class DotProcess {
 	}
 	
 	public static String generateDotEnumAssociations(GenericDefinition gi) {
-		return generateDotAssociations(gi);
+		int val = reference.get(gi.getFullName());
+		String out = "";
+		for(GenericDefinition i : gi.getRealizations()) {
+			out += "\tn" + val + " -> n" + reference.get(i.getFullName()) + "[arrowhead=onormal, style=dotted];\n";
+		}
+		return out + generateDotAssociations(gi);
 	}
 	
 	//-- GenericDefinition  -----------------------------------
@@ -213,8 +223,8 @@ public class DotProcess {
 		out += tabBuffer(depth + 1) + "label = \"" + address + "\";\n";
 		out += tabBuffer(depth + 1) + "fontsize = " + fontSize + ";\n";
 		out += tabBuffer(depth + 1) + "penwidth = " + penWidth + ";\n";
-		for(GenericDefinition gd : next.getComponents()) {
-			out += tabBuffer(depth + 1) + "n" + reference.get(gd.getFullName()) + ";\n";
+		for(String gd : next.getComponents()) {
+			out += tabBuffer(depth + 1) + "n" + reference.get(gd) + ";\n";
 		}
 		for(Cluster c : next.getChildren()) {
 			out = processClusters(out, c, depth + 1, fontSize - 4, penWidth + 1);

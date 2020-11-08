@@ -12,6 +12,7 @@ public abstract class GenericDefinition implements Comparable<GenericDefinition>
 	private String name;
 	private String context;
 	private ArrayList<GenericDefinition> associates;
+	private ArrayList<GenericDefinition> realizations;	//dotted line, empty arrowhead
 	private ArrayList<Function> functions;
 	
 //---  Constructors   -------------------------------------------------------------------------
@@ -21,6 +22,7 @@ public abstract class GenericDefinition implements Comparable<GenericDefinition>
 		context = inContext;
 		associates = new ArrayList<GenericDefinition>();
 		functions = new ArrayList<Function>();
+		realizations = new ArrayList<GenericDefinition>();
 	}
 	
 //---  Operations   ---------------------------------------------------------------------------
@@ -36,15 +38,19 @@ public abstract class GenericDefinition implements Comparable<GenericDefinition>
 		functions.add(in);
 	}
 	
+	public void addRealization(GenericDefinition in) {
+		realizations.add(in);
+	}
+	
 	public void addFunction(String vis, String nom, String ret, ArrayList<String> argNom, ArrayList<String> argTyp, boolean statStatic, boolean statAbstract) {
-		Function in = new Function(vis, name, ret, argNom, argTyp);
+		Function in = new Function(vis, nom, ret, argNom, argTyp);
 		in.setAbstract(statAbstract);
 		in.setStatic(statStatic);
 		addFunction(in);
 	}
 	
 	public void addConstructor(String vis, String nom, ArrayList<String> argNom, ArrayList<String> argTyp) {
-		Constructor in = new Constructor(vis, name, argNom, argTyp);
+		Constructor in = new Constructor(vis, nom, argNom, argTyp);
 		addFunction(in);
 	}
 
@@ -112,6 +118,10 @@ public abstract class GenericDefinition implements Comparable<GenericDefinition>
 		return associates;
 	}
 	
+	public ArrayList<GenericDefinition> getRealizations(){
+		return realizations;
+	}
+
 	public String getContext() {
 		return context;
 	}

@@ -14,6 +14,17 @@ import analysis.process.Cluster;
 
 public abstract class GenericFile {
 	
+//---  Constants   ----------------------------------------------------------------------------
+	
+	protected final static int VISIBILITY_PUBLIC = 0;
+	protected final static int VISIBILITY_PRIVATE = 1;
+	protected final static int VISIBILITY_PROTECTED = 2;
+	protected final static int VISIBILITY_OTHER = 3;
+	
+	protected final static String FULL_NAME_SEPARATOR = "/";
+	
+	protected final static String ASSOCIATION_STAR_IMPORT = "*";
+	
 //---  Instance Variables   -------------------------------------------------------------------
 	
 	private static boolean procInstance;
@@ -81,53 +92,99 @@ public abstract class GenericFile {
 	
 //---  Operations   ---------------------------------------------------------------------------
 
-	public void process(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericDefinition> interfaceRef, Cluster parent) {
-		HashSet<GenericDefinition> neighbors = parent.getCluster(context.split("\\.")).getComponents();
+	public void process(HashMap<String, GenericDefinition> classRef, Cluster parent) {
+		HashSet<String> neighbors = parent.getCluster(context.split("\\.")).getComponents();
 		if(isClassFile()) {
-			processClass(classRef, interfaceRef, neighbors);
+			processClass(classRef, neighbors);
 		}
 		else if(isInterfaceFile()){
-			processInterface(interfaceRef.get(getFullName()), classRef, neighbors);
+			processInterface(classRef, neighbors);
 		}
 		else if(isEnumFile()) {
 			processEnum(classRef.get(getFullName()), classRef, neighbors);
 		}
 	}
 	
-	public void processClass(HashMap<String, GenericDefinition> classRef, HashMap<String, GenericDefinition> interfaceRef, HashSet<GenericDefinition> neighbors) {
-		GenericClass out = (GenericClass)(classRef.get(getFullName()));
-		out.setInheritance(extractInheritance(classRef));
-		out.setAbstract(extractAbstract());
-		HashSet<String> bar = new HashSet<String>();
-		for(GenericDefinition gi : extractRealizations(interfaceRef)) {
-			out.addRealization(gi);
-			bar.add(gi.getFullName());
-		}
-		for(GenericDefinition gc : extractAssociations(classRef, neighbors)) {
-			if(!gc.equals(out.getInheritance()) && !bar.contains(gc.getFullName()))		//TODO: What if a class both extends and associates with another class?
-				out.addAssociation(gc);
-		}
+	public void processClass(HashMap<String, GenericDefinition> classRef, HashSet<String> neighbors) {
+		handleInheritance(extractInheritance(), classRef);
+		
+		((GenericClass)gen).setAbstract(extractAbstract());
+		HashSet<String> bar = handleRealizations(extractRealizations(), classRef);
+		handleAssociations(neighbors, bar, classRef);
 		if(getStatusFunction()) {
 			extractFunctions();
 		}
+		
 		if(getStatusInstanceVariable()) {
 			extractInstanceVariables();
 		}
 	}
 
-	public void processInterface(GenericDefinition in, HashMap<String, GenericDefinition> reference, HashSet<GenericDefinition> neighbors) {
-		GenericDefinition out = in;
+	public void processInterface(HashMap<String, GenericDefinition> classRef, HashSet<String> neighbors) {
+		HashSet<String> bar = handleRealizations(extractRealizations(), classRef);
+		handleAssociations(neighbors, bar, classRef);
 		if(getStatusFunction()) {
 			extractFunctions();
 		}
-		for(GenericDefinition gc : extractAssociations(reference, neighbors)) {
-			out.addAssociation(gc);
+	}
+	
+	public void processEnum(GenericDefinition in, HashMap<String, GenericDefinition> classRef, HashSet<String> neighbors) {
+		HashSet<String> bar = handleRealizations(extractRealizations(), classRef);
+		handleAssociations(neighbors, bar, classRef);
+		if(getStatusFunction()) {
+			extractFunctions();
 		}
 	}
 	
-	public void processEnum(GenericDefinition in, HashMap<String, GenericDefinition> reference, HashSet<GenericDefinition> neighbors) {
-		for(GenericDefinition gc : extractAssociations(reference, neighbors)) {
-			in.addAssociation(gc);
+	//-- Other  -----------------------------------------------
+	
+	private void handleInheritance(String parName, HashMap<String, GenericDefinition> ref) {
+		if(parName == null)
+			return;
+		for(GenericDefinition gd : ref.values()) {
+			if(gd.getName().equals(parName)) {
+				((GenericClass)gen).setInheritance(gd);
+				return;
+			}
+		}
+	}
+	
+	private HashSet<String> handleRealizations(ArrayList<String> realiz, HashMap<String, GenericDefinition> ref) {
+		HashSet<String> bar = new HashSet<String>();
+		for(String s : realiz) {
+			for(GenericDefinition gi : ref.values()) {
+				if(gi.getName().equals(s)) {
+					gen.addRealization(gi);
+					bar.add(s);
+				}
+			}
+		}
+		return bar;
+	}
+	
+	private void handleAssociations(HashSet<String> neighbors, HashSet<String> bar, HashMap<String, GenericDefinition> ref) {
+		ArrayList<String> noms = extractAssociations(neighbors);
+		for(String s : noms) {
+			if(ref.get(s) != null) {
+				if(!bar.contains(breakFullName(ref.get(s).getFullName())[1])) {	//TODO: While I only allow one association
+					gen.addAssociation(ref.get(s));
+				}
+			}
+			else if(!s.contains(ASSOCIATION_STAR_IMPORT)){
+				for(GenericDefinition gd : ref.values()) {
+					if(gd.getName().equals(s) && !bar.contains(gd.getName())) {
+						gen.addAssociation(gd);
+					}
+				}
+			}
+			else {
+				String path = s.replace(ASSOCIATION_STAR_IMPORT, ".");
+				for(String con : ref.keySet()) {
+					if(con.matches(path + "/.*") && !gen.hasAssociate((ref.get(con))) && !bar.contains(breakFullName(ref.get(con).getFullName())[1])) {
+						gen.addAssociation(ref.get(con));
+					}
+				}
+			}
 		}
 	}
 	
@@ -159,11 +216,11 @@ public abstract class GenericFile {
 	
 	protected abstract void extractInstanceVariables();
 	
-	protected abstract GenericDefinition extractInheritance(HashMap<String, GenericDefinition> ref);
+	protected abstract String extractInheritance();
 	
-	protected abstract ArrayList<GenericDefinition> extractRealizations(HashMap<String, GenericDefinition> ref);
+	protected abstract ArrayList<String> extractRealizations();
 	
-	protected abstract ArrayList<GenericDefinition> extractAssociations(HashMap<String, GenericDefinition> ref, HashSet<GenericDefinition> neighbor);
+	protected abstract ArrayList<String> extractAssociations(HashSet<String> neighbor);
 	
 	//-- Support Methods  -------------------------------------
 	
@@ -171,17 +228,42 @@ public abstract class GenericFile {
 		return in.substring(in.lastIndexOf(".") + 1);
 	}
 	
-	protected void addFunctionToDef(String vis, String name, String ret, ArrayList<String> argNom, ArrayList<String> argTyp, boolean statStatic, boolean statAbstract) {
-		gen.addFunction(vis, name, ret, argNom, argTyp, statStatic, statAbstract);
+	protected String formFullName(String context, String name) {
+		return context + FULL_NAME_SEPARATOR + name;
 	}
 	
-	protected void addConstructorToDef(String vis, String name, ArrayList<String> argNom, ArrayList<String> argTyp) {
-		gen.addConstructor(vis, name, argNom, argTyp);
+	protected void addFunctionToDef(int vis, String nom, String ret, ArrayList<String> argNom, ArrayList<String> argTyp, boolean statStatic, boolean statAbstract) {
+		if(privateCheck(vis)) {
+			gen.addFunction(interpretVisibility(vis), nom, ret, argNom, argTyp, statStatic, statAbstract);
+		}
 	}
 	
-	protected void addInstanceVariableToClass(String vis, String typ, String nom, boolean statStatic) {
-		if(isClassFile()) {
-			((GenericClass)gen).addInstanceVariable(vis, typ, nom, statStatic);
+	protected void addConstructorToDef(int vis, String nom, ArrayList<String> argNom, ArrayList<String> argTyp) {
+		if(privateCheck(vis)) {
+			gen.addConstructor(interpretVisibility(vis), nom, argNom, argTyp);
+		}
+	}
+	
+	protected void addInstanceVariableToClass(int vis, String typ, String nom, boolean statStatic) {
+		if(privateCheck(vis)) {
+			((GenericClass)gen).addInstanceVariable(interpretVisibility(vis), typ, nom, statStatic);
+		}
+	}
+	
+	private boolean privateCheck(int vis) {
+		return getStatusPrivate() || vis != VISIBILITY_PRIVATE;
+	}
+	
+	private String interpretVisibility(int in) {
+		switch(in) {
+			case VISIBILITY_PUBLIC: 
+				return "+";
+			case VISIBILITY_PRIVATE:
+				return "-";
+			case VISIBILITY_PROTECTED:
+				return "#";
+			default:
+				return "?";
 		}
 	}
 	
@@ -201,6 +283,10 @@ public abstract class GenericFile {
 
 	public GenericDefinition getDefinition() {
 		return gen;
+	}
+	
+	public String[] breakFullName(String in) {
+		return in.split(FULL_NAME_SEPARATOR);
 	}
 	
 	public String getName() {

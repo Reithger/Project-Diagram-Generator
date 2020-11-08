@@ -5,10 +5,10 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import analysis.process.Explore;
+import visual.composite.popout.PopoutAlert;
 
 public class ConvertVisual  {
 	
-	private final static String CONFIG_PATH = "./src/assets/config.properties";
 	private final static int DPI_INCREASE = 2;
 	
 	private static String imagePath;
@@ -24,19 +24,22 @@ public class ConvertVisual  {
 	public static String generateUMLDiagram(String path, ArrayList<String> ignore, String name, boolean inst, boolean func, boolean priv) {
 		File f = new File(path);
 		Explore.setParameters(inst, func, priv);
+		System.out.println("Beginning Explore operations");
 		Explore e = new Explore(f);
 		for(String s : ignore) {
 			e.ignorePackage(s);
 		}
 		e.run();
 		DotProcess.setProject(e);
+		System.out.println("Ending Explore operations\nBeginning draw operations");
 		return draw(DotProcess.generateDot(), name, "jpg").getAbsolutePath();
 	}
 	
 	public static File draw(String dotData, String name, String type) {
 		File folder = new File(imagePath);
 		folder.mkdir();
-		GraphViz gv = new GraphViz(imagePath, CONFIG_PATH);
+		System.out.println( settingsPath + "/config.txt");
+		GraphViz gv = new GraphViz(imagePath, settingsPath + "/config.txt");
 		gv.add(dotData);
 		for(int i = 0; i < DPI_INCREASE; i++) {
 			gv.increaseDpi();
@@ -55,8 +58,10 @@ public class ConvertVisual  {
 		
 		File out = new File(imagePath + "//" + name + "." + type);
 
-		gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
-		
+		int result = gv.writeGraphToFile(gv.getGraph(gv.getDotSource(), type), out);
+		if(result == -1) {
+			PopoutAlert pa = new PopoutAlert(300, 250, "Failure to draw UML via GraphViz.");
+		}
 		System.out.println("Done");
 		return out;
 	}

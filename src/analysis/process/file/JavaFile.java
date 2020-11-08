@@ -2,16 +2,12 @@ package analysis.process.file;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-
-import analysis.language.actor.GenericDefinition;
 
 public class JavaFile extends GenericFile {
 
 //---  Constants   ----------------------------------------------------------------------------
 	
-	private final static String TYPE = ".java";
 	private final static String[] KEY_BUFFER_PHRASES = new String[] {"(", ")"};
 	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static"};
 	private final static String REGEX_VISIBILITY_FILE_DEF = "((public|private|protected) )?";
@@ -48,7 +44,7 @@ public class JavaFile extends GenericFile {
 		in = in.replaceAll("\\\\\"", "");		//remove \" String occurrences
 		in = in.replaceAll("\"[^\"]*?\"", "\"\"");	//remove String literals
 		in = in.replaceAll("//.*?\n", "\n");	//remove comments
-		in = in.replaceAll("(?<=@.*)\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
+		in = in.replaceAll("(?<=@)\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
 		in = in.replaceAll("\n", " ");			//remove new lines, add space gaps
 		in = in.replaceAll("/\\*.*?\\*/", "");	//remove multi-line comments (/* ... */) with non-greedy regex (? symbol) for minimal removal
 		in = in.replaceAll("\t", "");			//remove tabs
@@ -90,11 +86,7 @@ public class JavaFile extends GenericFile {
 		}
 		return formFullName(context, nom);
 	}
-	
-	private String formFullName(String context, String name) {
-		return context + "/" + name;
-	}
-	
+
 	private void processInstanceVariable(String in) {
 		in = removeEquals(in);
 		boolean underline = false;
@@ -102,7 +94,7 @@ public class JavaFile extends GenericFile {
 			underline = true;	//TODO: Do the formatting here
 		}
 		String[] cont = cleanInput(in);
-		String vis = processVisibility(cont[0]);
+		int vis = processVisibility(cont[0]);
 		String typ = compileType(cont, 1);
 		addInstanceVariableToClass(vis, cont[cont.length - 1], typ, underline);
 	}
@@ -118,7 +110,7 @@ public class JavaFile extends GenericFile {
 		}
 		String[] cont = cleanInput(in);
 		int argStart = indexOf(cont, "(");
-		String vis = processVisibility(cont[0]);
+		int vis = processVisibility(cont[0]);
 		String name = cont[argStart-1];
 		String ret = argStart == 2 ? "" : compileType(cont, 1);
 		ArrayList<String> argNom = new ArrayList<String>();
@@ -220,7 +212,7 @@ public class JavaFile extends GenericFile {
 				skip = false;
 				continue;
 			}
-			if(testFunction(line)) {
+			if(isFunction(line)) {
 				processFunction(line);
 			}
 			else if(line.contains("@Override")) {
@@ -232,74 +224,65 @@ public class JavaFile extends GenericFile {
 	@Override
 	protected void extractInstanceVariables() {
 		for(String line : getFileContents()) {
-			if(testInstanceVariable(line)) {
+			if(isInstanceVariable(line)) {
 				processInstanceVariable(line);
 			}
 		}
 	}
 
 	@Override
-	protected GenericDefinition extractInheritance(HashMap<String, GenericDefinition> ref) {
+	protected String extractInheritance() {
 		for(String line : getFileContents()) {
 			if(isClassDefinition(line) && line.contains("extends")){
 				String[] use = cleanInput(line);
 				int posit = indexOf(use, "extends");
 				String name = use[posit + 1];
-				for(GenericDefinition gd : ref.values()) {
-					if(gd.getName().equals(name)) {
-						return gd;
-					}
-				}
+				return name;
 			}
 		}
 		return null;
 	}
 
 	@Override
-	protected ArrayList<GenericDefinition> extractRealizations(HashMap<String, GenericDefinition> ref) {
-		ArrayList<GenericDefinition> out = new ArrayList<GenericDefinition>();
+	protected ArrayList<String> extractRealizations() {
+		ArrayList<String> out = new ArrayList<String>();
 		for(String line : getFileContents()) {
-			if(isClassDefinition(line) && line.contains("implements")){
+			if(isClassDefinition(line) && line.contains(getRealizationTerm())){
 				String[] use = cleanInput(line);
-				int posit = indexOf(use, "implements");
-				while(++posit < use.length) {
-					String name = use[posit];
-					for(GenericDefinition gi : ref.values()) {
-						if(gi.getName().equals(name)) {
-							out.add(gi);
-						}
-					}
+				int posit = indexOf(use, getRealizationTerm());
+				while(++posit < use.length && use[posit].matches("[\\w><]*")) {
+					String name = use[posit].replaceAll("<[^>]*>", "");
+					out.add(name);
 				}
 			}
 		}
 		return out;
 	}
+	
+	private String getRealizationTerm() {
+		return isInterfaceFile() ? "extends" : "implements";
+	}
 
 	@Override
-	protected ArrayList<GenericDefinition> extractAssociations(HashMap<String, GenericDefinition> ref, HashSet<GenericDefinition> neighbors) {
-		ArrayList<GenericDefinition> out = new ArrayList<GenericDefinition>();
+	protected ArrayList<String> extractAssociations(HashSet<String> neighbors) {
+		ArrayList<String> out = new ArrayList<String>();
 		for(String line : getFileContents()) {
 			if(line.matches("import .*;")){
 				String name = processImportName(line);
 				if(!name.contains("*")) {
-					GenericDefinition use = ref.get(name);
-					if(use != null && !out.contains(use))
-						out.add(use);
+					out.add(name);
 				}
 				else {
 					String cont = name.substring(0, name.length() - 2);
-					for(String s : ref.keySet()) {
-						if(s.matches(cont + "/.*") && !out.contains(ref.get(s))) {
-							out.add(ref.get(s));
-						}
-					}
+					out.add(cont.replace(".", ASSOCIATION_STAR_IMPORT));
 				}
 			}
 			else {
-				for(GenericDefinition gd : neighbors) {
-					if(isInPackageDependency(line, gd.getName()) && ref.get(gd.getFullName()) != null && !out.contains(gd)) {
-						if(!findName().equals(gd.getName()) || (!isFileDefinition(line) && !isConstructor(line)))
-							out.add(ref.get(gd.getFullName()));
+				for(String gd : neighbors) {
+					String exNom = breakFullName(gd)[1];
+					if(isInPackageDependency(line, exNom) && !out.contains(gd)) {
+						if(!findName().equals(exNom) || (!isFileDefinition(line) && !isConstructor(line)))
+							out.add(gd);
 					}
 				}
 			}
@@ -321,23 +304,7 @@ public class JavaFile extends GenericFile {
 		return null;
 	}
 	
-	//-- Analyze Line  ----------------------------------------
-
-	protected boolean isFileDefinition(String line) {
-		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?(class|interface|enum) .*");
-	}
-	
-	private boolean isInPackageDependency(String line, String name) {
-		return line.matches(".*([^a-zA-Z\\d]+|^)" + name + "[^a-zA-Z\\d]+.*") && !line.matches("package .*");
-	}
-	
-	private boolean isClassDefinition(String line) {
-		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?class .*");
-	}
-	
-	private boolean isConstructor(String line) {
-		return line.matches(REGEX_VISIBILITY_FILE_DEF + getName() + "\\s*\\(.*");
-	}
+	//-- Analyze Type  ----------------------------------------
 
 	@Override
 	public boolean isClassFile() {
@@ -371,13 +338,29 @@ public class JavaFile extends GenericFile {
 	
 //---  Tester Methods   -----------------------------------------------------------------------
 	
-	private boolean testInstanceVariable(String in) {
-		in = removeEquals(in);
-		return getStatusInstanceVariable() && !(!getStatusPrivate() && in.matches("private.*")) && in.matches("(private|public|protected)[^{]*") && !in.contains("final") && !in.contains("abstract") && !in.contains("(");
+	private boolean isFileDefinition(String line) {
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?(class|interface|enum) .*");
 	}
 	
-	private boolean testFunction(String in) {
-		return getStatusFunction() && !(!getStatusPrivate() && in.matches("private.*")) && in.matches("(private|public|protected).*") && !in.contains(" new ") && in.contains("(") && !in.contains("=");
+	private boolean isInPackageDependency(String line, String name) {
+		return line.matches(".*([^a-zA-Z\\d]+|^)" + name + "[^a-zA-Z\\d]+.*") && !line.matches("package .*");
+	}
+	
+	private boolean isClassDefinition(String line) {
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?class .*");
+	}
+	
+	private boolean isConstructor(String line) {
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + getName() + "\\s*\\(.*");
+	}
+
+	private boolean isInstanceVariable(String in) {
+		in = removeEquals(in);
+		return in.matches("(private|public|protected)[^{]*") && !in.contains("final") && !in.contains("abstract") && !in.contains("(");
+	}
+	
+	private boolean isFunction(String in) {
+		return in.matches("(private|public|protected).*") && !in.contains(" new ") && in.contains("(") && !in.contains("=");
 	}
 
 //---  Support Methods   ----------------------------------------------------------------------
@@ -419,23 +402,17 @@ public class JavaFile extends GenericFile {
 		return out + line[start];
 	}
 	
-	private String processVisibility(String in) {
+	private int processVisibility(String in) {
 		switch(in) {
 			case "public":
-				return "+";
+				return VISIBILITY_PUBLIC;
 			case "private":
-				return "-";
+				return VISIBILITY_PRIVATE;
 			case "protected":
-				return "#";
+				return VISIBILITY_PROTECTED;
 			default:
-				return "?";
+				return VISIBILITY_OTHER;
 		}
-	}
-
-//---  Getter Methods   -----------------------------------------------------------------------
-	
-	public String getType() {
-		return TYPE;
 	}
 
 //---  Mechanics   ----------------------------------------------------------------------------
@@ -448,6 +425,5 @@ public class JavaFile extends GenericFile {
 		}
 		return -1;
 	}
-
 
 }

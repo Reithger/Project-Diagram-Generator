@@ -4,27 +4,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import analysis.language.actor.GenericDefinition;
-
 public class Cluster {
 
 //---  Instance Variables   -------------------------------------------------------------------
 	
 	private String[] address;
 	private ArrayList<Cluster> children;
-	private HashSet<GenericDefinition> composite;
+	private HashSet<String> composite;
 	
 //---  Constructors   -------------------------------------------------------------------------
 	
 	public Cluster(String[] givenAddress) {
 		address = givenAddress;
 		children = new ArrayList<Cluster>();
-		composite = new HashSet<GenericDefinition>();
+		composite = new HashSet<String>();
 	}
 	
 //---  Operations   ---------------------------------------------------------------------------
 	
-	public void addComponent(String[] path, GenericDefinition in) {
+	public void addComponent(String[] path, String in) {
 		if(path == null || path.length == 0) {
 			composite.add(in);
 		}
@@ -76,7 +74,7 @@ public class Cluster {
 		return children;
 	}
 	
-	public HashSet<GenericDefinition> getComponents(){
+	public HashSet<String> getComponents(){
 		return composite;
 	}
 	
@@ -121,8 +119,8 @@ public class Cluster {
 	
 	private void debugPrintOut(int d) {
 		System.out.println(tabBuffer(d) + getAddress());
-		for(GenericDefinition gd : getComponents()) {
-			System.out.println(tabBuffer(d) + "  " + gd.getName());
+		for(String gd : getComponents()) {
+			System.out.println(tabBuffer(d) + "  " + gd);
 		}
 		for(Cluster c : getChildren()) {
 			c.debugPrintOut(d + 1);
