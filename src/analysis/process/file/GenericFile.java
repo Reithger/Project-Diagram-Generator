@@ -178,7 +178,7 @@ public abstract class GenericFile {
 				}
 			}
 			else {
-				String path = s.replace(ASSOCIATION_STAR_IMPORT, ".");
+				String path = s.substring(0, s.length() - 1);
 				for(String con : ref.keySet()) {
 					if(con.matches(path + "/.*") && !gen.hasAssociate((ref.get(con))) && !bar.contains(breakFullName(ref.get(con).getFullName())[1])) {
 						gen.addAssociation(ref.get(con));
@@ -277,7 +277,7 @@ public abstract class GenericFile {
 	
 //---  Getter Methods   -----------------------------------------------------------------------
 	
-	protected ArrayList<String> getFileContents(){
+	public ArrayList<String> getFileContents(){
 		return lines;
 	}
 

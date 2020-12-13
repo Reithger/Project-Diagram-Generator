@@ -9,7 +9,7 @@ import visual.composite.popout.PopoutAlert;
 
 public class ConvertVisual  {
 	
-	private final static int DPI_INCREASE = 2;
+	private final static int DPI_INCREASE = 1;
 	
 	private static String imagePath;
 	private static String sourcePath;

@@ -60,7 +60,7 @@ public class Display {
 																{CODE_SHOW_PRIVATE}
 																};
 	
-																private String GENERATE_RECT_NAME = "generate_rect";
+	private String GENERATE_RECT_NAME = "generate_rect";
 																
 	private WindowFrame frame;
 	private HandlePanel panel;
@@ -68,23 +68,16 @@ public class Display {
 	private ImageDisplay display;
 	private boolean[][] state;
 	
-	private boolean testing = false;
+	private boolean testing = true;
 	
 	public Display() {
 		fileConfiguration();
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		frame = new WindowFrame(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		frame.setName("Test");
 		int panelX = 0;
 		int panelY = (int)(DEFAULT_HEIGHT * (1 - VERTICAL_RATIO));
 		panel = new HandlePanel(panelX, panelY, DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * VERTICAL_RATIO)) {
-			
-			private LoadingAnimation lA;
-			
-			@Override
-			public void mouseMoveBehaviour(int x, int y) {
-				if(lA != null)
-					lA.setLocation(panelX + x - lA.getWidth()/ 2, panelY + y + lA.getHeight() / 2);
-			}
 			
 			@Override
 			public void clickBehaviour(int code, int x, int y) {
@@ -107,7 +100,7 @@ public class Display {
 							String name = this.getElementStoredText(ENTRY_LABEL_SAVE_NAME);
 							String path = ConvertVisual.generateUMLDiagram(rootPath, ignore, name, state[0][0], state[1][0], state[2][0]);
 							showImage(path);
-							PopoutAlert pa = new PopoutAlert(300, 250, "UML generated to: \"" + path + "\".");
+							new PopoutAlert(300, 250, "UML generated to: \"" + path + "\".");
 						}
 						break;
 					case CODE_NAVIGATE_SRC:
@@ -126,17 +119,13 @@ public class Display {
 							});
 						}
 						else {
-							PopoutAlert pa = new PopoutAlert(300, 250, "Source folder for project not found.");
+							new PopoutAlert(300, 250, "Source folder for project not found.");
 						}
 						break;
 					default:
 						break;
 				}
 				drawPanel();
-			}
-			
-			@Override
-			public void keyBehaviour(char code) {
 			}
 			
 		};
@@ -153,7 +142,6 @@ public class Display {
 			@Override
 			public void mouseWheelBehaviour(int scroll) {
 				display.processMouseWheelInput(scroll);
-				drawImage();
 			}
 			
 			public void clickPressBehaviour(int code, int x, int y) {
@@ -199,6 +187,7 @@ public class Display {
 	}
 	
 	private void showImage(String in) {
+		image.removeCachedImage(in);
 		display = new ImageDisplay(in, image);
 	}
 	

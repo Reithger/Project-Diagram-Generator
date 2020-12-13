@@ -44,7 +44,9 @@ public class JavaFile extends GenericFile {
 		in = in.replaceAll("\\\\\"", "");		//remove \" String occurrences
 		in = in.replaceAll("\"[^\"]*?\"", "\"\"");	//remove String literals
 		in = in.replaceAll("//.*?\n", "\n");	//remove comments
-		in = in.replaceAll("(?<=@)\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
+		
+		in = in.replaceAll("(?<=@.*)\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
+		
 		in = in.replaceAll("\n", " ");			//remove new lines, add space gaps
 		in = in.replaceAll("/\\*.*?\\*/", "");	//remove multi-line comments (/* ... */) with non-greedy regex (? symbol) for minimal removal
 		in = in.replaceAll("\t", "");			//remove tabs
@@ -273,8 +275,8 @@ public class JavaFile extends GenericFile {
 					out.add(name);
 				}
 				else {
-					String cont = name.substring(0, name.length() - 2);
-					out.add(cont.replace(".", ASSOCIATION_STAR_IMPORT));
+					String cont = name.substring(0, name.length() - 1);
+					out.add(cont.replace("/", ASSOCIATION_STAR_IMPORT));
 				}
 			}
 			else {

@@ -23,11 +23,10 @@ digraph G {
 	n16 [label = <{GenericClass||}>];
 	n17 [label = <{<i>ClassComponent</i>||}>];
 	n18 [label = <{FileFactory||}>];
-	n19 [label = <{LoadingAnimation||}>];
-	n20 [label = <{Main||}>];
-	n21 [label = <{Node||}>];
-	n22 [label = <{<i>GenericDefinition</i>||}>];
-	n23 [label = <{Explore||}>];
+	n19 [label = <{Main||}>];
+	n20 [label = <{Node||}>];
+	n21 [label = <{<i>GenericDefinition</i>||}>];
+	n22 [label = <{Explore||}>];
 	subgraph cluster_{
 		label = "";
 		fontsize = 30;
@@ -47,7 +46,7 @@ digraph G {
 					n15;
 					n16;
 					n8;
-					n22;
+					n21;
 				}
 				subgraph cluster_analysis_language_component{
 					label = "analysis.language.component";
@@ -65,7 +64,7 @@ digraph G {
 				fontsize = 22;
 				penwidth = 3;
 				n6;
-				n23;
+				n22;
 				subgraph cluster_analysis_process_file{
 					label = "analysis.process.file";
 					fontsize = 18;
@@ -89,7 +88,7 @@ digraph G {
 			label = "main";
 			fontsize = 26;
 			penwidth = 2;
-			n20;
+			n19;
 		}
 		subgraph cluster_ui{
 			label = "ui";
@@ -98,54 +97,52 @@ digraph G {
 			n12;
 			n3;
 			n4;
-			n19;
-			n21;
+			n20;
 		}
 	}
 	n0 -> n17[arrowhead=onormal];
 	n0 -> n9[arrowhead=normal];
 	n1 -> n11[arrowhead=onormal];
 	n1 -> n1[arrowhead=none];
-	n2 -> n23[arrowhead=normal];
+	n2 -> n22[arrowhead=normal];
 	n2 -> n7[arrowhead=normal];
 	n2 -> n14[arrowhead=normal];
-	n3 -> n21[arrowhead=normal];
+	n3 -> n20[arrowhead=normal];
 	n4 -> n14[arrowhead=normal];
 	n4 -> n12[arrowhead=none];
 	n5 -> n17[arrowhead=onormal];
 	n6 -> n6[arrowhead=none];
 	n7 -> n16[arrowhead=normal];
-	n7 -> n22[arrowhead=normal];
+	n7 -> n21[arrowhead=normal];
 	n7 -> n6[arrowhead=normal];
-	n7 -> n23[arrowhead=normal];
+	n7 -> n22[arrowhead=normal];
 	n7 -> n10[arrowhead=normal];
-	n8 -> n22[arrowhead=onormal];
+	n8 -> n21[arrowhead=onormal];
 	n11 -> n16[arrowhead=normal];
-	n11 -> n22[arrowhead=normal];
+	n11 -> n21[arrowhead=normal];
 	n11 -> n15[arrowhead=normal];
 	n11 -> n8[arrowhead=normal];
 	n11 -> n6[arrowhead=normal];
 	n11 -> n11[arrowhead=none];
 	n12 -> n2[arrowhead=normal];
-	n12 -> n19[arrowhead=normal];
 	n12 -> n3[arrowhead=normal];
 	n12 -> n12[arrowhead=none];
 	n13 -> n0[arrowhead=onormal];
 	n13 -> n9[arrowhead=normal];
-	n15 -> n22[arrowhead=onormal];
-	n16 -> n22[arrowhead=onormal];
+	n15 -> n21[arrowhead=onormal];
+	n16 -> n21[arrowhead=onormal];
 	n16 -> n5[arrowhead=normal];
 	n18 -> n11[arrowhead=normal];
 	n18 -> n1[arrowhead=normal];
-	n20 -> n2[arrowhead=normal];
-	n20 -> n12[arrowhead=normal];
+	n19 -> n2[arrowhead=normal];
+	n19 -> n12[arrowhead=normal];
+	n20 -> n20[arrowhead=none];
+	n21 -> n13[arrowhead=normal];
+	n21 -> n0[arrowhead=normal];
 	n21 -> n21[arrowhead=none];
-	n22 -> n13[arrowhead=normal];
-	n22 -> n0[arrowhead=normal];
-	n22 -> n22[arrowhead=none];
-	n23 -> n22[arrowhead=normal];
-	n23 -> n18[arrowhead=normal];
-	n23 -> n11[arrowhead=normal];
-	n23 -> n6[arrowhead=normal];
+	n22 -> n21[arrowhead=normal];
+	n22 -> n18[arrowhead=normal];
+	n22 -> n11[arrowhead=normal];
+	n22 -> n6[arrowhead=normal];
 
 }

@@ -57,7 +57,6 @@ public class Explore{
 	}
 	
 	private void explore(File root) {
-		System.out.println(root.getName());
 		for(String s : root.list()) {
 			File look = new File(root.getAbsolutePath() + "/" + s);
 			if(!look.exists()) {
@@ -76,6 +75,7 @@ public class Explore{
 						continue;
 					}
 					GenericDefinition gd = f.getDefinition();
+					
 					boolean canAdd = false;
 					if(f.isClassFile()) {
 						classes.put(gd.getFullName(), gd);
