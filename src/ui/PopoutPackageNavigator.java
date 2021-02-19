@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 
-import input.Callback;
-import input.Communication;
 import visual.composite.HandlePanel;
 import visual.composite.popout.PopoutWindow;
 
@@ -23,11 +21,11 @@ public class PopoutPackageNavigator extends PopoutWindow{
 	private Node root;
 	private HandlePanel p;
 	private int codeCounter;
+	private volatile boolean ready;
 	
 	public PopoutPackageNavigator(String inRoot) {
 		super(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		allowScrollbars(true);
-		Communication.set(COMM_CODE, null);
 		p = getHandlePanel();
 		rootPath = inRoot;
 		File f = new File(rootPath);
@@ -37,8 +35,8 @@ public class PopoutPackageNavigator extends PopoutWindow{
 	}
 	
 	public String getPackageCode() {
+		while(!ready) {}
 		String out = root.getDisabled("");
-		System.out.println(out);
 		return out;
 	}
 
@@ -78,7 +76,7 @@ public class PopoutPackageNavigator extends PopoutWindow{
 	@Override
 	public void clickAction(int code, int x, int y) {
 		if(code == CODE_SUBMIT) {
-			Callback.callback(COMM_CODE);
+			ready = true;
 		} else if(code != -1) {
 			Node found = root.findCode(code);
 			found.toggle();
@@ -87,34 +85,4 @@ public class PopoutPackageNavigator extends PopoutWindow{
 		}
 	}
 
-	@Override
-	public void clickPressAction(int code, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void clickReleaseAction(int code, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void dragAction(int code, int x, int y) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyAction(char code) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void scrollAction(int code) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

@@ -1,10 +1,6 @@
 package main;
 
-import java.io.File;
 import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
 
 import image.ConvertVisual;
 import ui.Display;
@@ -35,14 +31,14 @@ public class Main {
 	private final static String PATH7 = "C:/Users/Borinor/eclipse-workspace/Pixel Art Program V3.0/src";
 	private final static String PATH8 = "C:/Users/Borinor/git/RobotTurtle/src";
 	private final static String PATH9 = "C:/Users/Borinor/eclipse-workspace/Pixel Art Program V3.0/src";
-	private final static String PATH10 = "C:/Users/Borinor/git/RobotTurtle-Marcia/milestone 4";
+	private final static String PATH10 = "C:\\Users\\Borinor\\git\\mattjax12 Project\\src";
 	
 	public final static String ADDRESS_SETTINGS = "./Diagram/settings/";
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 	
-	private final static String NAME = "SVI UML Newest";
+	private final static String NAME = "SVI Library UML Feb 14";
 	
 	public static void main(String[] args) throws Exception{
 		runReal();
@@ -67,7 +63,7 @@ public class Main {
 			}
 		}*/
 		
-		//runLoose("C:\\Users\\Borinor\\eclipse-workspace\\RobotTurtles - Alex\\src", "UML - RobotTurtles - Alex");
+		//runLoose(PATH3, NAME);
 	}
 	
 	private static void runLoose(String path, String name, String ... rem) {

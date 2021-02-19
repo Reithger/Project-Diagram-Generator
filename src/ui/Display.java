@@ -12,11 +12,12 @@ import java.util.ArrayList;
 import filemeta.FileChooser;
 import filemeta.config.Config;
 import image.ConvertVisual;
+import input.CustomEventReceiver;
+import input.NestedEventReceiver;
 import visual.composite.popout.PopoutAlert;
 import visual.composite.HandlePanel;
 import visual.composite.ImageDisplay;
 import visual.frame.WindowFrame;
-import input.Callback;
 
 public class Display {
 	
@@ -70,17 +71,28 @@ public class Display {
 	
 	private boolean testing = true;
 	
+	private String path;
+	private String ignore;
+	private String nom;
+	
 	public Display() {
 		fileConfiguration();
+		
+		path = testing ? "C:/Users/Borinor/eclipse-workspace/Project Diagram Generator/src/" : DEFAULT_SRC_TEXT;
+		nom = "Name";
+		ignore = DEFAULT_PKG_TEXT;
+		
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		frame = new WindowFrame(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		frame.setName("Test");
 		int panelX = 0;
 		int panelY = (int)(DEFAULT_HEIGHT * (1 - VERTICAL_RATIO));
-		panel = new HandlePanel(panelX, panelY, DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * VERTICAL_RATIO)) {
+		panel = new HandlePanel(panelX, panelY, DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * VERTICAL_RATIO));
+		panel.setEventReceiver(new CustomEventReceiver() {
 			
 			@Override
-			public void clickBehaviour(int code, int x, int y) {
+			public void clickEvent(int code, int x, int y, int clickType) {
+				nom = panel.getElementStoredText(ENTRY_LABEL_SAVE_NAME);
 				for(int i = 0; i < SELECTION_CODES.length; i++) {
 					for(int j = 0; j < SELECTION_CODES[i].length; j++) {
 						if(code == SELECTION_CODES[i][j]) {
@@ -90,33 +102,26 @@ public class Display {
 				}
 				switch(code) {
 					case CODE_GENERATE_UML:
-						String rootPath = this.getElementStoredText(ENTRY_LABEL_PROJECT_ROOT);
+						String rootPath = path;
 						if(!(new File(rootPath)).exists()){
-							PopoutAlert pa = new PopoutAlert(300, 250, "Source folder for project not found.");
+							new PopoutAlert(300, 250, "Source folder for project not found.");
 						}
 						else {
-							String sub = this.getElementStoredText(ENTRY_LABEL_SUB_PACKAGE);
-							ArrayList<String> ignore = processPackagesIgnore(sub);
-							String name = this.getElementStoredText(ENTRY_LABEL_SAVE_NAME);
-							String path = ConvertVisual.generateUMLDiagram(rootPath, ignore, name, state[0][0], state[1][0], state[2][0]);
+							ArrayList<String> igno = processPackagesIgnore(ignore);
+							String path = ConvertVisual.generateUMLDiagram(rootPath, igno, nom, state[0][0], state[1][0], state[2][0]);
 							showImage(path);
 							new PopoutAlert(300, 250, "UML generated to: \"" + path + "\".");
 						}
 						break;
 					case CODE_NAVIGATE_SRC:
-						setElementStoredText(ENTRY_LABEL_PROJECT_ROOT, FileChooser.promptSelectFile("C://", true, true).getAbsolutePath());
+						path = FileChooser.promptSelectFile("C://", true, true).getAbsolutePath();
 						break;
 					case CODE_NAVIGATE_SUB_PKG:
-						String rootPath2 = this.getElementStoredText(ENTRY_LABEL_PROJECT_ROOT);
+						String rootPath2 = panel.getElementStoredText(ENTRY_LABEL_PROJECT_ROOT);
 						if((new File(rootPath2)).exists()) {
 							PopoutPackageNavigator ppn = new PopoutPackageNavigator(rootPath2);
-							Callback.setCallback(PopoutPackageNavigator.COMM_CODE, new Callback() {
-								@Override
-								public void callbackFunction() {
-									setElementStoredText(ENTRY_LABEL_SUB_PACKAGE, ppn.getPackageCode());
-									ppn.dispose();
-								}
-							});
+							ignore = ppn.getPackageCode();
+							ppn.dispose();
 						}
 						else {
 							new PopoutAlert(300, 250, "Source folder for project not found.");
@@ -128,40 +133,18 @@ public class Display {
 				drawPanel();
 			}
 			
-		};
-		image = new HandlePanel(0, 0, DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * (1 - VERTICAL_RATIO))) {
-			
-			public void keyBehaviour(char code) {
-				display.processKeyInput(code);
-			}
-			
-			public void clickBehaviour(int code, int x, int y) {
-				display.processClickInput(code);
-			}
-
-			@Override
-			public void mouseWheelBehaviour(int scroll) {
-				display.processMouseWheelInput(scroll);
-			}
-			
-			public void clickPressBehaviour(int code, int x, int y) {
-				display.processPressInput(code, x, y);
-			}
-			
-			public void clickReleaseBehaviour(int code, int x, int y) {
-				display.processReleaseInput(code, x, y);
-			}
-			
-			@Override
-			public void dragBehaviour(int code, int x, int y) {
-				display.processDragInput(code, x, y);
-			}
-		};
+		});
+		image = new HandlePanel(0, 0, DEFAULT_WIDTH, (int)(DEFAULT_HEIGHT * (1 - VERTICAL_RATIO)));
+		
+		display = new ImageDisplay("/assets/Complexity.jpg", image);
+		
+		image.setEventReceiver(new NestedEventReceiver(display.generateEventReceiver()));
 		
 		panel.setScrollBarHorizontal(false);
 		panel.setScrollBarVertical(false);
 		
-		display = new ImageDisplay("/assets/Complexity.jpg", image);
+		display.autofitImage();
+		display.refresh();
 		
 		image.setScrollBarHorizontal(false);
 		image.setScrollBarVertical(false);
@@ -187,8 +170,9 @@ public class Display {
 	}
 	
 	private void showImage(String in) {
-		image.removeCachedImage(in);
-		display = new ImageDisplay(in, image);
+		display.setImage(in);
+		display.autofitImage();
+		display.refresh();
 	}
 	
 	private void drawPanel() {
@@ -211,17 +195,17 @@ public class Display {
 		int extend = wid / 6;
 		
 		panel.handleRectangle("rect_entry_root", false, 10, posX + extend / 2, posY, horzWid + extend, vertHei, Color.white, Color.black);
-		panel.handleTextEntry(ENTRY_LABEL_PROJECT_ROOT, false, posX + extend / 2, posY, horzWid + extend, vertHei, subCode--, DEFAULT_FONT, testing ? "C:/Users/Borinor/eclipse-workspace/Project Diagram Generator/src/" : DEFAULT_SRC_TEXT);
+		panel.handleTextEntry(ENTRY_LABEL_PROJECT_ROOT, false, posX + extend / 2, posY, horzWid + extend, vertHei, subCode--, DEFAULT_FONT, path);
 		panel.handleImageButton("filepath_src_button", false, posX + wid * 9 / 48 + extend, posY, iconSize, iconSize, "src/assets/plus_icon.png", CODE_NAVIGATE_SRC);
 		panel.handleRectangle("filepath_src_rect", false, 5, posX + wid * 9 / 48 + extend, posY, iconSize, iconSize, Color.white, Color.black);
 		posY += chngY;
 		panel.handleRectangle("rect_entry_sub", false, 10, posX + extend / 2, posY, horzWid + extend, vertHei, Color.white, Color.black);
-		panel.handleTextEntry(ENTRY_LABEL_SUB_PACKAGE, false, posX + extend / 2, posY, horzWid + extend, vertHei, subCode--, DEFAULT_FONT, DEFAULT_PKG_TEXT);
+		panel.handleTextEntry(ENTRY_LABEL_SUB_PACKAGE, false, posX + extend / 2, posY, horzWid + extend, vertHei, subCode--, DEFAULT_FONT, ignore);
 		panel.handleImageButton("pkg_nvg_button", false, posX + wid * 9 / 48 + extend, posY, iconSize, iconSize, "src/assets/plus_icon.png", CODE_NAVIGATE_SUB_PKG);
 		panel.handleRectangle("pkg_nvg_rect", false, 5, posX + wid * 9 / 48 + extend, posY, iconSize, iconSize, Color.white, Color.black);
 		posY += chngY;
 		panel.handleRectangle("rect_entry_name", false, 10, posX, posY, horzWid, vertHei,Color.white, Color.black);
-		panel.handleTextEntry(ENTRY_LABEL_SAVE_NAME, false, posX, posY, horzWid, vertHei, subCode--, DEFAULT_FONT, "Name");
+		panel.handleTextEntry(ENTRY_LABEL_SAVE_NAME, false, posX, posY, horzWid, vertHei, subCode--, DEFAULT_FONT, nom);
 	
 		posX += wid * 7 / 24;
 		
@@ -286,18 +270,4 @@ public class Display {
 		}
 	}
 	
-	public BufferedReader retrieveFileReader(String pathIn) {
-		String path = pathIn.replace("\\", "/");
-		InputStream is = Display.class.getResourceAsStream(path); 
-		if(is == null) {
-			try {
-				is = new FileInputStream(new File(path));
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return new BufferedReader(new InputStreamReader(is));
-	}
 }

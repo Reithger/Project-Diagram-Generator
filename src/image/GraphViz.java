@@ -238,6 +238,7 @@ public class GraphViz
  				sb.append(line);
  			}
  			dis.close();
+ 			br.close();
  		} 
  		catch (Exception e) {
  			System.err.println("Error: " + e.getMessage());

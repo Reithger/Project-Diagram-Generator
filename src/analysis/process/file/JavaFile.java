@@ -300,7 +300,11 @@ public class JavaFile extends GenericFile {
 				int posit = indexOf(use, "class");
 				posit = (posit == -1 ? indexOf(use, "interface") : posit);
 				posit = (posit == -1 ? indexOf(use, "enum") : posit);
-				return use[posit + 1];
+				String out = use[posit + 1];
+				if(out.contains("<")) {
+					out = out.substring(0, out.indexOf("<"));
+				}
+				return out;
 			}
 		}
 		return null;
