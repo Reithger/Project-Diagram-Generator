@@ -1,1 +1,6 @@
-/diagram/*
+/diagram/
+/bin/
+bin
+diagram
+.classpath
+.settings/
