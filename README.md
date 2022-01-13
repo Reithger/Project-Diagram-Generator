@@ -5,6 +5,8 @@
  
  Just run the "Project Diagram Generator 1.8.jar" to get things started, direct the prompt towards your graphviz/bin/dot.exe file (wherever you downloaded Graphviz to), and you can get started! The default image in there is the UML diagram for the program itself. More thorough description below.
 
+Note: To run this program fresh (not through the .jar but compiling it yourself), it requires my graphics library Software Visual Interface. The version that this uses is embedded in the assets folder inside the project, so just add that to your libraries when building it and you should be good to go.
+
 ## How to use this
 - If you're code-aware and want rapid construction of the same project, download this project and find the Main.java class in the Main package; there's a function called 'runLoose()' that takes a path and output name directly to automatically construct the same project's UML every time you run it, which is faster than doing it through the UI, although you could change the project while the UI and its settings were open and do rapid reconstruction that way as well.
 
