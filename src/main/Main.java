@@ -22,17 +22,6 @@ import ui.Display;
 
 public class Main {
 
-	private final static String PATH = "C:/Users/Borinor/git/Finite-State-Machine-Model/src/";
-	private final static String PATH2 = "C:/Users/Borinor/eclipse-workspace/Project Diagram Generator/src/";
-	private final static String PATH3 = "C:/Users/Borinor/git/SoftwareVisualInterface/src";
-	private final static String PATH4 = "C:/Users/Borinor/git/ZombieApocalypse/src"; 
-	private final static String PATH5 = "C:/Users/Borinor/git/Mr.Jack/src"; 
-	private final static String PATH6 = "C:/Users/Borinor/eclipse-workspace/OOExample1/src/"; 
-	private final static String PATH7 = "C:/Users/Borinor/eclipse-workspace/Pixel Art Program V3.0/src";
-	private final static String PATH8 = "C:/Users/Borinor/git/RobotTurtle/src";
-	private final static String PATH9 = "C:/Users/Borinor/eclipse-workspace/Pixel Art Program V3.0/src";
-	private final static String PATH10 = "C:\\Users\\Borinor\\git\\mattjax12 Project\\src";
-	
 	public final static String ADDRESS_SETTINGS = "./Diagram/settings/";
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
