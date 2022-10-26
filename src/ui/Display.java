@@ -103,7 +103,7 @@ public class Display {
 	public Display() {
 		fileConfiguration();
 		
-		path = testing ? "C:/Users/Borinor/eclipse-workspace/Project Diagram Generator/src/" : DEFAULT_SRC_TEXT;
+		path = testing ? System.getProperty("user.dir") + "/src" : DEFAULT_SRC_TEXT;
 		nom = DEFAULT_NAME;
 		ignore = DEFAULT_PKG_TEXT;
 		
@@ -140,7 +140,10 @@ public class Display {
 						break;
 					case CODE_NAVIGATE_SRC:
 						try {
-							path = FileChooser.promptSelectFile("C://", true, true).getAbsolutePath();
+							path = FileChooser.promptSelectFile(
+								System.getProperty("os.name").contains("Windows") ? "C://" : "/",
+								true, true
+							).getAbsolutePath();
 						}
 						catch(Exception e) {
 							
@@ -294,7 +297,15 @@ public class Display {
 			switch(c.getErrorCode()) {
 				case UMLConfigValidation.CODE_FAILURE_DOT_ADDRESS:
 					PopoutAlert pA = new PopoutAlert(400, 250, "Please navigate to and select the path for your graphviz/bin/dot.exe file in the following navigation tool");
-					Config.setConfigFileEntry("Diagram/settings/config.txt", DOT_ADDRESS_VAR, FileChooser.promptSelectFile("C:/", true, true).getAbsolutePath());
+					Config.setConfigFileEntry(
+						"Diagram/settings/config.txt", DOT_ADDRESS_VAR,
+						FileChooser.promptSelectFile(
+							System.getProperty("os.name").contains("Windows")
+							? "C://"
+							: "/",
+							true, true
+						).getAbsolutePath()
+					);
 					pA.dispose();
 					break;
 				case UMLConfigValidation.CODE_FAILURE_FILE_MISSING:
