@@ -51,8 +51,6 @@ public class Main {
 				runLoose(path + (src ? "/src/" : ""), saveName + s);
 			}
 		}*/
-		
-		//runLoose(PATH3, NAME);
 	}
 	
 	private static void runLoose(String path, String name, String ... rem) {
