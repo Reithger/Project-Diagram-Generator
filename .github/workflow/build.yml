@@ -1,0 +1,36 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - '.github/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+    - name: Compile Java
+      run: |
+        javac -cp src:src/assets/svi_18.jar $(find src -name '*.java')
+    - name: Build JAR file
+      run: |
+        jar cfe UML_Diagram_Generator.jar main.Main $(find src -name '*.class')
+    - name: Upload JAR file
+      if: ${{ github.event_name != 'pull_request' }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: UML-Diagram-Generator-JAR
+        path: UML_Diagram_Generator.jar
