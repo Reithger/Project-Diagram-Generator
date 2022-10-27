@@ -1,5 +1,6 @@
 package main;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import image.ConvertVisual;
@@ -41,29 +42,26 @@ public class Main {
 	private final static String NAME = "SVI Library UML Feb 14";
 	
 	public static void main(String[] args) throws Exception{
-		runReal();
-
+		if (args.length == 0) runReal();
+		else {
 		
-		/*String root = "C:/Users/Borinor/git/";
-		String saveName = "UML - ";
-		
-		File source = new File(root);
-		
-		for(String s : source.list()) {
-			if(s.contains("RobotTurtles")) {
-				String path = root + s;
+			String root = args[0];
+			String saveName = "UML - ";
+			
+			File source = new File(root);
+			
+			for (String s : source.list()) {
+				String path = root + File.separator + s;
 				File check = new File(path);
 				boolean src = false;
-				for(String t : check.list()) {
-					if(t.equals("src")) {
-						src = true;
-					}
-				}
-				runLoose(path + (src ? "/src/" : ""), saveName + s);
+                if (check.isDirectory() && s.equals("src")) {
+                    src = true;
+                }
+				if (src) runLoose(path, saveName + source.getName());
 			}
-		}*/
-		
-		//runLoose(PATH3, NAME);
+			
+			//runLoose(PATH3, NAME);
+		}
 	}
 	
 	private static void runLoose(String path, String name, String ... rem) {
