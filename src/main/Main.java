@@ -63,7 +63,7 @@ public class Main {
 			}
 		}*/
 		
-		//runLoose(PATH3, NAME);
+		//runLoose("C:\\Users\\SirBo\\eclipse-workspace\\SungHo\\", "SungHo");
 	}
 	
 	private static void runLoose(String path, String name, String ... rem) {

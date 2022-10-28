@@ -71,7 +71,7 @@ public class Explore{
 					continue;
 				}
 				for(GenericFile f : gfs) {
-					if(f == null) {
+					if(f == null || f.getDefinition() == null) {
 						continue;
 					}
 					GenericDefinition gd = f.getDefinition();

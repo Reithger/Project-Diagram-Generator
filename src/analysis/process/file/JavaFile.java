@@ -315,7 +315,7 @@ public class JavaFile extends GenericFile {
 	@Override
 	public boolean isClassFile() {
 		for(String s : getFileContents()) {
-			if(s.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?class .*")) {
+			if(s.matches(REGEX_VISIBILITY_FILE_DEF + "(final )?(abstract )?(final )?class .*")) {
 				return true;
 			}
 		}
@@ -345,7 +345,7 @@ public class JavaFile extends GenericFile {
 //---  Tester Methods   -----------------------------------------------------------------------
 	
 	private boolean isFileDefinition(String line) {
-		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(abstract )?(class|interface|enum) .*");
+		return line.matches(REGEX_VISIBILITY_FILE_DEF + "(final )?(abstract )?(final )?(class|interface|enum) .*");
 	}
 	
 	private boolean isInPackageDependency(String line, String name) {
