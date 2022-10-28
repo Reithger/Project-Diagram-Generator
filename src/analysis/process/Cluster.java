@@ -135,4 +135,8 @@ public class Cluster {
 		return out;
 	}
 	
+	public String toString() {
+		return Arrays.toString(address) + " -> (" + children + ")";
+	}
+	
 }

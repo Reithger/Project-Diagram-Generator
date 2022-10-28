@@ -1,0 +1,128 @@
+digraph G {
+	node[shape=record,style=filled,fillcolor=gray95];
+	edge[concentrate=true];
+	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
+	rankdir = TB;
+
+	n0 [label = <{RoundConstant||}>];
+	n1 [label = <{WARPCipher||}>];
+	n2 [label = <{WARPRunner||}>];
+	n3 [label = <{FeistelWARPCipher||}>];
+	n4 [label = <{CipherTester||}>];
+	n5 [label = <{WARPSpecification||}>];
+	n6 [label = <{SPNLikeWARPCipher||}>];
+	n7 [label = <{LongUtil||}>];
+	n8 [label = <{Nibble||}>];
+	n9 [label = <{UINT128||}>];
+	n10 [label = <{StressTest||}>];
+	n11 [label = <{BitOperation||}>];
+	n12 [label = <{DataTypeTester||}>];
+	subgraph cluster_{
+		label = "";
+		fontsize = 30;
+		penwidth = 1;
+		subgraph cluster_{
+			label = "";
+			fontsize = 26;
+			penwidth = 2;
+			n10;
+		}
+		subgraph cluster_warp{
+			label = "warp";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_warp_cipher{
+				label = "warp.cipher";
+				fontsize = 22;
+				penwidth = 3;
+				n0;
+				n1;
+				n2;
+				n5;
+				subgraph cluster_warp_cipher_variant{
+					label = "warp.cipher.variant";
+					fontsize = 18;
+					penwidth = 4;
+					n3;
+					n6;
+				}
+			}
+			subgraph cluster_warp_datatype{
+				label = "warp.datatype";
+				fontsize = 22;
+				penwidth = 3;
+				n8;
+				n9;
+			}
+			subgraph cluster_warp_test{
+				label = "warp.test";
+				fontsize = 22;
+				penwidth = 3;
+				n4;
+				n12;
+			}
+			subgraph cluster_warp_util{
+				label = "warp.util";
+				fontsize = 22;
+				penwidth = 3;
+				n11;
+				n7;
+			}
+		}
+	}
+	n0 -> n7[arrowhead=normal];
+	n0 -> n11[arrowhead=normal];
+	n0 -> n5[arrowhead=normal];
+	n1 -> n8[arrowhead=normal];
+	n1 -> n9[arrowhead=normal];
+	n1 -> n7[arrowhead=normal];
+	n1 -> n11[arrowhead=normal];
+	n1 -> n0[arrowhead=normal];
+	n1 -> n1[arrowhead=none];
+	n2 -> n8[arrowhead=normal];
+	n2 -> n9[arrowhead=normal];
+	n2 -> n1[arrowhead=normal];
+	n3 -> n1[arrowhead=onormal];
+	n3 -> n0[arrowhead=normal];
+	n3 -> n2[arrowhead=normal];
+	n3 -> n5[arrowhead=normal];
+	n3 -> n8[arrowhead=normal];
+	n3 -> n9[arrowhead=normal];
+	n3 -> n7[arrowhead=normal];
+	n3 -> n11[arrowhead=normal];
+	n4 -> n0[arrowhead=normal];
+	n4 -> n1[arrowhead=normal];
+	n4 -> n2[arrowhead=normal];
+	n4 -> n5[arrowhead=normal];
+	n4 -> n3[arrowhead=normal];
+	n4 -> n6[arrowhead=normal];
+	n4 -> n8[arrowhead=normal];
+	n4 -> n9[arrowhead=normal];
+	n5 -> n8[arrowhead=normal];
+	n5 -> n9[arrowhead=normal];
+	n6 -> n1[arrowhead=onormal];
+	n6 -> n0[arrowhead=normal];
+	n6 -> n2[arrowhead=normal];
+	n6 -> n5[arrowhead=normal];
+	n6 -> n8[arrowhead=normal];
+	n6 -> n9[arrowhead=normal];
+	n6 -> n7[arrowhead=normal];
+	n6 -> n11[arrowhead=normal];
+	n7 -> n8[arrowhead=normal];
+	n7 -> n9[arrowhead=none];
+	n8 -> n8[arrowhead=none];
+	n9 -> n11[arrowhead=normal];
+	n9 -> n9[arrowhead=none];
+	n9 -> n8[arrowhead=normal];
+	n10 -> n0[arrowhead=normal];
+	n10 -> n1[arrowhead=normal];
+	n10 -> n2[arrowhead=normal];
+	n10 -> n5[arrowhead=normal];
+	n10 -> n8[arrowhead=normal];
+	n10 -> n9[arrowhead=normal];
+	n12 -> n8[arrowhead=normal];
+	n12 -> n9[arrowhead=normal];
+	n12 -> n7[arrowhead=normal];
+	n12 -> n11[arrowhead=normal];
+
+}
