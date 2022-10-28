@@ -4,3 +4,4 @@ bin
 diagram
 .classpath
 .settings/
+src/main/MainTest.java
