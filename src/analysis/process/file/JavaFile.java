@@ -112,7 +112,6 @@ public class JavaFile extends GenericFile {
 			abs = true;
 		}
 		String[] cont = cleanInput(in);
-		System.out.println(Arrays.toString(cont));
 		int argStart = indexOf(cont, "(");
 		int vis = processVisibility(cont[0]);
 		String name = cont[argStart-1];
@@ -137,10 +136,8 @@ public class JavaFile extends GenericFile {
 			if(cont[i].equals(")"))
 				break;
 			String type = compileType(cont, i);
-			System.out.println(type);
 			i = compileTypeLength(cont, i);
 			String nom = cont[i].replaceAll(",", "");
-			System.out.println(nom);
 			argNom.add(nom);
 			argTyp.add(type);
 		}
