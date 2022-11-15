@@ -9,8 +9,8 @@ public class JavaFile extends GenericFile {
 
 //---  Constants   ----------------------------------------------------------------------------
 	
-	private final static String[] KEY_BUFFER_PHRASES = new String[] {"(", ")"};
-	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static", "final", "\\<.*\\>"};
+	private final static String[] KEY_BUFFER_PHRASES = new String[] {"(", ")", "<", ">"};
+	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static", "final"};
 	private final static String REGEX_VISIBILITY_FILE_DEF = "((public|private|protected) )?";
 
 //---  Constructors   -------------------------------------------------------------------------
@@ -116,15 +116,31 @@ public class JavaFile extends GenericFile {
 		int argStart = indexOf(cont, "(");
 		int vis = processVisibility(cont[0]);
 		String name = cont[argStart-1];
-		String ret = argStart == 2 ? "" : compileType(cont, 1);
+		int typeIndex = 1;
+		if(cont[typeIndex].equals("<")) {
+			int depth = 1;
+			typeIndex++;
+			while(depth != 0) {
+				if(cont[typeIndex].equals("<")) {
+					depth++;
+				}
+				if(cont[typeIndex].equals(">")) {
+					depth--;
+				}
+				typeIndex++;
+			}
+		}
+		String ret = argStart == typeIndex ? "" : compileType(cont, typeIndex);
 		ArrayList<String> argNom = new ArrayList<String>();
 		ArrayList<String> argTyp = new ArrayList<String>();
-		for(int i = argStart + 1; i < cont.length - 2; i += 2) {
+		for(int i = argStart + 1; i < cont.length - 2; i += 1) {
 			if(cont[i].equals(")"))
 				break;
 			String type = compileType(cont, i);
-			i += type.replaceAll("[^,]", "").length();
-			String nom = cont[i + 1].replaceAll(",", "");
+			System.out.println(type);
+			i = compileTypeLength(cont, i);
+			String nom = cont[i].replaceAll(",", "");
+			System.out.println(nom);
 			argNom.add(nom);
 			argTyp.add(type);
 		}
@@ -403,11 +419,41 @@ public class JavaFile extends GenericFile {
 	}
 	
 	private String compileType(String[] line, int start) {
-		String out = "";
-		while(line[start].contains(",")) {
-			out += line[start++] + " ";
+		String out = line[start++];
+		if(line[start].equals("<")) {
+			int depth = 1;
+			out += line[start++];
+			while(depth != 0) {
+				out += line[start];
+				if(line[start].equals("<")) {
+					depth++;
+				}
+				if(line[start].equals(">")) {
+					depth--;
+				}
+				start++;
+			}
 		}
-		return out + line[start];
+		return out;
+	}
+	
+	private int compileTypeLength(String[] line, int start) {
+		String out = line[start++];
+		if(line[start].equals("<")) {
+			int depth = 1;
+			out += line[start++];
+			while(depth != 0) {
+				out += line[start];
+				if(line[start].equals("<")) {
+					depth++;
+				}
+				if(line[start].equals(">")) {
+					depth--;
+				}
+				start++;
+			}
+		}
+		return start;
 	}
 	
 	private int processVisibility(String in) {
