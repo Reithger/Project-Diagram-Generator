@@ -18,7 +18,7 @@ import ui.Display;
  *
  */
 
-public class Main {
+public class Main <T> {
 
 	public final static String ADDRESS_SETTINGS = "./Diagram/settings/";
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
@@ -30,7 +30,7 @@ public class Main {
 		//runLoose("[FILE PATH HERE"], "[EXPORTED IMAGE NAME HERE]");
 	}
 	
-	private static void runLoose(String path, String name, String ... rem) {
+	private static <T> void runLoose(String path, String name, String ... rem) {
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		ArrayList<String> ignore = new ArrayList<String>();
 		for(String s : rem) {

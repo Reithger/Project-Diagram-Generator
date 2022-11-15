@@ -2,6 +2,7 @@ package analysis.process.file;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class JavaFile extends GenericFile {
@@ -9,7 +10,7 @@ public class JavaFile extends GenericFile {
 //---  Constants   ----------------------------------------------------------------------------
 	
 	private final static String[] KEY_BUFFER_PHRASES = new String[] {"(", ")"};
-	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static"};
+	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static", "final", "\\<.*\\>"};
 	private final static String REGEX_VISIBILITY_FILE_DEF = "((public|private|protected) )?";
 
 //---  Constructors   -------------------------------------------------------------------------
@@ -111,6 +112,7 @@ public class JavaFile extends GenericFile {
 			abs = true;
 		}
 		String[] cont = cleanInput(in);
+		System.out.println(Arrays.toString(cont));
 		int argStart = indexOf(cont, "(");
 		int vis = processVisibility(cont[0]);
 		String name = cont[argStart-1];
@@ -199,7 +201,7 @@ public class JavaFile extends GenericFile {
 	@Override
 	protected boolean extractAbstract() {
 		for(String line : getFileContents()) {
-			if(line.matches("public abstract class .*")) {
+			if(isFileDefinition(line) && line.contains(" abstract ")) {
 				return true;
 			}
 		}
