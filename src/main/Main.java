@@ -30,6 +30,10 @@ public class Main <T> {
 		if (args.length == 0) runReal();
 		else {
 			ArrayList<String> argList = new ArrayList<>(Arrays.asList(args));
+			if (argList.contains("-h")) {
+				printHelp();
+				System.exit(0);
+			}
 			String root = findArgData(argList, "-root=");
 			String saveName = findArgData(argList, "-savename=");
 			boolean inst = containsArg(argList, "-i");
@@ -37,6 +41,22 @@ public class Main <T> {
 			boolean priv = containsArg(argList, "-p");
 			runLoose(root, saveName, inst, func, priv, argList.toArray(new String[0]));
 		}
+	}
+
+	private static void printHelp() {
+		System.out.println("========== List of Available Arguments ==========");
+		System.out.println("-root=<path-to-root-of-project (required)");
+		System.out.println("    This argument specifies the path to project root.");
+		System.out.println("-savename=<image-name> (required)");
+		System.out.println("    This argument specifies the filename of the generated diagram.");
+		System.out.println("-i (optional)");
+		System.out.println("    If this argument is present, the generated diagram will show instance variables.");
+		System.out.println("-p (optional)");
+		System.out.println("    If this argument is present, the generated diagram will show private entities.");
+		System.out.println("-f (optional)");
+		System.out.println("    If this argument is present, the generated diagram will show functions.");
+		System.out.println("-h (optional)");
+		System.out.println("    Displays this help message then exits.");
 	}
 
 	private static String findArgData(ArrayList<String> args, String argPrefix) {
