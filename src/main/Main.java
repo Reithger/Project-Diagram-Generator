@@ -1,5 +1,6 @@
 package main;
 
+import java.io.*;
 import java.util.ArrayList;
 
 import image.ConvertVisual;
@@ -26,8 +27,26 @@ public class Main <T> {
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
 	
 	public static void main(String[] args) throws Exception{
-		runReal();
-		//runLoose("[FILE PATH HERE"], "[EXPORTED IMAGE NAME HERE]");
+		if (args.length == 0) runReal();
+		else {
+		
+			String root = args[0];
+			String saveName = "UML - ";
+			
+			File source = new File(root);
+			
+			for (String s : source.list()) {
+				String path = root + File.separator + s;
+				File check = new File(path);
+				boolean src = false;
+                if (check.isDirectory() && s.equals("src")) {
+                    src = true;
+                }
+				if (src) runLoose(path, saveName + source.getName());
+			}
+			
+			//runLoose(PATH3, NAME);
+		}
 	}
 	
 	private static <T> void runLoose(String path, String name, String ... rem) {
