@@ -39,7 +39,7 @@ public class Display {
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
-	private final static String WINDOWS_DEFAULT_CONFIG_PATH = System.getProperty("user.dir") + "/assets/config_windows.properties";
+	private final static String WINDOWS_DEFAULT_CONFIG_PATH = System.getProperty("user.dir") + "/src/assets/config_windows.properties";
 	private final static String LINUX_DEFAULT_CONFIG_PATH = System.getProperty("user.dir") + "/src/assets/config_linux.properties";
 
 	//-- Config References  -----------------------------------
