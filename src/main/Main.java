@@ -50,13 +50,7 @@ public class Main <T> {
 	}
 
 	private static boolean containsArg(ArrayList<String> args, String arg) {
-		for (int i = 0; i < args.size(); i++) {
-			if (args.get(i).equals(arg)) {
-				args.remove(i);
-				return true;
-			}
-		}
-		return false;
+		return args.remove(arg);
 	}
 	
 	private static <T> void runLoose(String path, String name, boolean inst, boolean func, boolean priv, String ... rem) {
