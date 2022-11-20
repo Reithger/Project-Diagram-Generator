@@ -290,15 +290,24 @@ public class Display {
 		c.addFilePath("Diagram/images");
 		c.addFilePath("Diagram/sources");
 		c.addFile("Diagram/settings", "config.txt", DEFAULT_CONFIG_COMMENT);
-		c.addFileEntry(
-			"Diagram/settings", "config.txt", DOT_ADDRESS_VAR,
-			"Where is your dot program located? It will be called externally.",
-			System.getProperty("os.name").contains("Windows")
-			? Config.getConfigFileEntry(WINDOWS_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR)
-			: (System.getProperty("os.name").contains("Linux") ?
-			Config.getConfigFileEntry(LINUX_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR) : "?"
-			)
-		);
+		if (System.getProperty("os.name").contains("Windows")) {
+			c.addFileEntry("Diagram/settings", "config.txt", DOT_ADDRESS_VAR,
+				"Where is your dot program located? It will be called externally.",
+				Config.getConfigFileEntry(WINDOWS_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR)
+			);
+		}
+		else if (System.getProperty("os.name").contains("Linux")) {
+			c.addFileEntry("Diagram/settings", "config.txt", DOT_ADDRESS_VAR,
+				"Where is your dot program located? It will be called externally.",
+				Config.getConfigFileEntry(LINUX_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR)
+			);
+		}
+		else {
+			c.addFileEntry("Diagram/settings", "config.txt", DOT_ADDRESS_VAR,
+				"Where is your dot program located? It will be called externally.",
+				Config.getConfigFileEntry(LINUX_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR)
+			);
+		}
 		c.softWriteConfig();
 		
 		while(!c.verifyConfig()) {
