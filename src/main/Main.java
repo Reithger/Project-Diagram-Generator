@@ -32,8 +32,10 @@ public class Main <T> {
 			ArrayList<String> argList = new ArrayList<>(Arrays.asList(args));
 			String root = findArgData(argList, "-root=");
 			String saveName = findArgData(argList, "-savename=");
-			
-			runLoose(root, saveName, argList.toArray(new String[0]));
+			boolean inst = containsArg(argList, "-i");
+			boolean func = containsArg(argList, "-f");
+			boolean priv = containsArg(argList, "-p");
+			runLoose(root, saveName, inst, func, priv, argList.toArray(new String[0]));
 		}
 	}
 
@@ -46,14 +48,24 @@ public class Main <T> {
 		}
 		throw new IllegalArgumentException(argPrefix + " not specified");
 	}
+
+	private static boolean containsArg(ArrayList<String> args, String arg) {
+		for (int i = 0; i < args.size(); i++) {
+			if (args.get(i).equals(arg)) {
+				args.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
 	
-	private static <T> void runLoose(String path, String name, String ... rem) {
+	private static <T> void runLoose(String path, String name, boolean inst, boolean func, boolean priv, String ... rem) {
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		ArrayList<String> ignore = new ArrayList<String>();
 		for(String s : rem) {
 			ignore.add(s);
 		}
-		ConvertVisual.generateUMLDiagram(path, ignore, name, false, false, false);
+		ConvertVisual.generateUMLDiagram(path, ignore, name, inst, func, priv);
 	}
 	
 	private static void runReal() {
