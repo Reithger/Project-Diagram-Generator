@@ -305,7 +305,7 @@ public class Display {
 		else {
 			c.addFileEntry("Diagram/settings", "config.txt", DOT_ADDRESS_VAR,
 				"Where is your dot program located? It will be called externally.",
-				Config.getConfigFileEntry(LINUX_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR)
+				"?"
 			);
 		}
 		c.softWriteConfig();
