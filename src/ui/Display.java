@@ -39,7 +39,8 @@ public class Display {
 	public final static String ADDRESS_IMAGES = "./Diagram/images/";
 	public final static String ADDRESS_SOURCES = "./Diagram/sources/";
 	public final static String ADDRESS_CONFIG = ADDRESS_SETTINGS + "/config.txt";
-	private final static String DEFAULT_CONFIG_PATH = "/assets/config.properties";
+	private final static String WINDOWS_DEFAULT_CONFIG_PATH = System.getProperty("user.dir") + "/assets/config_windows.properties";
+	private final static String LINUX_DEFAULT_CONFIG_PATH = System.getProperty("user.dir") + "/src/assets/config_linux.properties";
 
 	//-- Config References  -----------------------------------
 	
@@ -289,8 +290,15 @@ public class Display {
 		c.addFilePath("Diagram/images");
 		c.addFilePath("Diagram/sources");
 		c.addFile("Diagram/settings", "config.txt", DEFAULT_CONFIG_COMMENT);
-		c.addFileEntry("Diagram/settings", "config.txt", DOT_ADDRESS_VAR, "Where is your dot program located? It will be called externally.", "?");
-		
+		c.addFileEntry(
+			"Diagram/settings", "config.txt", DOT_ADDRESS_VAR,
+			"Where is your dot program located? It will be called externally.",
+			System.getProperty("os.name").contains("Windows")
+			? Config.getConfigFileEntry(WINDOWS_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR)
+			: (System.getProperty("os.name").contains("Linux") ?
+			Config.getConfigFileEntry(LINUX_DEFAULT_CONFIG_PATH, DOT_ADDRESS_VAR) : "?"
+			)
+		);
 		c.softWriteConfig();
 		
 		while(!c.verifyConfig()) {
