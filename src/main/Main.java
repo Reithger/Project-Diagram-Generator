@@ -1,6 +1,7 @@
 package main;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.ArrayList;
 
 import image.ConvertVisual;
@@ -29,24 +30,22 @@ public class Main <T> {
 	public static void main(String[] args) throws Exception{
 		if (args.length == 0) runReal();
 		else {
-		
-			String root = args[0];
-			String saveName = "UML - ";
+			ArrayList<String> argList = new ArrayList<>(Arrays.asList(args));
+			String root = findArgData(argList, "-root=");
+			String saveName = findArgData(argList, "-savename=");
 			
-			File source = new File(root);
-			
-			for (String s : source.list()) {
-				String path = root + File.separator + s;
-				File check = new File(path);
-				boolean src = false;
-                if (check.isDirectory() && s.equals("src")) {
-                    src = true;
-                }
-				if (src) runLoose(path, saveName + source.getName());
-			}
-			
-			//runLoose(PATH3, NAME);
+			runLoose(root, saveName, argList.toArray(new String[0]));
 		}
+	}
+
+	private static String findArgData(ArrayList<String> args, String argPrefix) {
+		for (int i = 0; i < args.size(); i++) {
+			if (args.get(i).startsWith(argPrefix)) {
+				String arg = args.remove(i);
+				return arg.substring(argPrefix.length());
+			}
+		}
+		throw new IllegalArgumentException(argPrefix + " not specified");
 	}
 	
 	private static <T> void runLoose(String path, String name, String ... rem) {
