@@ -56,6 +56,8 @@ public class Main <T> {
 		System.out.println("    If this argument is present, the generated diagram will show private entities.");
 		System.out.println("-f (optional)");
 		System.out.println("    If this argument is present, the generated diagram will show functions.");
+		System.out.println("-c (optional)");
+		System.out.println("    If this argument is present, the generated diagram will show constants.");
 		System.out.println("-h (optional)");
 		System.out.println("    Displays this help message then exits.");
 	}
