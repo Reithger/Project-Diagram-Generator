@@ -34,9 +34,10 @@ public class GenericClass extends GenericDefinition{
 		instanceVariables.add(in);
 	}
 	
-	public void addInstanceVariable(String vis, String nom, String typ, boolean isStatic) {
+	public void addInstanceVariable(String vis, String nom, String typ, boolean isStatic, boolean isFinal) {
 		InstanceVariable iv = new InstanceVariable(vis, nom, typ);
 		iv.setStatic(isStatic);
+		iv.setFinal(isFinal);
 		addInstanceVariable(iv);
 	}
 	
@@ -85,6 +86,10 @@ public class GenericClass extends GenericDefinition{
 
 	public boolean getInstanceVariableStaticAt(int index) {
 		return getInstanceVariableAt(index).getStatic();
+	}
+	
+	public boolean getInstanceVariableFinalAt(int index) {
+		return getInstanceVariableAt(index).getFinal();
 	}
 	
 	//-- GenericClass  ----------------------------------------

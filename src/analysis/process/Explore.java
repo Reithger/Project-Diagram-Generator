@@ -149,8 +149,8 @@ public class Explore{
 	
 //--  Setter Methods   ------------------------------------------------------------------------
 	
-	public static void setParameters(boolean inst, boolean func, boolean priv) {
-		GenericFile.assignProcessStates(inst, func, priv);
+	public static void setParameters(boolean inst, boolean func, boolean priv, boolean consta) {
+		GenericFile.assignProcessStates(inst, func, priv, consta);
 	}
 	
 }

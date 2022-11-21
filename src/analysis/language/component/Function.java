@@ -9,6 +9,7 @@ public class Function extends ClassComponent{
 	private ArrayList<Argument> arguments;
 	private boolean isAbstract;	//italics
 	private boolean isStatic;	//underline
+	private boolean isFinal;
 	
 //---  Constructors   -------------------------------------------------------------------------
 	
@@ -33,6 +34,10 @@ public class Function extends ClassComponent{
 	
 	public void setStatic(boolean in) {
 		isStatic = in;
+	}
+	
+	public void setFinal(boolean in) {
+		isFinal = in;
 	}
 	
 //---  Getter Methods   -----------------------------------------------------------------------
@@ -63,6 +68,10 @@ public class Function extends ClassComponent{
 	
 	public boolean getStatic() {
 		return isStatic;
+	}
+	
+	public boolean getFinal() {
+		return isFinal;
 	}
 	
 }

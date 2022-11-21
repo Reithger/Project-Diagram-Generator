@@ -39,7 +39,8 @@ public class Main <T> {
 			boolean inst = containsArg(argList, "-i");
 			boolean func = containsArg(argList, "-f");
 			boolean priv = containsArg(argList, "-p");
-			runLoose(root, saveName, inst, func, priv, argList.toArray(new String[0]));
+			boolean consta = containsArg(argList, "-c");
+			runLoose(root, saveName, inst, func, priv, consta, argList.toArray(new String[0]));
 		}
 	}
 
@@ -73,13 +74,13 @@ public class Main <T> {
 		return args.remove(arg);
 	}
 	
-	private static <T> void runLoose(String path, String name, boolean inst, boolean func, boolean priv, String ... rem) {
+	private static <T> void runLoose(String path, String name, boolean inst, boolean func, boolean priv, boolean consta, String ... rem) {
 		ConvertVisual.assignPaths(ADDRESS_IMAGES, ADDRESS_SOURCES, ADDRESS_SETTINGS);
 		ArrayList<String> ignore = new ArrayList<String>();
 		for(String s : rem) {
 			ignore.add(s);
 		}
-		ConvertVisual.generateUMLDiagram(path, ignore, name, inst, func, priv);
+		ConvertVisual.generateUMLDiagram(path, ignore, name, inst, func, priv, consta);
 	}
 	
 	private static void runReal() {

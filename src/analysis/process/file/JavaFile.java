@@ -75,7 +75,7 @@ public class JavaFile extends GenericFile {
 
 	private String removeEquals(String in) {
 		if(in.contains("=")) {
-			return in.substring(in.indexOf("="));
+			return in.substring(0, in.indexOf("="));
 		}
 		return in;
 	}
@@ -91,25 +91,35 @@ public class JavaFile extends GenericFile {
 	}
 
 	private void processInstanceVariable(String in) {
+		System.out.println(in);
 		in = removeEquals(in);
 		boolean underline = false;
+		boolean fina = false;
 		if(in.contains("static")) {
 			underline = true;	//TODO: Do the formatting here
 		}
+		if(in.contains("final")) {
+			fina = true;
+		}
 		String[] cont = cleanInput(in);
+		System.out.println(Arrays.toString(cont));
 		int vis = processVisibility(cont[0]);
 		String typ = compileType(cont, 1);
-		addInstanceVariableToClass(vis, cont[cont.length - 1], typ, underline);
+		addInstanceVariableToClass(vis, cont[cont.length - 1], typ, underline, fina);
 	}
 	
 	private void processFunction(String in) {
 		boolean stat = false;
 		boolean abs = false;
-		if(in.contains("static")) {
+		boolean fin = false;
+		if(in.contains(" static ")) {
 			stat = true;	//TODO: Do the formatting here
 		}
-		if(in.contains("abstract")) {
+		if(in.contains(" abstract ")) {
 			abs = true;
+		}
+		if(in.contains(" final ")) {
+			fin = true;
 		}
 		String[] cont = cleanInput(in);
 		int argStart = indexOf(cont, "(");
@@ -145,7 +155,7 @@ public class JavaFile extends GenericFile {
 			addConstructorToDef(vis, name, argNom, argTyp);
 		}
 		else {
-			addFunctionToDef(vis, name, ret, argNom, argTyp, stat, abs);
+			addFunctionToDef(vis, name, ret, argNom, argTyp, stat, abs, fin);
 		}
 	};
 
@@ -377,7 +387,7 @@ public class JavaFile extends GenericFile {
 
 	private boolean isInstanceVariable(String in) {
 		in = removeEquals(in);
-		return in.matches("(private|public|protected)[^{]*") && !in.contains("final") && !in.contains("abstract") && !in.contains("(");
+		return in.matches("(private|public|protected)[^{]*") && !in.contains("abstract") && !in.contains("(");
 	}
 	
 	private boolean isFunction(String in) {

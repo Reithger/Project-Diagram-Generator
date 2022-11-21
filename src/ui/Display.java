@@ -74,17 +74,20 @@ public class Display {
 	private final static int CODE_SHOW_INSTANCE = 50;
 	private final static int CODE_SHOW_FUNCTION = 51;
 	private final static int CODE_SHOW_PRIVATE = 52;
+	private final static int CODE_SHOW_CONSTANT = 56;
 	private final static int CODE_GENERATE_UML = 53;
 	private final static int CODE_NAVIGATE_SRC = 54;
 	private final static int CODE_NAVIGATE_SUB_PKG = 55;
 	
 	private final static String[][] BOOLEAN_SELECTION = new String[][] {{"Show Instance Variables?"}, 
 																		{"Show Functions?"},
-																		{"Show Private Entities?"}
+																		{"Show Private Entities?"},
+																		{"Show Constants?"}
 																		};
 	private final static int[][] SELECTION_CODES = new int[][] {{CODE_SHOW_INSTANCE},
 																{CODE_SHOW_FUNCTION},
-																{CODE_SHOW_PRIVATE}
+																{CODE_SHOW_PRIVATE},
+																{CODE_SHOW_CONSTANT}
 																};
 	
 	private String GENERATE_RECT_NAME = "generate_rect";
@@ -134,7 +137,7 @@ public class Display {
 						}
 						else {
 							ArrayList<String> igno = processPackagesIgnore(ignore);
-							String path = ConvertVisual.generateUMLDiagram(rootPath, igno, nom, state[0][0], state[1][0], state[2][0]);
+							String path = ConvertVisual.generateUMLDiagram(rootPath, igno, nom, state[0][0], state[1][0], state[2][0], state[3][0]);
 							showImage(path);
 							new PopoutAlert(300, 250, "UML generated to: \"" + path + "\".");
 						}

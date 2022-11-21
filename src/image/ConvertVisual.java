@@ -21,9 +21,9 @@ public class ConvertVisual  {
 		settingsPath = sett;
 	}
 	
-	public static String generateUMLDiagram(String path, ArrayList<String> ignore, String name, boolean inst, boolean func, boolean priv) {
+	public static String generateUMLDiagram(String path, ArrayList<String> ignore, String name, boolean inst, boolean func, boolean priv, boolean consta) {
 		File f = new File(path);
-		Explore.setParameters(inst, func, priv);
+		Explore.setParameters(inst, func, priv, consta);
 		System.out.println("Beginning Explore operations");
 		Explore e = new Explore(f);
 		for(String s : ignore) {

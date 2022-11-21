@@ -30,6 +30,7 @@ public abstract class GenericFile {
 	private static boolean procInstance;
 	private static boolean procFunction;
 	private static boolean procPrivate;
+	private static boolean procConstants;
 	
 	private String contents;
 	private ArrayList<String> lines;
@@ -232,9 +233,9 @@ public abstract class GenericFile {
 		return context + FULL_NAME_SEPARATOR + name;
 	}
 	
-	protected void addFunctionToDef(int vis, String nom, String ret, ArrayList<String> argNom, ArrayList<String> argTyp, boolean statStatic, boolean statAbstract) {
+	protected void addFunctionToDef(int vis, String nom, String ret, ArrayList<String> argNom, ArrayList<String> argTyp, boolean statStatic, boolean statAbstract, boolean isFin) {
 		if(privateCheck(vis)) {
-			gen.addFunction(interpretVisibility(vis), nom, ret, argNom, argTyp, statStatic, statAbstract);
+			gen.addFunction(interpretVisibility(vis), nom, ret, argNom, argTyp, statStatic, statAbstract, isFin);
 		}
 	}
 	
@@ -244,14 +245,18 @@ public abstract class GenericFile {
 		}
 	}
 	
-	protected void addInstanceVariableToClass(int vis, String typ, String nom, boolean statStatic) {
-		if(privateCheck(vis)) {
-			((GenericClass)gen).addInstanceVariable(interpretVisibility(vis), typ, nom, statStatic);
+	protected void addInstanceVariableToClass(int vis, String typ, String nom, boolean statStatic, boolean statFinal) {
+		if(privateCheck(vis) && constantCheck(statFinal)) {
+			((GenericClass)gen).addInstanceVariable(interpretVisibility(vis), typ, nom, statStatic, statFinal);
 		}
 	}
 	
 	private boolean privateCheck(int vis) {
 		return getStatusPrivate() || vis != VISIBILITY_PRIVATE;
+	}
+	
+	private boolean constantCheck(boolean isFinal) {
+		return getStatusConstant() || !isFinal;
 	}
 	
 	private String interpretVisibility(int in) {
@@ -269,10 +274,11 @@ public abstract class GenericFile {
 	
 //---  Setter Methods   -----------------------------------------------------------------------
 	
-	public static void assignProcessStates(boolean inst, boolean func, boolean priv) {
+	public static void assignProcessStates(boolean inst, boolean func, boolean priv, boolean constant) {
 		procInstance = inst;
 		procFunction = func;
 		procPrivate = priv;
+		procConstants = constant;
 	}
 	
 //---  Getter Methods   -----------------------------------------------------------------------
@@ -311,6 +317,10 @@ public abstract class GenericFile {
 	
 	protected boolean getStatusFunction() {
 		return procFunction;
+	}
+	
+	protected boolean getStatusConstant() {
+		return procConstants;
 	}
 	
 }
