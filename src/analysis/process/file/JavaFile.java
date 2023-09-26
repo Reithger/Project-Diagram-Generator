@@ -387,11 +387,11 @@ public class JavaFile extends GenericFile {
 
 	private boolean isInstanceVariable(String in) {
 		in = removeEquals(in);
-		return in.matches("(private|public|protected)[^{]*") && !in.contains("abstract") && !in.contains("(");
+		return in.matches("((private|public|protected) )[^{]*") && !in.contains("abstract") && !in.contains("(");
 	}
 	
 	private boolean isFunction(String in) {
-		return in.matches("(private|public|protected).*") && !in.contains(" new ") && in.contains("(") && !in.contains("=");
+		return in.matches("((private|public|protected) ).*") && !in.contains(" new ") && in.contains("(") && !in.contains("=");
 	}
 
 //---  Support Methods   ----------------------------------------------------------------------
