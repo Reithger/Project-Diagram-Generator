@@ -46,7 +46,8 @@ public class JavaFile extends GenericFile {
 		in = in.replaceAll("\"[^\"]*?\"", "\"\"");	//remove String literals
 		in = in.replaceAll("//.*?\n", "\n");	//remove comments
 		
-		in = in.replaceAll("(?<=@.*)\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
+		//TODO: Put the {0,21413} here instead of * to avoid a bug, look into robust solution
+		in = in.replaceAll("(?<=@.{0,21413})\n", ";\n");	//Buffer @ lines preceding something to be on a separate line
 		
 		in = in.replaceAll("\n", " ");			//remove new lines, add space gaps
 		in = in.replaceAll("/\\*.*?\\*/", "");	//remove multi-line comments (/* ... */) with non-greedy regex (? symbol) for minimal removal
