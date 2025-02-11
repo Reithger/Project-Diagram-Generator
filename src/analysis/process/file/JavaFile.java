@@ -10,7 +10,7 @@ public class JavaFile extends GenericFile {
 //---  Constants   ----------------------------------------------------------------------------
 	
 	private final static String[] KEY_BUFFER_PHRASES = new String[] {"(", ")", "<", ">"};
-	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static", "final"};
+	private final static String[] REMOVE_TERMS = new String[] {"volatile", "abstract", "static", "final", "default", "native", "transient"};
 	private final static String REGEX_VISIBILITY_FILE_DEF = "((public|private|protected) )?";
 
 //---  Constructors   -------------------------------------------------------------------------
