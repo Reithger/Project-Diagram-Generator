@@ -21,3 +21,7 @@ Note: To run this program fresh (not through the .jar but compiling it yourself)
 - You can also filter out whether the UML will contain instance variables, functions, and/or the private instance variables/functions using the three checkboxes on the right of the screen.
 
 That's about it! Let me know if anything doesn't work or if you would recommend some changes; it currently only works on java projects (it has to know how to read the files in the project, which takes a lot of care) but I plan to eventually support more languages once I get to understanding them well enough to process them robustly.
+
+## UML Class Diagram of the UML Class Diagram Generator
+
+![Complexity](https://github.com/user-attachments/assets/74b6fb5d-ce44-40e0-aff1-d8e289f424f0)
