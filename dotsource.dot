@@ -4,380 +4,162 @@ digraph G {
 	graph[splines = ortho, ranksep = 1, ratio = fill, color=blue];
 	rankdir = TB;
 
-	n0 [label = <{DrawTypeTapering||}>];
-	n1 [label = <{DrawingBoard||}>];
-	n2 [label = <{TileMetaInfo||}>];
-	n3 [label = <{ChangeStep||}>];
-	n4 [label = <{PopoutColorDesigner||}>];
-	n5 [label = <{DrawingManager||}>];
-	n6 [label = <{SketchAnimation||}>];
-	n7 [label = <{PopoutKeybindSelect||}>];
-	n8 [label = <{TileFactory||}>];
-	n9 [label = <{<i>Corkboard</i>||}>];
-	n10 [label = <{GridColor||}>];
-	n11 [label = <{StandardDraw||}>];
-	n12 [label = <{DrawingPage||}>];
-	n13 [label = <{LayerSeries||}>];
-	n14 [label = <{ZoomCanvas||}>];
-	n15 [label = <{LayerPicture||}>];
-	n16 [label = <{KeyBindings||}>];
-	n17 [label = <{Overlay||}>];
-	n18 [label = <{Change||}>];
-	n19 [label = <{CorkboardButton||}>];
-	n20 [label = <{DrawTypeSquare||}>];
-	n21 [label = <{ArtPicture||}>];
-	n22 [label = <{TileBig||}>];
-	n23 [label = <{LayerAnimation||}>];
-	n24 [label = <{DataAccess||}>];
-	n25 [label = <{Main||}>];
-	n26 [label = <{PopoutInputRequest||}>];
-	n27 [label = <{DrawTypeCircle||}>];
-	n28 [label = <{Manager||}>];
-	n29 [label = <{Pallet||}>];
-	n30 [label = <{PageFactory||}>];
-	n31 [label = <{LineCalculator||}>];
-	n32 [label = <{SettingsBar||}>];
-	n33 [label = <{Page||}>];
-	n34 [label = <{View||}>];
-	n35 [label = <{<i>Component</i>||}>];
-	n36 [label = <{DrawTypeSelector||}>];
-	n37 [label = <{GridImage||}>];
-	n38 [label = <{PixelArtDrawer||}>];
-	n39 [label = <{VersionHistory||}>];
-	n40 [label = <{SketchPicture||}>];
-	n41 [label = <{Point||}>];
-	n42 [label = <{<i>Sketch</i>||}>];
-	n43 [label = <{CodeReference||}>];
-	n44 [label = <{<i>Tile</i>||}>];
-	n45 [label = <{CorkboardGenerator||}>];
-	n46 [label = <{PopoutConfirm||}>];
-	n47 [label = <{RegionDraw||}>];
-	n48 [label = <{DisplayAnimation||}>];
-	n49 [label = <{TileNumericSelector||}>];
-	n50 [label = <{Curator||}>];
-	n51 [label = <{DisplayPicture||}>];
-	n52 [label = <{CodeInfo||}>];
-	n53 [label = <{ButtonManager||}>];
-	n54 [label = <{Pen||}>];
-	n55 [label = <{TileGrid||}>];
-	n56 [label = <{ValidateConfig||}>];
-	n57 [label = <{DrawInstruction||}>];
-	n58 [label = <{ColorManager||}>];
-	n59 [label = <{ArtAnimation||}>];
-	n60 [label = <{&lt;&lt;interface&gt;&gt;<BR/>InputHandler||}>];
-	n61 [label = <{&lt;&lt;interface&gt;&gt;<BR/>DrawType||}>];
-	n62 [label = <{&lt;&lt;interface&gt;&gt;<BR/>GridIcon||}>];
-	n63 [label = <{&lt;&lt;interface&gt;&gt;<BR/>CodeMetaAccess||}>];
+	n0 [label = <{DarkenFilter||}>];
+	n1 [label = <{<i>KeepAliveThread</i>||}>];
+	n2 [label = <{ShakeEffect||}>];
+	n3 [label = <{RedFilter||}>];
+	n4 [label = <{View||}>];
+	n5 [label = <{AudioConfigsDisplay||}>];
+	n6 [label = <{SpriteDisplay||}>];
+	n7 [label = <{Controller||}>];
+	n8 [label = <{AudioReading||}>];
+	n9 [label = <{ChangeFactory||}>];
+	n10 [label = <{MirrorFilter||}>];
+	n11 [label = <{ProfilesDisplay||}>];
+	n12 [label = <{TimeOutThread||}>];
+	n13 [label = <{ReadWriteConfig||}>];
+	n14 [label = <{<i>VisualDisplay</i>||}>];
+	n15 [label = <{ListenerPacket||}>];
+	n16 [label = <{CodeReference||}>];
+	n17 [label = <{Profile||}>];
+	n18 [label = <{EventSender||}>];
+	n19 [label = <{Main||}>];
+	n20 [label = <{ListeningThread||}>];
+	n21 [label = <{AudioConfig||}>];
+	n22 [label = <{&lt;&lt;interface&gt;&gt;<BR/>Filter||}>];
+	n23 [label = <{&lt;&lt;interface&gt;&gt;<BR/>AudioLevelPasser||}>];
+	n24 [label = <{&lt;&lt;interface&gt;&gt;<BR/>InitiateListening||}>];
+	n25 [label = <{&lt;&lt;interface&gt;&gt;<BR/>Change||}>];
+	n26 [label = <{&lt;&lt;interface&gt;&gt;<BR/>EventProcessor||}>];
+	n27 [label = <{&lt;&lt;interface&gt;&gt;<BR/>Effect||}>];
+	n28 [label = <{&lt;&lt;interface&gt;&gt;<BR/>ImageRetriever||}>];
 	subgraph cluster_{
 		label = "";
 		fontsize = 30;
 		penwidth = 1;
-		subgraph cluster_control{
-			label = "control";
+		subgraph cluster_main{
+			label = "main";
 			fontsize = 26;
 			penwidth = 2;
-			n25;
-			n38;
-			subgraph cluster_control_code{
-				label = "control.code";
-				fontsize = 22;
-				penwidth = 3;
-				n52;
-				n43;
-				n16;
-			}
-			subgraph cluster_control_config{
-				label = "control.config";
-				fontsize = 22;
-				penwidth = 3;
-				n24;
-				n56;
-			}
-		}
-		subgraph cluster_manager{
-			label = "manager";
-			fontsize = 26;
-			penwidth = 2;
+			n13;
+			n16;
+			n7;
+			n26;
+			n19;
 			n28;
-			subgraph cluster_manager_curator{
-				label = "manager.curator";
-				fontsize = 22;
-				penwidth = 3;
-				n35;
-				n50;
-				subgraph cluster_manager_curator_animation{
-					label = "manager.curator.animation";
-					fontsize = 18;
-					penwidth = 4;
-					n23;
-					n59;
-				}
-				subgraph cluster_manager_curator_picture{
-					label = "manager.curator.picture";
-					fontsize = 18;
-					penwidth = 4;
-					n13;
-					n14;
-					n15;
-					n21;
-				}
-			}
-			subgraph cluster_manager_pen{
-				label = "manager.pen";
-				fontsize = 22;
-				penwidth = 3;
-				n54;
-				subgraph cluster_manager_pen_changes{
-					label = "manager.pen.changes";
-					fontsize = 18;
-					penwidth = 4;
-					n3;
-					n39;
-					n57;
-					n18;
-				}
-				subgraph cluster_manager_pen_color{
-					label = "manager.pen.color";
-					fontsize = 18;
-					penwidth = 4;
-					n58;
-					n29;
-				}
-				subgraph cluster_manager_pen_drawing{
-					label = "manager.pen.drawing";
-					fontsize = 18;
-					penwidth = 4;
-					n11;
-					n5;
-					n31;
-					n47;
-					n17;
-					n41;
-					subgraph cluster_manager_pen_drawing_drawtype{
-						label = "manager.pen.drawing.drawtype";
-						fontsize = 14;
-						penwidth = 5;
-						n0;
-						n36;
-						n20;
-						n27;
-						n61;
-					}
-				}
-			}
-			subgraph cluster_manager_sketch{
-				label = "manager.sketch";
-				fontsize = 22;
-				penwidth = 3;
-				n42;
-				n6;
-				n40;
-			}
-		}
-		subgraph cluster_visual{
-			label = "visual";
-			fontsize = 26;
-			penwidth = 2;
-			n60;
-			n34;
-			n63;
-			subgraph cluster_visual_drawboard{
-				label = "visual.drawboard";
+			subgraph cluster_main_audio{
+				label = "main.audio";
 				fontsize = 22;
 				penwidth = 3;
 				n1;
+				n23;
+				n24;
+				n15;
+				n8;
 				n12;
-				subgraph cluster_visual_drawboard_corkboard{
-					label = "visual.drawboard.corkboard";
-					fontsize = 18;
-					penwidth = 4;
-					n9;
-					n51;
-					n45;
-					n48;
-					subgraph cluster_visual_drawboard_corkboard_buttons{
-						label = "visual.drawboard.corkboard.buttons";
-						fontsize = 14;
-						penwidth = 5;
-						n53;
-						n19;
-					}
-				}
+				n20;
 			}
-			subgraph cluster_visual_popouts{
-				label = "visual.popouts";
+		}
+		subgraph cluster_model{
+			label = "model";
+			fontsize = 26;
+			penwidth = 2;
+			subgraph cluster_model_change{
+				label = "model.change";
 				fontsize = 22;
 				penwidth = 3;
-				n26;
-				n4;
-				n46;
-				n7;
-			}
-			subgraph cluster_visual_settings{
-				label = "visual.settings";
-				fontsize = 22;
-				penwidth = 3;
-				n32;
-				subgraph cluster_visual_settings_page{
-					label = "visual.settings.page";
+				n25;
+				n9;
+				subgraph cluster_model_change_effect{
+					label = "model.change.effect";
 					fontsize = 18;
 					penwidth = 4;
-					n30;
-					n33;
-					subgraph cluster_visual_settings_page_tile{
-						label = "visual.settings.page.tile";
-						fontsize = 14;
-						penwidth = 5;
-						n2;
-						n55;
-						n44;
-						n8;
-						n49;
-						n22;
-						subgraph cluster_visual_settings_page_tile_grid{
-							label = "visual.settings.page.tile.grid";
-							fontsize = 10;
-							penwidth = 6;
-							n37;
-							n10;
-							n62;
-						}
-					}
+					n2;
+					n27;
 				}
+				subgraph cluster_model_change_filter{
+					label = "model.change.filter";
+					fontsize = 18;
+					penwidth = 4;
+					n0;
+					n22;
+					n3;
+					n10;
+				}
+			}
+			subgraph cluster_model_profile{
+				label = "model.profile";
+				fontsize = 22;
+				penwidth = 3;
+				n17;
+				n21;
+			}
+		}
+		subgraph cluster_ui{
+			label = "ui";
+			fontsize = 26;
+			penwidth = 2;
+			n4;
+			n18;
+			subgraph cluster_ui_display{
+				label = "ui.display";
+				fontsize = 22;
+				penwidth = 3;
+				n14;
+				n5;
+				n6;
+				n11;
 			}
 		}
 	}
-	n0 -> n61[arrowhead=onormal, style=dashed];
-	n1 -> n43[arrowhead=normal];
-	n1 -> n63[arrowhead=normal];
-	n1 -> n60[arrowhead=normal];
-	n1 -> n45[arrowhead=normal];
-	n1 -> n46[arrowhead=normal];
-	n1 -> n12[arrowhead=none];
-	n3 -> n18[arrowhead=normal];
-	n3 -> n3[arrowhead=none];
-	n5 -> n15[arrowhead=normal];
-	n5 -> n18[arrowhead=normal];
-	n5 -> n57[arrowhead=normal];
-	n5 -> n39[arrowhead=normal];
-	n5 -> n11[arrowhead=normal];
-	n5 -> n47[arrowhead=normal];
-	n5 -> n17[arrowhead=normal];
-	n5 -> n41[arrowhead=normal];
-	n6 -> n42[arrowhead=onormal];
-	n6 -> n50[arrowhead=normal];
-	n6 -> n6[arrowhead=none];
-	n8 -> n49[arrowhead=normal];
-	n8 -> n22[arrowhead=normal];
-	n8 -> n55[arrowhead=normal];
-	n8 -> n44[arrowhead=normal];
-	n9 -> n63[arrowhead=normal];
-	n9 -> n60[arrowhead=normal];
-	n9 -> n53[arrowhead=normal];
-	n9 -> n9[arrowhead=none];
-	n10 -> n10[arrowhead=none];
-	n10 -> n62[arrowhead=onormal, style=dashed];
-	n11 -> n18[arrowhead=normal];
-	n11 -> n61[arrowhead=normal];
-	n11 -> n36[arrowhead=normal];
-	n11 -> n41[arrowhead=normal];
-	n11 -> n31[arrowhead=normal];
-	n12 -> n9[arrowhead=normal];
-	n12 -> n45[arrowhead=normal];
-	n12 -> n60[arrowhead=onormal, style=dashed];
-	n13 -> n13[arrowhead=onormal, style=dashed];
-	n15 -> n35[arrowhead=onormal];
-	n15 -> n21[arrowhead=normal];
-	n15 -> n13[arrowhead=normal];
-	n15 -> n14[arrowhead=normal];
-	n16 -> n43[arrowhead=normal];
-	n17 -> n18[arrowhead=normal];
-	n18 -> n18[arrowhead=none];
-	n20 -> n61[arrowhead=onormal, style=dashed];
-	n21 -> n21[arrowhead=onormal, style=dashed];
-	n22 -> n44[arrowhead=onormal];
-	n23 -> n35[arrowhead=onormal];
-	n23 -> n59[arrowhead=normal];
-	n24 -> n56[arrowhead=normal];
-	n25 -> n38[arrowhead=normal];
-	n27 -> n61[arrowhead=onormal, style=dashed];
-	n28 -> n15[arrowhead=normal];
-	n28 -> n13[arrowhead=normal];
-	n28 -> n54[arrowhead=normal];
-	n28 -> n50[arrowhead=normal];
-	n28 -> n42[arrowhead=normal];
-	n28 -> n40[arrowhead=normal];
-	n30 -> n43[arrowhead=normal];
-	n30 -> n63[arrowhead=normal];
-	n30 -> n33[arrowhead=normal];
-	n31 -> n41[arrowhead=normal];
-	n32 -> n43[arrowhead=normal];
-	n32 -> n63[arrowhead=normal];
-	n32 -> n60[arrowhead=normal];
-	n32 -> n33[arrowhead=normal];
-	n32 -> n30[arrowhead=normal];
-	n33 -> n63[arrowhead=normal];
-	n33 -> n44[arrowhead=normal];
-	n33 -> n8[arrowhead=normal];
-	n33 -> n33[arrowhead=none];
-	n33 -> n60[arrowhead=onormal, style=dashed];
-	n34 -> n1[arrowhead=normal];
-	n34 -> n4[arrowhead=normal];
-	n34 -> n46[arrowhead=normal];
-	n34 -> n26[arrowhead=normal];
-	n34 -> n7[arrowhead=normal];
-	n34 -> n32[arrowhead=normal];
-	n34 -> n60[arrowhead=onormal, style=dashed];
-	n36 -> n61[arrowhead=normal];
-	n36 -> n20[arrowhead=normal];
-	n36 -> n27[arrowhead=normal];
-	n36 -> n0[arrowhead=normal];
-	n37 -> n37[arrowhead=none];
-	n37 -> n62[arrowhead=onormal, style=dashed];
-	n38 -> n43[arrowhead=normal];
-	n38 -> n16[arrowhead=normal];
-	n38 -> n24[arrowhead=normal];
-	n38 -> n28[arrowhead=normal];
-	n38 -> n54[arrowhead=normal];
-	n38 -> n34[arrowhead=normal];
-	n38 -> n60[arrowhead=onormal, style=dashed];
-	n39 -> n3[arrowhead=normal];
-	n39 -> n18[arrowhead=normal];
-	n40 -> n42[arrowhead=onormal];
-	n40 -> n50[arrowhead=normal];
-	n40 -> n40[arrowhead=none];
-	n41 -> n41[arrowhead=onormal, style=dashed];
-	n42 -> n50[arrowhead=normal];
-	n42 -> n42[arrowhead=none];
-	n43 -> n52[arrowhead=normal];
-	n43 -> n43[arrowhead=none];
-	n44 -> n2[arrowhead=normal];
-	n44 -> n44[arrowhead=onormal, style=dashed];
-	n45 -> n63[arrowhead=normal];
-	n45 -> n9[arrowhead=normal];
-	n45 -> n51[arrowhead=normal];
-	n45 -> n48[arrowhead=normal];
-	n47 -> n18[arrowhead=normal];
-	n47 -> n41[arrowhead=normal];
-	n48 -> n9[arrowhead=onormal];
-	n49 -> n44[arrowhead=onormal];
-	n50 -> n23[arrowhead=normal];
-	n50 -> n15[arrowhead=normal];
-	n50 -> n13[arrowhead=normal];
-	n50 -> n35[arrowhead=normal];
-	n51 -> n9[arrowhead=onormal];
-	n51 -> n51[arrowhead=none];
-	n53 -> n19[arrowhead=normal];
-	n54 -> n43[arrowhead=normal];
-	n54 -> n15[arrowhead=normal];
-	n54 -> n58[arrowhead=normal];
-	n54 -> n5[arrowhead=normal];
-	n55 -> n44[arrowhead=onormal];
-	n55 -> n10[arrowhead=normal];
-	n55 -> n62[arrowhead=normal];
-	n55 -> n37[arrowhead=normal];
-	n58 -> n29[arrowhead=normal];
-	n59 -> n15[arrowhead=normal];
-	n59 -> n59[arrowhead=onormal, style=dashed];
+	n0 -> n9[arrowhead=none];
+	n0 -> n22[arrowhead=onormal, style=dashed];
+	n2 -> n9[arrowhead=none];
+	n2 -> n27[arrowhead=onormal, style=dashed];
+	n3 -> n9[arrowhead=none];
+	n3 -> n22[arrowhead=onormal, style=dashed];
+	n4 -> n5[arrowhead=normal];
+	n4 -> n11[arrowhead=normal];
+	n4 -> n6[arrowhead=normal];
+	n4 -> n28[arrowhead=onormal, style=dashed];
+	n5 -> n14[arrowhead=onormal];
+	n6 -> n14[arrowhead=onormal];
+	n7 -> n8[arrowhead=none];
+	n7 -> n17[arrowhead=normal];
+	n7 -> n18[arrowhead=normal];
+	n7 -> n4[arrowhead=normal];
+	n7 -> n13[arrowhead=none];
+	n7 -> n16[arrowhead=normal];
+	n7 -> n26[arrowhead=onormal, style=dashed];
+	n7 -> n23[arrowhead=onormal, style=dashed];
+	n8 -> n23[arrowhead=normal];
+	n8 -> n15[arrowhead=normal];
+	n8 -> n20[arrowhead=normal];
+	n8 -> n12[arrowhead=normal];
+	n8 -> n8[arrowhead=none];
+	n8 -> n24[arrowhead=onormal, style=dashed];
+	n9 -> n10[arrowhead=none];
+	n9 -> n25[arrowhead=normal];
+	n10 -> n22[arrowhead=onormal, style=dashed];
+	n11 -> n14[arrowhead=onormal];
+	n11 -> n16[arrowhead=normal];
+	n12 -> n1[arrowhead=onormal];
+	n12 -> n15[arrowhead=normal];
+	n12 -> n24[arrowhead=normal];
+	n13 -> n17[arrowhead=normal];
+	n14 -> n18[arrowhead=normal];
+	n15 -> n1[arrowhead=normal];
+	n17 -> n28[arrowhead=normal];
+	n17 -> n25[arrowhead=normal];
+	n17 -> n9[arrowhead=normal];
+	n17 -> n21[arrowhead=normal];
+	n18 -> n26[arrowhead=normal];
+	n19 -> n7[arrowhead=normal];
+	n20 -> n1[arrowhead=onormal];
+	n20 -> n15[arrowhead=normal];
+	n20 -> n23[arrowhead=normal];
+	n21 -> n25[arrowhead=normal];
+	n22 -> n25[arrowhead=normal];
+	n27 -> n25[arrowhead=normal];
 
 }
