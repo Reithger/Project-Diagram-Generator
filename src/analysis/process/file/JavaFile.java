@@ -107,7 +107,9 @@ public class JavaFile extends GenericFile {
 		System.out.println(Arrays.toString(cont));
 		int vis = processVisibility(cont[0]);
 		String typ = compileType(cont, 1);
-		addInstanceVariableToClass(vis, cont[cont.length - 1], typ, underline, fina);
+		for (int i = compileTypeLength(cont, 1); i < cont.length; i++) {
+			addInstanceVariableToClass(vis, cont[i].replace(",", ""), typ, underline, fina);
+		}
 	}
 	
 	private void processFunction(String in) {
